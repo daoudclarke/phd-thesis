@@ -1,0 +1,18 @@
+%Created by jPicEdt 1.x
+%PsTricks format (pstricks.sty needed)
+%Wed Jun 21 07:54:56 BST 2006
+\psset{xunit=1mm,yunit=1mm,runit=1mm}
+\begin{pspicture}(0,0)(115.00,30.00)
+\newrgbcolor{userHatchColour}{0.60 0.60 0.60}
+\psframe[linewidth=0.15,linecolor=black,fillcolor=black,fillstyle=hlines,hatchwidth=0.28,hatchsep=1.42,hatchangle=45.00,hatchcolor=userHatchColour](30.67,7.50)(53.67,30.00)
+\newrgbcolor{userHatchColour}{0.60 0.60 0.60}
+\psframe[linewidth=0.15,linecolor=black,fillcolor=black,fillstyle=hlines,hatchwidth=0.28,hatchsep=1.42,hatchangle=45.00,hatchcolor=userHatchColour](0.00,0.00)(23.00,30.00)
+\newrgbcolor{userHatchColour}{0.60 0.60 0.60}
+\psframe[linewidth=0.15,linecolor=black,fillcolor=black,fillstyle=hlines,hatchwidth=0.28,hatchsep=1.42,hatchangle=45.00,hatchcolor=userHatchColour](61.33,7.50)(115.00,30.00)
+\newrgbcolor{userFillColour}{1.00 1.00 1.00}
+\psframe[linewidth=0.15,linecolor=black,fillcolor=userFillColour,fillstyle=solid](30.67,15.00)(46.00,30.00)
+\newrgbcolor{userFillColour}{1.00 1.00 1.00}
+\psframe[linewidth=0.15,linecolor=black,fillcolor=userFillColour,fillstyle=solid](0.00,0.00)(15.33,30.00)
+\newrgbcolor{userFillColour}{1.00 1.00 1.00}
+\psframe[linewidth=0.15,linecolor=black,fillcolor=userFillColour,fillstyle=solid](61.33,15.00)(115.00,30.00)
+\end{pspicture}

@@ -1,0 +1,546 @@
+%%Bismillahi-r-Rahman-r-rahim
+%%Wa-s-salatu wa-s-salamu alai sayyidina Muhammad
+%%Wa ala alihi wa sahbihi ajma'in
+%
+%\documentclass{kluwer}    % Specifies the document style.
+%
+%%\usepackage{amssymb}
+%%\usepackage[leqno]{amsmath}
+%%\usepackage{amsthm}
+%%\usepackage{eufrak}
+%\usepackage{graphs}
+%
+%\newcommand{\bra}[1]{\langle #1|}
+%\newcommand{\ket}[1]{|#1 \rangle}
+%\newcommand{\bracket}[2]{\langle #1| #2\rangle}
+%
+%\newcommand{\inprod}[2]{\langle #1, #2 \rangle}
+%
+%\newcommand{\Tr}[0]{\mathrm{Tr}}
+%
+%\newcommand{\newcite}[1]{\citeauthor{#1} \shortcite{#1}}
+%
+%\newtheorem{defn}{Definition}
+%\newtheorem{prop}{Proposition}
+
+\documentclass[12pt]{report}
+
+\input{head}
+
+\begin{document}                
+
+\chapter{Context Theories and Syntax} 
+
+In this chapter we look at ways of describing syntactic properties of language in terms of vector space operators and algebra. This will allow us to incorporate such properties into context theories for natural language, combining representations of meaning and syntax, as we will see in the next chapter.
+
+\section{Background}
+
+The methods for describing syntax in natural language are numerous; we concentrate here on those that we have found to be closest to the algebraic approach, namely the categorial grammar of \cite{Lambek:58} and later derivatives of this formalism, and the link grammar of \cite{Sleator:91}. It is the latter that we have found to be most amenable to our approach; we have found novel connections between this formalism and certain algebraic constructions that we will describe shortly.
+
+\subsection{Categorial Grammars}
+
+%\subsection{Lambek Calculus}
+
+\cite{Lambek:58} developed a calculus specifically for natural language, based on earlier categorial grammar formalisms. In its original form, it is defined as a deductive system, whose axioms\footnote{See also \cite{Wood:93}.} are:
+\begin{eqnarray*}
+x & \rightarrow & x\\
+(xy)z & \leftrightarrow  & x(yz),
+\end{eqnarray*}
+where $x \leftrightarrow y$ is shorthand for $x\rightarrow y$ and $y\rightarrow x$, with the following rules of inference:
+\begin{eqnarray*}
+xy \rightarrow z & \mathrm{iff} & x\rightarrow z/y\\
+xy \rightarrow z & \mathrm{iff} & y\rightarrow x\backslash z,
+%\mathrm{if}\ x\rightarrow z/y& \mathrm{then} & xy \rightarrow z\\
+%\mathrm{if}\ x\rightarrow z\backslash y & \mathrm{then} &  xy \rightarrow z
+\end{eqnarray*}
+and
+$$\mathrm{if}\ x\rightarrow y\ \mathrm{and}\  y\rightarrow z\ \mathrm{then}\ x\rightarrow z$$
+
+In application to NLP, each word is assigned to one or more categories (elements in the calculus); the category of a phrase can then be determined from the deductive system, by taking the product of the categories associated with each word in the phrase.
+
+One way of modeling the Lambek calculus is with free semigroups (also called \emph{L-models}) --- the completeness of the Lambek calculus with respect to such models is described in \cite{Pentus:95}. The calculus can be viewed as operations on subsets  of a monoid $M$, with
+\begin{eqnarray*}
+XY &=& \{xy : a \in X, b \in Y\} \\
+X \backslash Y &=& \{m \in M : Xm \subseteq Y\} \\
+Y / X &=& \{m \in M : mX \subseteq Y\}
+\end{eqnarray*}
+where $X,Y\subseteq M$ and we also use $m$ as a shorthand for $\{m\}$.
+
+More generally, the operations $/$ and $\backslash$ can be defined for certain semigroups called \emph{residuated lattices} \citep{Birkhoff:48}. The connection between the Lambek calculus and residuated lattices was noted in Lambek's original paper \citep{Lambek:58}.
+
+\begin{defn}[Lattice Ordered Semigroup]
+A lattice ordered semigroup is a semigroup $S$ which is also a lattice under the operations $\lor$ and $\land$ such that
+\begin{eqnarray*}
+x\cdot (y\lor z) &=& x\cdot y \lor x\cdot z\\
+(y\lor z)\cdot x &=& y\cdot x \lor z\cdot x
+\end{eqnarray*}
+\end{defn}
+
+\begin{defn}[Residuated Lattice]
+A lattice ordered semigroup $S$ is called a residuated lattice, if for each $x,y \in S$ there exists a greatest element $x/y$ such that
+$$x/y \cdot y \le x$$
+and a greatest element $x\backslash y$ such that
+$$y \cdot y\backslash x \le x.$$
+The elements $x/y$ and $y\backslash x$ are called the right and left \emph{residuals} or \emph{quotients}.
+\end{defn}
+
+As \cite{Birkhoff:48} notes, if $S$ has a zero which is also the least element of the lattice then the residuation operations $/$ and $\backslash$ can be defined by
+\begin{eqnarray*}
+x/y &=& \bigvee\{z : zy \le x\}\\
+y\backslash x &=& \bigvee\{z : yz \le x\}
+\end{eqnarray*}
+
+\subsection{Bilinear Logic and Pregroups}
+
+\cite{Lambek:93} and \cite{Abrusci:91}, based on earlier work of \cite{Girard:87}, developed a new version of Lambek's calculus called \emph{Bilinear Logic}. This adds two constants, 1 (introduced at an earlier stage by Lambek) and 0, to Lambek's original definition, which satisfy
+\begin{gather*}
+1x \leftrightarrow x \leftrightarrow x1\\
+(0/x)\backslash 0 \leftrightarrow x \leftrightarrow 0/(x\backslash 0) 
+\end{gather*}
+As a shorthand notation, $
+
+%We have recently come across the unpublished work of Yu Jiangsheng\footnote{\texttt{http://icl.pku.edu.cn/yujs/papers/pdf/fcg.pdf}} where syntax and semantics are combined in a formalism that has its basis in categorial grammars and feature structures.
+
+%\subsection{Algebraic Parsing}
+
+%In unpublished work, Mark Hopkins has reformulated standard results in language theory in algebraic as opposed to set-theoretic terms, with dioids (idempotent semirings) as a basis.\footnote{\texttt{http://www.uwm.edu/$\sim$whopkins/compalg/}} He shows that a grammar can be viewed as a system of inequalities on the dioid.
+
+%Work in progress is an algebraic formulation of context free languages by use of ``context free expressions'' --- regular expressions over a monoid giving context free languages. We have been in communication about the best way to formulate and prove the theory.
+
+
+
+\section{Operator Formulation of Link Grammar}
+
+In this section we describe link grammar in terms of operators on a vector space. The mathematics we will make use of is in fact derived from that of quantum mechanics: links are described as combinations of `creation' and `annihilation' operators referring to the creation and annihilation of a particle in a quantum mechanical system.
+
+%In information retrieval, the idea of representing words as vectors has been popular since the discovery of latent semantic analysis (LSA) \cite{Deerwester:90} in which vectors representing meanings of words are determined by analysing a corpus of documents. Such representations have proved to be effective in satisfying users' queries, because they generalise the query in a very flexible manner, returning documents whose vector representations are closest to the vector representation of the query.  More recently,
+
+The mathematics of quantum mechanics has proved useful in retrieval applications for removing unwanted components of meaning in a search query \cite{Widdows:03} on LSA vectors.
+%Our ultimate goal is to be able to represent all aspects of language in terms of linear algebra, allowing a much more flexible definition of meaning than that traditionally used.
+%This paper describes part of a much larger project which aims at describe all aspects of language including syntax and semantics in terms of algebra. Our hope is that this would provide a more flexible definition of meaning than previous approaches, and enable deeper and more subtle theoretical models and statistical analyses of language, also potentially leading the way to more efficient computational methods of handling statistical features of language.
+%In order to reach this goal, it needs to be shown, for example, that natural language syntax can be adequately defined in terms of linear algebra. The goal of this paper is to show that this can be achieved using some of the mathematics of quantum mechanics.
+Quantum mechanics deals with a kind of vector space that is particularly well behaved and frequently occurring, so called \emph{Hilbert space}. If we consider that more general aspects of meaning in language may be represented using such a space, then the mathematics of quantum mechanics becomes a natural place to look for the representation of other linguistic phenomena. We make use of a special kind of infinite dimensional Hilbert space called \emph{Fock space}. Syntactic properties of words can be represented as \emph{operators} on such a space, and it turns out such a formulation is equivalent to a syntactic formalism proposed previously, \emph{link grammar}.
+
+One immediate benefit of this discovery is an entirely new perspective on link grammars, which may open up research on this type of grammar, possibly leading to new computational procedures. Our hope is that it will pave the way to a merging of vector representations of meaning with syntax, bringing the same flexibility to representation of phrases and sentences in computational linguistics as has been brought to that of words in LSA.
+
+%In the remainder of this paper, we first introduce link grammar, then describe the mathematics that forms the foundation of our presentation, describe link grammar in quantum mechanical terms, and finally discuss our conclusions and further work. The paper is written with the non-technical reader in mind, and requires only an elementary knowledge of linear algebra.
+
+\subsection{Link Grammar}
+
+
+
+Link grammar \citep{Sleator:91} is a lexicalised syntactic formalism which describes properties of words in terms of \emph{links} formed between them, and which is context-free in terms of its generative power. Apart from determining which sequences are grammatical, the links also encapsulate the nature of the relationships between words.
+
+As an example, a transitive verb in English may link (simultaneously) to a subject on the left and an object on the right. This is represented in link grammar as the \emph{disjunct} $\ket{s}\bra{o}$ where $s$ and $o$ stand for `subject' and `object' respectively.\footnote{We are introducing our own, quantum mechanical, notation for link grammars from the beginning so as to be consistent, however we will describe the intended interpretation of this notation later.}
+
+\begin{defn}[Link Grammar]
+Let $L$ be a set of \emph{link types}. Then we define a set of \emph{left connectors} $D_l(L) = \{\ket{x} : x \in L\}$ and a set of \emph{right connectors} $D_r(L) = \{\bra{x} : x \in L\}$.
+
+A disjunct is an element of $D_l(L)^*D_r(L)^*$. That is, a disjunct consists of a string of left connectors $\ket{x_1}\ket{x_2}\ldots\ket{x_n}$ followed by a string of right connectors $\bra{y_1}\bra{y_2}\ldots\bra{y_m}$.
+
+The syntactic representation of a word is a set of disjuncts, each one corresponding to a different syntactic r\^ole played by the word. A sequence of words is in the language generated by the grammar if there is a corresponding sequence of disjuncts and a set of arcs, or \emph{links} drawn above the disjuncts such that:
+\begin{itemize}
+\item each disjunct in the sequence is a disjunct of the corresponding word in the sequence of words;
+\item each left connector is connected to a right connector of the same type at any position to the right of it by drawing a link from one to the other;
+\item each connector in each disjunct in the sequence is connected to exactly one other connector;
+\item no links cross.
+\end{itemize}
+\end{defn}
+
+Table \ref{link} shows a fragment of a link grammar. The grammar is clearly highly simplified, and is presented merely to explain the concept; for example in our fragment, \emph{way} and \emph{mud} can only occur as objects. Link grammars generally include a special symbol called the `wall' to indicate the beginning of the sequence \citep{Sleator:91}, which is then included in the grammar, but again we have omitted this for simplicity.
+
+\begin{table}
+\begin{center}
+\caption{A small link grammar.}
+\begin{tabular}{lp{7cm}}
+\hline\noalign{\smallskip}
+\emph{word} & \emph{disjuncts}\\
+\noalign{\smallskip}
+\hline\hline
+\noalign{\smallskip}
+%\lcline{1-1}\rcline{2-2}
+they	& $\bra{s}$\\
+mashed & $\ket{s}\bra{o}\qquad \ket{s}\bra{m}\bra{o}$ \\
+way, mud & $\ket{d}\ket{o}\qquad \ket{d}\ket{j}\qquad \ket{a}\ket{d}\ket{o}\qquad \ket{a}\ket{d}\ket{j}$ \\
+their, the & $\bra{d}$\\
+through & $\ket{m}\bra{j}$\\
+thick & $\bra{a}$\\
+\noalign{\smallskip}
+\hline
+\noalign{\smallskip}
+%\multicolumn{2}{p{7cm}}
+Link types: &  $s$: subject, $o$: object, $m$: modifying phrases, \mbox{$a$: adjective}, $j$: preposition.\\
+\noalign{\smallskip}
+\hline
+\end{tabular}
+\label{link}
+\end{center}
+\end{table}
+
+
+A parse for a sentence is drawn as a set of links above the sentence, as in Figure \ref{parse} for the sentence `they mashed their way through the thick mud'. The disjuncts that are used in the parse are not generally drawn, but can be inferred from the links drawn above the sentence.
+
+
+\begin{figure}[b]
+\begin{center}
+\begin{graph}(10,4)(-1,-1)
+	\graphlinecolour{1}
+\newcommand{\ntext}[4]{\roundnode{#1}(#2,#3)[\graphlinecolour{0}]  \nodetext{#1}(0,-.5){\raisebox{0pt}[1pt][1pt]{#4}}}
+\newcommand{\btext}[3]{\bow{#1}{#2}{0.5}[\graphlinecolour{0}] \bowtext{#1}{#2}{0.5}{#3}}
+\ntext{They}{0}{0}{they}
+\ntext{Mashed}{1.3}{0}{mashed}
+\ntext{Their}{2.6}{0}{their}
+\ntext{Way}{3.7}{0}{way}
+\ntext{Through}{5}{0}{through}
+\ntext{The}{6.3}{0}{the}
+\ntext{Thick}{7.4}{0}{thick}
+\ntext{Mud}{8.5}{0}{mud}
+\btext{Thick}{Mud}{$a$}
+\btext{The}{Mud}{$d$}
+\btext{Through}{Mud}{$j$}
+\btext{Their}{Way}{$d$}
+\btext{Mashed}{Way}{$o$}
+\btext{Mashed}{Through}{$m$}
+\btext{They}{Mashed}{$s$}
+\end{graph}
+\caption{A link grammar parse.}
+\label{parse}
+\end{center}
+\end{figure}
+
+
+An efficient parsing algorithm for link grammar based on dynamic programming is described by \cite{Sleator:91}. Their link grammar for English can handle transitive, ditransitive and modal verbs; prepositions, adverbs, complex noun phrases and relative clauses; questions and question inversion; number agreement is also taken into account.
+
+\section{Quantum Mechanics and Syntax}
+
+We now begin our algebraic formulation of link grammar in terms of operators on Hilbert space. The required definitions are given in the appendix; for a more complete description, see for example \cite{Kreyszig:89} which also applies the mathematics to quantum mechanics.
+
+%This requires some important constructions of Hilbert spaces and an understanding of operators on Hilbert spaces. While it may seem like a lot of mathematics is required in order to represent something straightforward, the constructions are mathematical natural; moreover the importance of the Hilbert space formalism cannot be over-emphasised, for it occurs naturally in many areas of mathematics: many vector spaces can be considered as Hilbert spaces.
+
+Our exposition is inspired by the study of \emph{free probability} \cite{Voiculescu:97}, wherein the study of non-crossing diagrams is very closely connected to link grammars; our main result is more or less a direct translation of a standard result in free probability theory.
+
+\subsection{Constructing Fock Space}
+
+Our syntactic vectors will reside in \emph{Fock Space}, a Hilbert space which is like the sum of an infinite series of Hilbert spaces.
+
+%\subsubsection{Fock Space}
+
+Let $H$ be a finite dimensional complex Hilbert space and $\Omega$ a distinguished vector in $H$ with norm 1. The Fock space $\mathcal{F}$ of $H$ is then defined as
+$$\mathcal{F} = \mathbb{C}\Omega \oplus H \oplus (H \otimes H) \oplus (H \otimes H \otimes H) \oplus \cdots$$
+i.e.~it is the direct sum of all finite tensor product powers of $H$, where $\oplus$ denotes the direct sum and $\otimes$ the tensor product (see section \ref{new-vector-spaces}), and $\mathbb{C}\Omega$ is a one dimensional Hilbert space which is viewed as the zeroth power of $H$.
+
+%\subsubsection{Operators}
+
+
+
+
+\subsection{Creation and Annihilation Operators}
+
+We are now able to form the connection between quantum mechanics and syntax.
+In the physical interpretation of Fock space, different powers of the Hilbert space $H$ correspond to states of different numbers of particles. Special operators called \emph{creation operators} map states in $n$ powers of $H$ to states in $n+1$ powers of $H$, effectively `creating' an additional particle. Similarly, \emph{annihilation operators} reduce the number of powers of $H$ in a state by one, `annihilating' a particle. It is these operators that we will use to represent syntax.
+
+Let $u$ be a vector in $H$. The creation operator $\ket{u}$ on $\mathcal{F}$ is defined such that
+$$\ket{u} v_1\otimes v_2 \otimes \cdots \otimes v_n = u \otimes v_1\otimes v_2 \otimes \cdots \otimes v_n.$$
+The \emph{dual} of $\ket{u}$ is the annihilation operator $\bra{u}$ and maps vectors according to:
+$$\bra{u}v_1\otimes v_2 \otimes \cdots \otimes v_n = \inprod{u}{v_1}v_2 \otimes \cdots \otimes v_n$$
+and $\bra{u}\Omega = 0$. The action of the operators on sums of tensor products can be deduced from their linearity.
+
+The effect of `creating' and then `annihilating' is just a scalar product times the identity operator, 1:
+$$\bracket{u}{v} = \inprod{u}{v}1;$$
+the notation $\bracket{u}{v}$ is used whenever a creation operator follows an annihilation operator.
+
+\subsection{Syntactic Interpretation}
+
+In the syntactic interpretation of Fock space, the set of links $L$ are represented as a set of vectors $L_H$ which are assumed to form an \emph{orthonormal basis} for $H$. Disjuncts for words are then formed by concatenating creation and annihilation operators, in exactly the same way that left and right connectors are concatenated in link grammar. The representation of the syntactic characteristics of a word can then be represented by taking the sum of its disjuncts. For example the word \emph{mashed} in our simple link grammar in Table \ref{link} can be represented as the operator
+$$\hat{\mathit{mashed}} = \ket{s}\bra{o} + \ket{s}\bra{m}\bra{o},$$
+where we assume the vectors $s,o,m,a,j \in H$ form an orthonormal basis for $H$.
+
+Our formulation will require that the link grammar parses are ``strict'' in the following sense: there must not be any connectors left unlinked; thus the parse must start with a right connector and end with a left connector.
+
+In order to determine whether a sequence of words is in the language determined by the link grammar, we define a \emph{linear functional} $\phi$ on $B(\mathcal{F})$ (a linear function from $B(\mathcal{F})$ to $\mathbb{C}$) by
+$$\phi(\hat{a}) = \inprod{\Omega}{\hat{a}\Omega},$$
+where $\hat{a} \in B(\mathcal{F})$.  We then have the following:
+\begin{prop}
+Let $W$ be a set of words, and $\Gamma$ a function that assigns a set of link grammar disjuncts to every word in $W$, with link types from a set $L$.
+
+For every $w \in W$ we denote its corresponding Fock space operator $\hat{w}$ on the Fock space generated by the Hilbert space with basis vectors $L_H$  corresponding to the link types in $L$. Then $w_1w_2\ldots w_n$ is in the link grammar language defined by $\Gamma$ if and only if $\phi(\hat{s}) \ge 1$, where $s = \hat{w_1}\hat{w_2}\ldots\hat{w_n}$. $\phi(\hat{s})$ indicates the number of valid link grammar parses.
+\end{prop}
+\begin{proof}
+Let us first assume each word has only one disjunct.
+%In this case $\phi(\hat{s})$ is equal either to 0 or 1. If $\phi(\hat{s}) = 1$ then
+
+The product of an annihilation operator with a creation operator satisfies
+$$\bracket{x}{y} = \left\{\begin{array}{ll}
+0 & \textrm{if $x \neq y$}\\
+1 & \textrm{if $x = y$}\end{array}\right.,$$
+where $x, y \in L_H$. Thus any operator $\hat{s}$ which is given by a product of creation and annihilation operators reduces either to $0$, $1$, or a product of a (possibly empty) sequence of creation operators followed by a (possibly empty) sequence of annihilation operators. In the latter case, as in the case of $0$, $\phi(\hat{s})$ will be zero since if there are annihilation operators in the sequence their operation on $\Omega$ will give zero (they operate on $\Omega$ first as they are on the right), and if there are no annihilation operators the creation operators will operate on $\Omega$ to give a vector disjoint with $\Omega$.
+
+If the sequence satisfies any of the following the product will be zero and the sentence will not parse:
+\begin{itemize}
+\item A left connector is not matched by a right connector; in this case the product of the corresponding operator will map $\Omega$ to a different dimension in the Fock space and $\phi(\hat{s})$ will be zero.
+\item The left connector is matched by a right connector of a different type; in this case the product of the corresponding operators will be zero since
+\item The connectors match but the corresponding links cross; in the case there will again be a product of the form $\bracket{x}{y}$ where $x\neq y$ and the product will be zero.
+\end{itemize}
+Conversely, $\phi(\hat{s})$ will be zero just in case one of the above conditions holds and thus the sentence will not parse.
+
+On the other hand, if none of the above conditions are met the sentence must parse and if the parse is strict the corresponding operator must map $\Omega$ to itself, so $\phi(\hat{s}) = 1$.
+
+If words are now allowed more than one disjunct, then since these are added as operators and distribute with respect to multiplication each possible parse will be a term in the resulting sum of disjunts, and thus $\phi(\hat{s})$ will indicate the number of valid link grammar parses.
+\end{proof}
+
+\subsection{Stochastic Link Grammar}
+
+In applications requiring robust parsing of natural language stochastic grammars are vital in order to help in dealing with the large number of parses, which in general for wide coverage parsers increases exponentially with sentence length \cite{Manning:99}.
+
+In the case of our implementation of link grammar we are not restricted to using sums of the basis vectors $L_H$, but can take any linear combination of these vectors when constructing the grammar, enabling us to form a type of stochastic link grammar.
+
+Probabilistic link grammars were described by \cite{Lafferty:92}, where the probability of each link occurring with a word is conditioned on several factors, including the words occurring on either side. Such a model provides a probability distribution over the language generated by the grammar. They showed their formalism to be a generalisation of \emph{trigrams} which have proved very successful in language modelling. Our formalism however allows no such conditioning of probability, and thus does not provide a probability distribution over the language without renormalisation.
+
+To see how stochastic link grammar may be formulated within our framework, define the \emph{trace} $\Tr(\hat{a})$ of an operator $\hat{a}$ as
+$$\Tr(\hat{a}) = \sum_{k} \inprod{\hat{a}e_k}{e_k}$$
+where the $e_k$ are vectors forming an orthonormal basis for $\mathcal{F}$. If we restrict our grammar to consider operators with trace $\le 1$ then the trace can be considered to correspond to the (unnormalised) probability of the word or sequence.
+
+%The question of how such a stochastic grammar could be determined is, unfortunately, unanswered.
+
+One advantage of this simpler formulation of stochastic link grammar in comparison to \cite{Lafferty:92} is that it allows an entirely lexicalised description of syntax: the grammar can be described by assigning each word its disjuncts and corresponding probabilities.
+
+There is also a potential for the algebraic approach to open up new computational methods for dealing with this widespread ambiguity. Currently words are represented as operators on an infinite dimensional vector space and thus can be viewed as infinite matrices. It is possible that a way could be found to approximate these infinite matrices by finite matrices, for example by a dimensionality reduction of the kind used in random indexing \cite{Sahlgren:02}, in which each dimension of a high dimensionality space is projected onto a random subspace of a lower dimensionality space. This would open up the computational tools developed for matrix multiplication to tackling the problem of natural language parsing.
+
+%\section{Conclusions}
+
+%We have shown a deep connection between link grammar and the mathematics of quantum mechanics, specifically, that of creation and annihilation operators on Fock space, leading us to a new type of stochastic link grammar.
+
+%It is our hope that this work will open up new avenues of research in the application of algebra to linguistics, allowing us to explore and make use of the vast body of work that exists in studies of linear algebra.
+
+
+\section{Algebraic Formulation of Link Grammars}
+\label{link}
+
+The vector space formulation of link grammar we have just described is useful because it gives us insight into the relationship between syntax and vector space operators, and may also lead to new computational techniques. However we are interested in combining representations of syntax with representations of meaning, and the formulation just described does not seem to be ideally suited to this.
+
+If we can describe syntax in algebraic terms, specifically in terms of semigroups, then we will be on much stronger ground because of the tools available for combining such representations. As we will see, we will not lose the flexibility of vector space representations; the vector space nature will be regained by considering the algebra $L^1(S)$ that can be associated with each semigroup $S$.
+
+First we will describe a semigroup to represent link grammar in terms of strings of left and right connectors.
+\begin{defn}[Bracket Semigroup]
+We define
+$$D(L) = D_l(L) \cup D_r(L) \cup \{0\},$$
+and let $\equiv$ be the minimal congruence on $D(L)^*$ satisfying
+$$\bracket{x}{y} \equiv \left\{ \begin{array}{ll}
+	0 & \text{if }x \neq y \\
+	1 & \text{if }x = y
+\end{array}\right.,$$
+for all $x,y \in L$ and $0x \equiv x0 \equiv 0$ for all $x \in D(L)^*$, where $1$ is the empty string. Then the \emph{bracket semigroup on $L$} is defined as $D(L)^*/ \equiv$. We identify the equivalence classes of the bracket semigroup by their shortest elements.
+\end{defn}
+
+As before, we can associate with each word $w$ in a set $W$ 
+
+\begin{prop}
+
+\end{prop}
+
+%We can allow words to have more than one disjunct by defining an additional binary operation, denoted by $+$ and called addition, which is commutative and idempotent, and for which $0$ is a unity. Addition is otherwise defined freely with respect to the elements of the underlying semigroup. The resulting structure is an \emph{idempotent semiring}.
+
+\subsection{Inverse Semigroups}
+\label{inverse}
+
+The bracket semigroup defined previously falls within a more general category of semigroups: that of inverse semigroups.
+
+\begin{defn}[Inverse Semigroup]
+An inverse semigroup $S$ is a semigroup such that each element $x \in S$ has a unique element $x^{-1} \in S$ such that $xx^{-1}x = x$ and $x^{-1}xx^{-1} = x^{-1}$.
+\end{defn}
+
+\begin{prop}
+A bracket semigroup is an inverse semigroup.
+\end{prop}
+
+\begin{proof}
+Define $\bra{x}^{-1} = \ket{x}$ and $\ket{x}^{-1} = \bra{x}$. Let $x_1x_2\ldots x_n$ be a representative element of an equivalence class of a bracket algebra, then define
+$$(x_1x_2\ldots x_n)^{-1} = x_n^{-1}x_{n-1}^{-1}\ldots x_1^{-1}.$$
+Then the operation as given defines a unique inverse satisfying the requirements of an inverse semigroup.
+\end{proof}
+
+The identification of link grammars as a type of inverse semigroup  has led us to consider other kinds of inverse semigroup as a possible means of incorporating semantics into the formalism. We recount some basic properties of inverse semigroups \cite{Howie:76}.
+
+Let $S$ be an inverse semigroup with set of idempotents $E(S)$. Then:
+\begin{itemize}
+\item $(a^{-1})^{-1} = a$ for all $a\in S$.
+\item $aa^{-1} \in E(S)$ for all $a \in S$.
+\item $aea^{-1} \in E(S)$ for all $a \in S$, $e\in E(S)$.
+\item $e^{-1} = e$ for all $e \in E(S)$.
+\item $ef=fe$ for all $e,f \in E(S)$, i.e.~idempotents commute, and thus form a subsemigroup of $S$.
+\item A partial order $\le$ can be defined on $S$ by $a \le b$ if there exists $e \in E(S)$ such  that $a=eb$. If $a \le b$ then:
+\begin{itemize}
+\item[$\diamond$] $aa^{-1} = ba^{-1}$
+\item[$\diamond$] $a = ab^{-1}a$
+\item[$\diamond$] There exists $e \in E(S)$ such that $a=be$
+\end{itemize}
+\item The partial order is easily seen to be a generalisation of the semilattice order on a commutative semigroup of idempotents, defined by $e \le f$ if $ef = e$, and $e \land f = ef$.
+\end{itemize}
+
+\subsection{Free Inverse Semigroups}
+
+The bracket semigroup does not store the `parse' of a sentence, it merely informs us whether a sentence parses or not. An alternative construction that is of great importance for our studies is the notion of a \emph{free} inverse semigroup.
+
+The crucial work on free inverse semigroups was done by \cite{Munn:74} in which he proves that free inverse semigroups are isomorphic to \emph{birooted word-trees}.
+
+Informally, the free inverse semigroup on a set $A$ is formed from elements of $A$ and their inverses, $A^{-1} = \{a^{-1} : a \in A\}$, satisfying no other condition than those of an inverse semigroup. Formally, the free inverse semigroup is defined in terms of a congruence relation on $(A \cup A^{-1})^*$ specifying the inverse property and commutativity of idempotents --- see \cite{Munn:74} for details. We denote the free inverse semigroup on $A$ by $\FIS(A)$.
+
+
+\subsection{Equivalence to Birooted Word-Trees}
+
+A birooted word-tree on a set $A$ is a directed acyclic graph whose edges are labelled by elements of $A$ which does not contain any subgraphs of the form $\bullet \stackrel{a}{\longrightarrow} \bullet \stackrel{a}{\longleftarrow} \bullet$ or $\bullet \stackrel{a}{\longleftarrow} \bullet \stackrel{a}{\longrightarrow} \bullet$, together with two distinguished nodes, called the start node, $\Box$ and finish node, $\circ$.
+
+A element in the free semigroup $\FIS(A)$ is denoted as a sequence $x_1^{d_1}x_2^{d_2}\ldots x_n^{d_n}$ where $x_i \in A$ and $d_i \in \{1,-1\}$.
+
+ We construct the birooted word tree by starting with a single node as the start node, and for each $i$ from 1 to $n$:
+\begin{itemize}
+\item Determine if there is an edge labelled $x_i$ leaving the current node if $d_i = 1$, or arriving at the current node if $d_i = -1$.
+\item If so, follow this edge and make the resulting node the current node.
+\item If not, create a new node and join it with an edge labelled $x_i$ in the appropriate direction, and make this node the current node.
+\end{itemize}
+The finish node is the current node after the $n$ iterations.
+
+As an example consider the set $A = \{a,b,c,d\}$, and the element in $\FIS(A)$ given by the sequence
+$$aaa^{-1}bcdbb^{-1}aa^{-1}d^{-1}c^{-1}ac.$$
+This has the following graph:
+
+\begin{center}
+\begin{graph}(10,6)(-1,-5)
+\newcommand{\diredgetext}[3]{\diredge{#1}{#2}\edgetext{#1}{#2}{#3}}
+
+\squarenode{R1}(0,0)[\graphnodecolour{1}]
+\roundnode{R2}(2,0)
+\roundnode{R3}(2,-2)
+\roundnode{R4}(4,0)
+\roundnode{R5}(4,-2)
+\roundnode{R6}(6,-2)
+\roundnode{R7}(6,-4)
+\roundnode{R8}(8,-2)
+\roundnode{R9}(6,0)
+\roundnode{R10}(8,0)[\graphnodecolour{1}]
+%\diredge{R1}{R2}
+\diredgetext{R1}{R2}{$a$}
+\diredgetext{R2}{R3}{$a$}
+\diredgetext{R2}{R4}{$b$}
+\diredgetext{R4}{R5}{$c$}
+\diredgetext{R5}{R6}{$d$}
+\diredgetext{R6}{R7}{$b$}
+\diredgetext{R6}{R8}{$a$}
+\diredgetext{R4}{R9}{$a$}
+\diredgetext{R9}{R10}{$c$}
+\end{graph}
+\end{center}
+
+The product of two elements $x$ and $y$  in the free inverse semigroup can be computed by finding the birooted word-tree of $x$ and that of $y$, joining the graphs by equating the start node of $y$ with the finish node of $x$ (and making it a normal node), and merging any other nodes and edges necessary to remove any subgraphs of the form  $\bullet \stackrel{a}{\longrightarrow} \bullet \stackrel{a}{\longleftarrow} \bullet$ or $\bullet \stackrel{a}{\longleftarrow} \bullet \stackrel{a}{\longrightarrow} \bullet$.
+
+The inverse of an element has the same graph with start and finish nodes exchanged.
+
+\subsection{Syntactic Equivalence}
+
+We can represent parses of sentences in link grammar by translating words to syntactic categories in the \emph{free inverse semigroup} instead of the bracket algebra. In this case sentences are represented as idempotents. For example, the parse shown earlier for ``they mashed their way through the thick mud'' can be represented in the inverse semigroup on $A = \{s,m,o,d,j,a\}$ as
+$$ss^{-1}moo^{-1}dd^{-1}m^{-1}jdaa^{-1}d^{-1}j^{-1}$$
+which has the following birooted word-tree:
+
+\begin{center}
+\begin{graph}(8,8)(0,-7.5)
+\newcommand{\diredgetext}[3]{\diredge{#1}{#2}\edgetext{#1}{#2}{#3}}
+\squarenode{R1}(4,0)[\graphnodecolour{1}]
+\roundnode{R2}(0,-2)
+\roundnode{R3}(4,-3)
+\roundnode{R4}(4,-5)
+\roundnode{R5}(4,-7)
+\roundnode{R6}(8,-2)
+\roundnode{R7}(8,-4)
+\roundnode{R8}(8,-6)
+\roundnode{R1Copy}(4,0)[\graphnodecolour{1}]
+%Edges:
+\freetext(0,-1){$s(\text{they},\text{mashed})$}
+\diredge{R1}{R2}
+\diredgetext{R1}{R3}{$m(\text{mashed},\text{through})$}
+\diredgetext{R3}{R4}{$o(\text{mashed},\text{way})$}
+\diredgetext{R4}{R5}{$d(\text{their},\text{way})$}
+\diredge{R1}{R6}
+\freetext(8,-1){$j(\text{through},\text{mud})$}
+\diredgetext{R6}{R7}{$d(\text{the},\text{mud})$}
+\diredgetext{R7}{R8}{$a(\text{thick},\text{mud})$}
+\end{graph}
+\end{center}
+
+%\begin{center}
+%\begin{graph}(6,5)(0,-0.5)
+%\newcommand{\diredgetext}[3]{\diredge{#1}{#2}\edgetext{#1}{#2}{#3}}
+%\squarenode{R1}(0,2)[\graphnodecolour{1}]
+%\roundnode{R2}(0,4)
+%\roundnode{R3}(2,2)
+%\roundnode{R4}(4,2)
+%\roundnode{R5}(6,2)
+%\roundnode{R6}(0,0)
+%\roundnode{R7}(2,0)
+%\roundnode{R8}(4,0)
+%\roundnode{R1Copy}(0,2)[\graphnodecolour{1}]
+%%Edges:
+%\diredgetext{R1}{R2}{$s$}
+%\diredgetext{R1}{R3}{$m$}
+%\diredgetext{R3}{R4}{$o$}
+%\diredgetext{R4}{R5}{$d$}
+%\diredgetext{R1}{R6}{$j$}
+%\diredgetext{R6}{R7}{$d$}
+%\diredgetext{R7}{R8}{$a$}
+%\end{graph}
+%\end{center}
+In this graph, the fact that start and finish nodes overlap indicates that the element is idempotent. The nodes linked by the grammar are indicated in brackets; later we will be able to attach the meanings of these words to the links in the grammar.
+
+
+%\subsection{Probabilistic Link Grammars}
+
+%\cite{Lafferty:92} describe a probabilistic implementation of link grammars. Their implementation is generative, in that probabilities are assumed to be conditioned on the choices that are made at each stage, so as to provide a probability distribution over the language described by the grammar.
+
+%Such an approach is not the natural one to take from the algebraic perspective. Instead we would look at the \emph{discrete semigroup algebra} of the bracket semigroup or free inverse semigroup, for example, which provides a very simplistic way of attaching probabilities to parses.
+
+%\label{discrete}
+%\begin{defn}
+%The \emph{discrete semigroup algebra} $l^1(S,m)$ given any semigroup $S$ and positive real-valued function $m$ on $S$ is the set of all complex-valued functions $f$ on $S$ satisfying
+%$\sum_{x \in S} m(x) |f(x)| < \infty;$
+%this is a vector space under pointwise addition and scalar multiplication. We can define multiplication on elements of this vector space by convolution:
+%$$(fg)(x) = \sum_{yz = x} f(y)g(x),$$
+%where if $yz = x$ has no solutions, $(fg)(x)$ is defined to be zero. The norm $\|\cdot\|$ is then defined by
+%$$\|f\| = \sum_{x \in S} m(x) |f(x)|.$$
+%The special discrete semigroup algebra of $S$ with $m(x) = 1$ for all $x$ is denoted $l^1(S)$.
+%\end{defn}
+
+%This construction, however, does result in something that, without renormalising, is not strictly probabilistic. For comparing strings for the purposes of entailment though, it is not clear that such renormalisation would be necessary.
+
+
+\subsection{A Semigroup for Syntax}
+
+Both the bracket semigroup and the free inverse semigroup accurately represent syntax according to link grammar, however both have advantages and disadvantages for practical application in representing syntax. The free inverse semigroup stores information about the parse in a Munn tree, however combinations which don't parse will be `left over'. In the bracket semigroup, combinations which don't parse have a product of zero, so are ignored, but there is no memory of the parse.
+
+For example, suppose nouns may optionally be preceded by an adjective ($a$) before taking a determiner ($d$) which we represent as $n_f = a^{-1}d^{-1} + d^{-1}$ in idempotent semiring of the free inverse semigroup, and as $n_b = \ket{a}\ket{d} + \ket{d}$ in the idempotent semiring of the bracket semigroup. If the noun is now preceded by a determiner, $d$ or $\bra{d}$ respectively, then in the free inverse semigroup we have
+$$dn_f = da^{-1}d^{-1} + dd^{-1}$$
+while in the bracket semigroup we have $\bra{d}n_b = 1$ since $\bracket{d}{a} = 0$. Thus the free inverse semigroup correctly stores the idempotent $dd^{-1}$ but leaves the non-syntactic construction $da^{-1}d^{-1}$, while the bracket semigroup correctly cancels out this construction, but has no memory of the parse.
+
+To get around this problem we combine the two structures; to do this we will need the \emph{direct product}. Given two semigroups $S_1$ and $S_2$ the direct product is the cartesian product $S_1 \times S_2$ with the semigroup product defined by
+$$ (x_1,y_1)\cdot (x_2,y_2) = (x_1x_2,y_1y_2). $$
+If $S_1$ and $S_2$ are inverse semigroups, then $S_1 \times S_2$ is an inverse semigroup, with inverse $(x,y)^{-1} = (x^{-1},y^{-1})$.
+
+Given a set $A$ of links, we take the direct product of the free inverse semigroup on $A$ and the bracket semigroup on $A$, modulo an equivalence which makes elements zero in the bracket semigroup zero in the product. That is, the semigroup for syntax  is defined as
+$$\FIS(A) \times B(A)\ / \equiv,$$
+where $\equiv$ is defined by $(x,0) \equiv (y,0)$ for all $x,y \in \FIS(A)$. We are actually interested in the subsemigroup $S_s(A)$ generated by elements of the form $(a, \bra{a})$ and $(a^{-1},\ket{a})$ for all elements $a \in A$. We denote these elements $\sbra{a}$ and $\sket{a}$ respectively, and the idempotent $(aa^{-1},1)$ as $\sbracket{a}{a}$.
+
+Our example then becomes
+$$\sbra{d}n_s = \sbra{d} \Big(\sket{a}\sket{d} + \sket{d}\Big) = \sbracket{d}{d}$$
+where $n_s = \sket{a}\sket{d} + \sket{d}$ is the representation of the noun in $S_s(A)$.
+
+%\subsection{Algebras from Syntax Semigroups}
+
+%If $S$ is a semigroup, we can construct an algebra $L^1(S)$ of functions on $S$ (see section \ref{algebras}).
+
+
+%\theendnotes
+
+\bibliographystyle{plainnat}
+\bibliography{contexts.bib}
+
+
+%\end{article}
+\end{document}

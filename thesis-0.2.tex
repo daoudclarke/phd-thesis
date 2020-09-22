@@ -1,0 +1,179 @@
+%Bismillahi-r-Rahmani-r-Rahim
+
+
+\documentclass[a4paper,oneside,12pt]{report}
+
+
+
+%Macro for including parts:
+% \begin{macro}{\includepart} 
+% 
+% \marg{#1} --  The name of the part 
+% 
+% 
+%    \begin{macrocode} 
+\newcommand*{\includepart}[1]{% 
+    \let\olddocumentclass\documentclass% 
+    \renewcommand*{\documentclass}[2][]{}% 
+    % 
+    \let\oldusepackage\usepackage% 
+    \renewcommand*{\usepackage}[2][]{% 
+        \expandafter\ifx\csname ver@##2.sty\endcsname\relax% 
+            \GenericError{}{Package `##2' not loaded}{}{% 
+                Plase load the package using `\string\usepackage'% 
+                \space in the main file.% 
+            }% 
+        \fi% 
+    }% 
+    % 
+    \let\olddocument\document% 
+    \renewcommand*{\document}{\endgroup}% 
+    % 
+    \let\oldenddocument\enddocument% 
+    \renewcommand*{\enddocument}{\begingroup}% 
+    %
+    \let\oldbibliography\bibliography%
+    \renewcommand*{\bibliography}[1]{}%
+    \let\oldbibliographystyle\bibliographystyle%
+    \renewcommand*{\bibliographystyle}[1]{}%
+    \let\oldinclude\include%
+    \renewcommand*{\include}[1]{}%
+    %
+    \oldinclude{#1}% 
+    %
+    \let\bibliography\oldbibliography%
+    \let\bibliographystyle\oldbibliographystyle%
+    \let\include\oldinclude% 
+    \let\documentclass\olddocumentclass% 
+    \let\usepackage\oldusepackage 
+    \let\document\olddocument% 
+    \let\enddocument\oldenddocument% 
+
+} 
+
+%    \end{macrocode} 
+% 
+% \end{macro} 
+
+
+
+
+%\usepackage[T1]{fontenc}
+%\usepackage{textcomp}
+
+%\renewcommand{\rmdefault}{dayrom}
+
+
+%\input{commands.tex}
+
+%Commands:
+\usepackage{makeidx}
+
+%\usepackage{natbib}
+
+\usepackage{anysize}
+\marginsize{4cm}{2cm}{2.5cm}{2.5cm}
+\usepackage{setspace}
+\onehalfspacing
+
+\makeindex
+
+%\font\cmbig=cmr7 at 90pt
+% 
+% \newcommand{\dropcap}[1]{
+% \setbox1=\hbox{\cmbig #1}
+%\dimen1=\wd1
+%\dimen2=\ht1
+%\box1\nointerlineskip
+%\advance\dimen2 by 1.5pt
+%\vskip-\dimen2
+%\advance\dimen1 by -2pt
+%\hangindent=\dimen1 \hangafter=-4\noindent
+%}
+
+\usepackage{thesis}
+
+\input{head}
+
+%\linespread{1.3}
+
+\title{Meaning and Algebra}
+\author{Daoud Clarke}
+\date{2006}
+
+\begin{document}
+
+\maketitle
+
+
+ \chapter*{Preface}
+
+%\begin{right}
+\textsf{\textsl{My Lord, increase me in knowledge!}}
+%\end{right}
+\newline
+
+\dropcap{I}\textsc{ndeed all praise} belongs to God. We ask for God's prayers and deep peace upon the final 
+messenger Muhammad, the messenger of peace, love, mercy, justice and freedom, for it is only by his example that we may reach success, and without his guidance we would be lost. We ask that God may make this work a light and a mercy for mankind; that its benefits may shine out to all humanity and its defects may not cause harm; that He may encourage by it the seekers of His knowledge; and give success by it to those who fight for truth and justice.
+ 
+ We begin in His name, and we pray for His help and guidance, for ``None shall encompass any of His knowledge except by His will''.  Finally, we ask the reader's forgiveness for any errors in what follows, for whatever is good is from Him, and whatever is bad is from ourselves. 
+
+%\input{preface.tex}
+
+\tableofcontents
+
+%\input{introduction.tex}
+
+%\chapter{An Algebraic Vision}
+
+%%\section{Introduction}
+
+%\dropcap{T}\textsc{he aim of this thesis} is to promote an algebraic approach to computational linguistics. It is our strong belief that certain areas of algebra are very well suited to capturing the shades of meaning and vagueness inherent in natural language, and combining these with a strong probabilistic foundation. Our studies have led us gradually to one specific area, that of \emph{vector lattices} and \emph{positive operators} on these lattices. In fact, our essential thesis may be stated as follows: \emph{The meaning of a word can be represented as a positive operator}.
+%%\footnote{The mathematical reader should note that the sense of this term that is intended here is that of Aliprantis and Burkinshaw, i.e.~an operator on a vector lattice, and not that of an operator whose spectrum is a subset of the non-negative real numbers.}}\index{positive operator}.
+%Our efforts from now on are devoted to explaining what this statement means, and justifying it as far as we are able.
+
+% We believe there are many benefits to such an approach, as well as some disadvantages. The benefits stem from the ability to combine and compare techniques from diverse areas of computational linguistics within a unified and consistent formalism. Techniques and formalisms such as latent semantic analysis, semantic distance in ontologies, $n$-grams, categorial grammars, link grammars and dependency tree structures can all be considered within the framework of positive operators and vector lattices.
+%%\begin{itemize}
+%%\item Several approaches to representing syntax in natural language, including probabilistic versions of context free formalisms such as categorial grammars and link grammars can be considered as positive operators, as can language modeling formalisms such as $n$-grams.
+%%\item An ontology in the form of a lattice, together with a measure of semantic distance, can be used to build a vector lattice to represent meanings of words.
+%%\item Vector representations such as those used in latent semantic analysis can also be considered as vector lattices
+%%\item Dependency tree structures can be 
+%%\end{itemize}
+
+%\section{A Philosophy of Meaning}
+
+%\section{Requirements for a Natural Language Algebra}
+
+\part{Context Theoretic Semantics}
+
+\includepart{introduction}
+
+\includepart{background}
+
+\includepart{meaning-context}
+
+\includepart{context-theories}
+
+\part{Applications}
+
+\includepart{model-theoretic}
+
+\includepart{ontologies}
+
+\includepart{syntax}
+
+\appendix
+
+\includepart{definitions}
+
+\printindex
+
+\bibliographystyle{plainnat}
+\bibliography{contexts}
+
+\end{document}
+
+
+
+
+

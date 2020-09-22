@@ -1,0 +1,425 @@
+%Bismillahi-r-Rahmani-r-Rahim
+\documentclass{report}
+
+\include{head}
+\usepackage{fancyvrb}
+\usepackage{pstricks}
+
+\begin{document}
+
+\chapter{Introduction}
+
+In recent years, the abundance of text corpora and computing power has allowed the development of techniques to analyse statistical properties of words. These techniques have proved useful in many areas of computational linguistics, arguably providing evidence that they capture something about the nature of words that should be included in representations of their meaning.
+
+However, it is very difficult to reconcile these techniques with existing theories of meaning in language, which revolve around logical and ontological representations. The new techniques, almost without exception, can be viewed as dealing with vector-based representations of meaning, placing meaning (at least at the word level) within the realm of mathematics and algebra; conversely the older theories of meaning dwell in the realm of logic and ontology. There thus appears to be a gulf between theory and practice. Theory says that meaning looks logical, while in practice computational linguists make use of vector-based representations of meaning.
+
+%This apparent gap does not so far appear to have hindered the development of statistical and vector-based techniques. However, when it comes to applying the resulting representations to reasoning systems, there seems to be a distinct lack of unity and direction amongst researchers, who often resort to ad-hoc or pseudo-probabilistic methods. An example of this is given by the two recent Textual Entailment Challenges, in which the task is for the computer to determine whether, given a pair of sentences (called ``text'' and ``hypothesis''), the text entails or implies the hypothesis. A set of these pairs is provided for development of the system, and the system is then evaluated on a separate set. Each pair has been prejudged by human annotators as a true or false entailment pair. An example pair from the second challenge (in this case a true entailment) is
+%\begin{itemize}
+%\item \emph{text:} Once called the ``Queen of the Danube,'' Budapest has long been the focal point of the nation and a lively cultural centre.%\item \emph{hypothesis:} Budapest was once popularly known as the ÒQueen of the Danube.Ó
+%\end{itemize}
+%Most systems made use of vector based techniques, however very few adhered to a philosophy of meaning; moreover the philosophy of those that did arguably did not directly justify their techniques. This is fine from an engineering perspective, especially since some systems performed remarkably well given the difficulty of the task. From a theoretical linguistic perspective however, there is a problem. Existing notions of meaning in linguistic theory are simply not compatible with current techniques.
+
+%It is in fact remarkable that techniques have developed so far without a supporting theory --- perhaps in part due to the rapid development of technology opening up previously unforeseen areas of exploration in computational linguistics. Whatever the reason, the result is that theory lags behind practice, and it is this problem that we hope to address.
+
+The problem appears to be a fundamental one in computational linguistics since the whole foundation of meaning seems to be in question. The older, logical theories often subscribe to a model-theoretic philosophy of meaning \citep{Kamp:93}. According to this approach, sentences should be translated to a logical form that can be interpreted as a description of the state of the world. The new vector-based techniques, on the other hand, are often closer in spirit to the philosophy of ``meaning as context'', that the meaning of an expression is determined by how it is used. This is an old idea with origins in the philosophy of \cite{Wittgenstein:53}, who said that ``meaning just \emph{is} use'' and \cite{Firth:57}, ``You shall know a word by the company it keeps''. Whilst the two philosophies are not necessarily incompatible, especially since the former is intended to apply at the sentence level and the latter at the word level, it is not clear how they relate to each other.
+
+With this in mind, the goal of our work is the following: the development of a precise and general theory of meaning based on the philosophy of meaning as context. By precise, we mean that the theory should specify what form representations of meaning should take. The theory should be general enough so as to encompass in some manner (or be easily related to) existing vector-based techniques, but also allow the description of meaning at the phrase and sentence level, including through model-theoretic representations.
+
+We believe we have achieved this goal. Essentially our thesis is this: the notion of meaning as context can be extended to any expression in natural language. What we have found is that given certain assumptions about how to interpret the idea of ``meaning as context'' mathematically, including giving a mathematical definition of ``corpus'', we can derive some mathematical properties of meaning. Specifically:
+\begin{itemize}
+\item The meaning of a word can be represented as an element of an \emph{algebra} (a vector space with a compatible notion of multiplication defined) such that the meaning of the concatenation of expressions corresponds to the product (in the algebra) of their meanings.
+\item A \emph{linear functional} can be defined on the algebra giving us a \emph{non-com\-mutative probability space}. Applying this functional to the representation of an expression gives us the familiar notion of the probability of the expression.
+\item Lattice operations can be defined on the algebra, making it a \emph{vector lattice}. Together with the linear functional, this allows us to define a notion of a ``degree of entailment'' between expressions in terms of their algebraic representations.
+\end{itemize}
+These ideas will be explained in detail in due course. The theoretical formalism is very general, and for this reason we refer to it as a ``framework''. We call a specific implementation within the framework a ``context theory'', since it can be viewed as a theory about what contexts expressions occur in. We call the general theory we develop ``context-theoretic semantics''.
+
+What we have found connects the idea of meaning as context with several well established and thoroughly studied areas of mathematics: those of algebras and vector lattices. It is our hope that the vast amounts of mathematical research in these areas will in the long term be of benefit to computational linguists. Similarly, the area of non-commutative probability is very promising for applications to computational linguistics. In addition to the familiar notion of statistical independence, non-commutative probability was developed to describe  \emph{free probability}, which has similarities with independence but is inherently non-commutative in nature. Whilst non-commutative probability is a new area of research (in terms of the history of mathematics) we believe there is much potential in the application of this area to computational linguistics.
+
+While there are unquestionably intellectual benefits in the development of such a theory, one may ask what practical benefits such a theory may bring. The first answer is that, just as the developers of the theory behind quantum physics could not foresee its application to building lasers and silicon chip transistors, it is difficult to predict what potential benefits a new theory could bring. We will, however, do our best to identify potential benefits and applications in order to help motivate our theory. For this reason, this document is divided into two parts, the first setting out the relevant background and developing the theory itself, and the second detailing the application of the theory to several diverse areas of computational linguistics. These make use of some ideas from the areas of mathematics mentioned above, but we believe we are only scratching the surface of their potential application. The applications we will discuss are as follows:
+\begin{itemize}
+\item An analysis of how language models relate to context-theoretic semantics, specifically looking at the algebras that can be associated with $n$-gram models of language.
+\item An algebraic description of model-theoretic semantics, allowing us to provide a method of incorporating lexical and syntactic ambiguity into the representation, specifically incorporating statistical properties of ambiguity.
+\item An analysis of ontology in the context of vector lattices, showing that a taxonomy can be embedded in a vector lattice in such a way as to preserve a commonly used measure of semantic distance on the taxonomy.
+\item An examination of the algebraic properties of syntax, showing how the context-theoretic framework relates to categorial grammars, and developing an algebraic description of link grammar.
+\item A look at methods of combining context theories to build new ones, providing the potential to build complex systems for analysis of natural language.
+\end{itemize}
+
+In the remainder of this chapter, we detail our approach to the problem, then review some of the aforementioned techniques leading to vector based representations of meaning. In the second chapter we give an introduction to certain areas of mathematics: both those that are relevant to a thorough understanding of existing techniques in computational linguistics, and those that we believe will be of importance in future theories of meaning, particularly those that are important in understanding our own theory of meaning. In the third chapter we develop the theory itself.
+
+%\section{The Problem}
+
+%We wish to elaborate more on the specific problem that we wish to solve. To do this, we will give an introduction to vector-based techniques, specifically Latent Semantic Analysis and variations on the technique, and measures of distributional similarity. We will then look in more detail at the Textual Entailment Challenge and approaches to solving the problem. Finally we will discuss why we believe a vector-based theory of meaning will benefit researchers tackling such problems.
+
+
+% \section{Words and Vectors --- Existing Work}
+% 
+%The purpose of this section is to review existing work on representing words using vectors. All of the work we are aware of focuses on automatic techniques to determine some aspect of the meaning of words, or relationships between their meanings, based on the contexts they occur in within some large corpus of text. It is this that has led us to formalise meaning in terms of context, and thus it is informative for us to study these techniques. In particular we wish to focus on the mathematical properties of vectors involved in such analyses; this will allow us to abstract from these techniques to gain an insight into the nature of meaning.
+ 
+%Measures of distributional similarity attempt to put a measure of similarity on terms based on the contexts they occur in. Terms are represented by ``feature vectors'' whose nature depends on what features of the contexts we are interested in modeling, for example dependency relations might be used to form these vectors. Once these vectors are obtained, numerous mathematical formulae are available to measure similarity, for example, we can choose this to be the cosine of the angle between the vectors. 
+
+%In latent semantic analysis, vectors are also used to represent contexts that terms occur in, although in this case, the context is more commonly defined by looking at terms that occur within a window, or simply considering what documents a term occur. A different kind of analysis is applied, which attempts to deduce ``latent'' information about the meaning of a term by means of a dimensionality reduction. The resulting vectors are a compact representation of the meaning of the term, and have proved useful in information retrieval applications.
+
+%\section{Vector Based Representations of Meaning}
+%
+%Vector-based representations of meaning have arisen out of the wide availability of large text corpora and computing power which allows the statistical analysis of these corpora. By ``vector-based representations of meaning'' we really mean two areas of research: that of latent semantic analysis and its variants, and that of measures of distributional similarity between natural language expressions. In general, both these areas involve representing expressions in terms of vectors which are built according to the contexts that the expression of interest occurs in in some large corpus. Figure \ref{fruit} gives a sample of occurrences of the term ``fruit'' in the British National Corpus; typically context vectors are built from many more occurrences of a term.
+%
+%In latent semantic analysis, analysis is performed on the vectors, resulting in a new vector representation of an expression which is supposed to describe ``latent'' features of meaning of the expression. By contrast, measures of distributional similarity leave the initial vector representation intact, but use mathematical analysis to measure the similarity between these vectors in various ways.
+%
+%Both techniques are dependent on how the initial vectors are built, which is crucial to their effectiveness for different applications.
+%\begin{itemize}
+%\item The vector representation of an expression may depend purely on what document the expression occurs in: the representation is simply the multiset or bag of document identifiers corresponding to occurrences of the expression. The order of occurrences of words in a document is thus deemed unimportant in this model. Each dimension of the vector representation corresponds to a document in the corpus.
+%\item In a \emph{windowing model} the representation of an expression is built from words that occur within a certain ``window'' of $n$ words from the expression of interest; again order of occurrence is unimportant. Each dimension of the vector representation now corresponds to a different word that expressions may co-occur with.
+%\item The text may be parsed with a dependency parser and the dependency relations used to build vectors. In this case, each dimension would correspond to a different relationship: a noun occurring as object of a verb would be in a different dimension to the same noun occurring as the subject of the verb.
+%\end{itemize}
+%The first of these representations relates closely to information retrieval applications, and it was this application that led to the development of latent semantic analysis; the second representation is also commonly used in latent semantic analysis. Variations on the third representation are more commonly used in measures of distributional similarity.
+%
+%\begin{figure}
+%\begin{Verbatim}[fontsize=\scriptsize]
+%end some medicine for her, but she will need fruit and  milk, and some other special things that
+%our own. Here we give you ideas for foliage, fruit and  various festive trimmings that you can i
+%part II). However, other strategies can bear fruit  and are described under three sections which
+%       supper Ñ tomatoes, potato chips, dried fruit and cake. And  they drank water out of tea-cu
+%erent days, as  the East Berliners queue for fruit and cheap stereos, a Turkish  beggar sleeps i
+%dening; and  Pests -- how to control them on fruit and vegetables. Both are  produced by the Hen
+%me,"Silver Queen" is male so will never bear fruit    At the opposite end of the prickliness sca
+% lifted away    Like an orange lifted from a fruit-bowl    And darkness, blacker    Than an oil-
+%ed in your  wreath. Christmas ribbon and wax fruit can be added for colour.  Essentials are scis
+%e you need to start developing your very own fruit  collection    KEEPING OUT THE COLD    Need e
+%ly with Jeyes fluid    THE KITCHEN GARDEN    FRUIT    Cut out cankers on fruit trees, except tho
+%wn and watered    AUTUMN HUES    Foliage and fruit enrich the autumn garden, whether glowing  th
+%- have forgotten  the maxim: " tel arbre tel fruit ". If I were  willing  to  unstitch the past 
+% of three children of Alfred Roger Ackerley, fruit importer  of London, and his mistress, Janett
+%rful didactic spirit, much that was to  bear fruit in his years as a mature artist. Although thi
+%e all made with natural vegetable, plant and fruit ingredients  such as chamomile, kukai nut and
+%ack in the soup.    He re-visits the Copella fruit juice farm in Suffolk, the  business he told 
+%rategic relationship" with Lotus, the first  fruit of which is a mail gateway between Office and
+%, choose your plants  carefully to enjoy the fruit of your labour all year round.    PLACES TO V
+% and I love chips.  Otherwise I'll nibble on fruit or something to convince myself  that I'm eat
+% tone and felt the  softness and warmth of a fruit ripening against a wall? If she  had she migh
+%ol place to set. Calories per  slice: 395    Fruit Scones with cinnamon Butter    (makes 12)    
+%ought me water. Another monster gave me some fruit  to eat. A few monsters lay against my body a
+%ney fungus.    Cut out diseased wood on most fruit trees    VEGETABLES    Continue winter diggin
+%age and chafing.    Remove old, unproductive fruit trees by cutting them down to  shoulder heigh
+%ITCHEN GARDEN    FRUIT    Cut out cankers on fruit trees, except those on peaches, plums  and ch
+%ps  remain, then stir in the sugar and dried fruit. Using a round-  ended knife, stir in the mil
+% of a homeland, well others dream too,    De fruit was forbidden an now yu can't chew,    How ca
+%onnoisseurs. We take a bite from an unusual  fruit. We come away neither nourished nor ravished,
+%\end{Verbatim}
+%
+%\caption{Occurrences and some context of occurrences of the word \emph{fruit} in the British National Corpus.}
+%\label{fruit}
+%\end{figure}
+%
+%
+%\subsection{Latent Semantic Analysis and its Variants}
+%
+%The technique of latent semantic analysis and the similar probabilistic techniques that followed it, arose from the work of \cite{Deerwester:90}, in the context of the task of information retrieval. We will give only a brief overview here, since the details are not directly relevant to our work.
+%
+%It is common in information retrieval to represent a term by the vector of documents it occurs in. Table \ref{fruittable} gives a set of hypothetical occurrences of six terms in eight documents. Given a user query term, the information retrieval software will then return the documents that have the most occurrences of that term. From the vector perspective, the documents are identified with the \emph{components} of the vector representation of a term; given a query term, the most suitable document corresponds to the \emph{greatest component} of the term's vector representation.
+%
+%It is often the case, however, that there are documents that are suitable matches for a given query which do not contain that query term often, or even at all. These will not be returned by the straightforward matching technique, and latent semantic analysis aims to get around this problem. It aims to deduce ``latent'' information about where terms may be expected to appear, by reducing the number of dimensions in which vectors are represented. This is performed in such a way that the most important components of meaning are retained, while those thought to represent noise are discarded.  This \emph{dimensionality reduction} has the effect of moving vectors that were unrelated closer together, as they are ``squashed'' into a space of lower dimensionality. For example, in table \ref{fruittable}, \emph{banana} and \emph{orange} never occur together, however they both occur with \emph{apple} and \emph{fruit} which provides evidence that they are related. Latent semantic analysis aims to deduce this relation.
+%
+%%Latent semantic analysis works by reducing the number of dimensions in which information can be stored, keeping only the most important information about the original matrix.
+%
+%Figure \ref{reduce} is intended to give an idea of how this works. The outer rectangles represent  the matrices arrived at by singular valued decomposition, their product gives the original matrix representing the table of term-document co-occurrences. These matrices are arranged so that the most important information is stored in the top and left areas, with less important information being stored towards the bottom and right. In latent semantic analysis, a rectangle of the most important information is chosen (the inner rectangles); this information is kept and the remaining areas of the matrices are discarded --- these are assumed to contain only noise information.
+% 
+%Table \ref{approx} shows the latent semantic analysis approximation to table \ref{fruittable}. In this case we chose to keep only two dimensions for the inner rectangles. We can see that in the new table, \emph{banana} and \emph{orange} now have components in common --- latent semantic analysis has forced them into a shared space. Because there were only two dimensions available, the term \emph{computer}, which before only shared components with \emph{apple} has been forced nearer to all the other terms, but remains closest to the term \emph{apple} as we would expect.
+%
+%
+%
+%%Latent semantic analysis works in as follows. The matrix $M$ representing the original table can be decomposed into three matrices, $M = UDV$, where $U$ and $V$ are unitary matrices and $D$ is a diagonal matrix containing the \emph{singular values} of $M$. Figure \ref{reduce} shows how the dimensionality reduction is performed. The decomposition can be rearranged so that the most important components --- those with the greatest singular values --- are in the top left of the matrix $D$, the dimensionality reduction is then performed by discarding the less important components, resulting in smaller matrices $U'$, $V'$ and $D'$. The matrix $M$ is then \emph{approximated} by the product of the new matrices, $M \simeq U'D'V'$.
+%
+%%For example, if we take table \ref{fruittable} as matrix $M$, then the decomposed and reduced matrices are those in figure \ref{decompose}. In this case we chose two keep only two dimensions corresponding to the greatest singular values ($12.8$ and $9.46$); keeping more dimensions would mean that more features of the original matrix would be preserved.
+%\begin{table}
+%\newcommand\T{\rule[-1.2ex]{0pt}{3.7ex}}
+%
+%\begin{center}
+%\begin{tabular}{|l|cccccccc|}
+%\hline
+%	 	& $d_1$\T	& $d_2$	& $d_3$	& $d_4$	& $d_5$ & $d_6$ & $d_7$ & $d_8$\\
+%\hline
+%banana\T	& 2		& --		& --		& --		& 5		& --		& 5		& --\\
+%apple\T	& 4		& 3		& 4		& 6		& 3		& --		& --		& --\\
+%orange\T	& --		& 2		& 1		& --		& --		& 7		& --		& 3\\
+%fruit\T	& --		& 1		& 3		& --		& 4		& 3		& 5		& 3\\
+%tree\T	& --		& --		& 5		& --		& --		& 5		& --		& --\\
+%computer\T& --		& --		& --		& 6		& --		& --		& --		& --\\
+%\hline
+%\end{tabular}
+%\caption{A table of hypothetical occurrences of words in a set of documents, $d_1$ to $d_8$.}
+%\label{fruittable}
+%\end{center}
+%\end{table}
+%
+%%\begin{figure}
+%%$$\left( \begin{array}{cc}
+%%.335  &  -.175 \\
+%%.504   & -.619 \\
+%%.392   & .514\\
+%%.564   & .177\\
+%%.374   & .341\\
+%%.141   & -.415 
+%%\end{array}\right)
+%%\left( \begin{array}{cc}
+%%  12.8   &   0  \\
+%%   0   &   9.46
+%%\end{array}\right)
+%%\left( \begin{array}{cc}
+%%.209   &  -.298  \\
+%%.223    & -.0686 \\
+%%.466   & .0295 \\
+%%.302   &  -.655  \\
+%%.425   &  -.213  \\
+%%.492   &  .617 \\
+%%.351   & .00101\\
+%%.224    & .219 \\
+%%\end{array}\right)^\mathrm{T}$$
+%%\caption{The matrices $U'$, $D'$ and $V'$ formed from singular value decomposition and dimensionality reduction. The product approximates the original matrix in table \ref{fruittable}. Here $A^\mathrm{T}$ is used to mean the transpose of matrix $A$.}
+%%\label{decompose}
+%%\end{figure}
+%
+%\begin{table}
+%\newcommand\T{\rule[-1.2ex]{0pt}{3.7ex}}
+%
+%\begin{center}
+%\begin{tabular}{|l|cccccccc|}
+%\hline
+%	 	& $d_1$\T	& $d_2$	& $d_3$	& $d_4$	& $d_5$ & $d_6$ & $d_7$ & $d_8$\\
+%\hline
+%banana\T & 1.40 & 1.08 & 1.95 & 2.40 &  2.19 & 1.09 &  1.51 & .597 \\
+%apple\T	& 3.11 & 1.85 & 2.84 & 5.80 &  4.00 & -.44 &  2.26 &  .17 \\
+%orange\T	& -.40 & .795 & 2.48 & -1.68 & 1.10 & 5.49 &  1.77 & 2.20 \\
+%fruit\T	& 1.02 & 1.50 & 3.41 & 1.08 &  2.71 & 4.60 &  2.53 & 1.99 \\
+%tree\T	& .041 & .847 & 2.33 & -.68 &  1.35 & 4.36 &  1.68 & 1.78 \\
+%computer\T& 1.56 & .679 & .731 & 3.13 &  1.62 & -1.53 & .635 & -.455\\
+%\hline
+%\end{tabular}
+%\caption{An approximation to the table obtained from a singular-valued decomposition followed by a dimensionality reduction to two dimensions.}
+%\label{approx}
+%\end{center}
+%\end{table}
+%
+%\begin{figure}
+%\begin{center}
+%\input{matrices.pst}
+%\end{center}
+%\caption{Matrix decomposition and dimensionality reduction in latent semantic analysis.}
+%\label{reduce}
+%\end{figure}
+%
+%Latent semantic analysis in its original form has some problems many of which have now been resolved to a large degree by new techniques. For example, the new, approximate matrix may contain negative values, as our example shows (table \ref{approx}). This is undesirable, as the matrix is intended to represent expected co-occurrence frequencies, and these cannot be negative; this is a result of the techniques lack of grounding in a sound probabilistic analysis of the situation.
+%
+%\emph{Probabilistic latent semantic analysis} \citep{Hofmann:99} is a technique which has the same aim, but solves this problem in a probabilistic fashion. It treats the occurrence of words and documents as random variables, and postulates the existence of a hidden variable (see figure \ref{plsa}). This resolves the issue of negative values, and puts the technique on a firmer theoretical foundation.
+%
+%\emph{Latent Dirichlet Allocation} \citep{Blei:03} provides an even more in-depth Bayesian analysis of the situation. The problem with probabiliistic latent semantic analysis, the authors propose, is that there is an assumed finite number of documents. This is not the true situation: the documents available should be viewed as a sample from an infinite set of documents. In order to achieve this, they model documents as samples from a \emph{multinomial distribution} --- a generalisation of the binomial distribution.
+%
+%\begin{figure}
+%\begin{center}
+%\input{plsa.pst}
+%\end{center}
+%\caption{The probabilistic latent semantic analysis model of words $w$ and documents $d$ modelled as dependent on a latent variable $z$.}
+%\label{plsa}
+%\end{figure}
+%
+%
+%
+%\subsection{Measures of Distributional Similarity}
+%
+%The use of distributional similarity measures (or often, more accurately, distance measures) has been an area of intense interest in computational linguistics in recent years \citep{Lin:98a,Lee:99,Curran:02,Kilgarriff:03,Weeds:04}. A wide variety of measures have been suggested; the details are not of interest to us here so we mention only a few basic measures.
+%
+%\begin{table}
+%\newcommand\T{\rule[-1.7ex]{0pt}{4.2ex}}
+%\begin{center}
+%\begin{tabular}{|l|rcl|}
+%
+%\hline
+%\emph{Measure} & \multicolumn{3}{|c|}{\emph{Formula}\T} \\
+%\hline\hline
+%Cosine\T & $\cos \theta$&=& $\frac{u\cdot v}{\|u\|\|v\|}$\\
+%Euclidean distance\T & $\|u - v\|$&=& $\sqrt{\sum_i (u_i - v_i)^2}$\\
+%City block distance\T & $\|u - v\|_1$ &=& $\sum_i |u_i - v_i|$\\
+%\hline
+%\end{tabular}
+%\caption{Geometric measures of similarity and distance between vectors $u$ and $v$, where $u_i$ indicates the components of vector $u$, $u\cdot v$ indicates the dot product and $\|u\|$ denotes the Euclidean norm of $u$.}
+%\label{simmeasures}
+%\end{center}
+%\end{table}
+%
+%The most obvious are those with a clear geometric interpretation, namely measuring angles and distances between vectors (see table \ref{simmeasures}). The cosine of the angle between vectors is often used as a measure of similarity since it takes values between $0$ and $1$ and is equal to $1$ only when the vectors are exactly the same. The Euclidean distance is our familiar measure of distance and the $L^1$ norm or ``city block'' distance corresponds to the distance measured using only vertical and horizontal lines (in two dimensions).
+%
+%The more complex measures are more probabilistic in nature; vectors are normalised so that they can be considered as an estimate of a probability distribution over contexts, allowing the use of mathematics to measure the similarity between distributions.
+%
+%
+%%\subsection{Properties of Vectors for Meaning}
+%%\subsection{Outstanding Issues in Existing Work}
+% 
+%%\subsection{Case Study: Textual Entailment} 
+%
+%
+%\section{Model-Theoretic Semantics}
+%
+%
+%
+%\section{Philosophy}
+%
+%The development of a theory of meaning inevitably requires subscription to a philosophy of \emph{what meaning is}. We are interested in describing representations resulting from techniques that make use of context in order to determine meaning, therefore it is natural that we look for a philsophy in which meaning is closely connected to context. The closest we have found is in the ideas of \cite{Firth:57}, and before him, \cite{Wittgenstein:53}.
+%
+%\subsection{Wittgenstein}
+%
+%Wittgenstein was concerned with understanding language for the purpose of applying it to philosophy. He believed that many errors in philosophical reasoning arose out of an incorrect understanding of what meaning is. In \emph{Philosophical Investigations} Wittgenstein especially combats the idea that the meaning of a word is an object:
+%\begin{quote}
+%``When they (my elders) named some object, and accordingly moved towards something, I saw this and I grasped that that the thing was called by the sound they uttered when they meant to point it out.  Their intention was shown by their bodily movements, as it were the natural language of all peoples; the expression of the face, the play of the eyes, the movement of other parts of the body, and the tone of the voice which expresses our state of mind in seeking, having, rejecting, or avoiding something.  Thus, as I heard words repeatedly used in their proper places in various sentences, I gradually learnt to understand what objects they signified; and after I had trained my mouth to form these signs, I used them to express my own desires.''\footnote{A quotation from Augustine (Confessions, I.8.)}
+% 
+%These words, it seems to me, give us a particular picture of the essence of human language.  It is this: the individual words in language name objects --- sentences are combinations of such names. In this picture of language we find the roots of the following idea: Every word has a meaning.  The meaning is correlated with the word.  It is the object for which the word stands.
+%\end{quote}
+%He later continues, ``That philosophical concept of meaning has its place in a primitive idea of the way language functions''.
+%
+%Wittgenstein's own idea of meaning is later expressed as follows:
+%\begin{quote}
+%For a large class of cases --- though not for all --- in which we employ the word ``meaning'' it can be defined thus: the meaning of a word is its use in the language.
+%\end{quote}
+%In other words, if we know exactly how a word should be used, then in general, we know its meaning. Note that Wittgenstein requires that we know the ``use'' of a word rather than merely the contexts it is used in. This implies a much stronger knowledge since it seems to require knowing the reason behind using a word in terms of the impact it will produce; knowing the contexts a word occurs in merely means we can list the particular situations in which the use of the word is appropriate.
+%
+%
+%
+%
+%
+%\subsection{Firth}
+%
+%
+%\cite{Honeybone:05} describes Firth's perception of language:
+%\begin{quote}
+%\ldots Firth saw language as a set of  events which speakers uttered, a mode of action, a way of  ``doing  things'',  and  therefore  linguists should focus on speech events themselves. This rejected  the  common view that speech acts are only interesting for linguists to gain access to the  ``true'' object of study --- their underlying grammatical systems.
+%
+%As utterances occur in real-life contexts, Firth argued that their meaning derived  just as much from the particular situation in which they occurred as from the string of  sounds  uttered.  This  integrationist  idea, which  mixes  language with the objects  physically present during a conversation to ascertain the meaning involved, is known  as Firth's ``contextual theory of meaning''\ldots
+%\end{quote}
+%This is summed up in the quote from \cite{Firth:57}, ``You shall know a word by the company it keeps''.
+%
+%Wittgenstein and Firth appear to come close to a philosophy in agreement with modern techniques in computational linguistics, since these are based around analysing how a word is used, their contexts (in large text corpora) in order to determine their meaning. Of course many aspects of their ``use'' (as Wittgenstein intended it) or ``context'' (as Firth intended it) are ignored: the techniques do not generally take into account the person speaking or writing, or the time or location in which it was spoken or written. We may call these the ``general context'' --- modern techniques make use of the ``specific context'', the other words occurring in the region of the word of interest.
+%
+%\subsection{Harris}
+%
+%The distributional hypothesis of \cite{Harris:68} states that words that occur in similar contexts have similar meanings. Here context is used in the sense of the words occurring in proximity to the word of interest (specific context), not the general sense of context intended by Firth.
+%
+%\subsection{Later Developments}
+%
+%Harris's distributional hypothesis has been the inspiration for much of the statistical work on determining meaning from corpora. Very recently, attempts have been made to refine the distributional hypothesis.
+%
+%\cite{Weeds:04} take this one step further with the introduction of the idea of ``distributional generality''. A term $w_1$ is distributionally more general than another term $w_2$ if $w_2$ occurs in a subset of the contexts that $w_1$ occurs in. They relate this to their measures of precision and recall which they use to define a variety of measures of distributional similarity.
+%
+%The idea is that distributional generality may be connected to \emph{semantic generality}. An example of this is the \emph{hypernymy relation} or ``is a'' relation between nouns: a word $w_1$ is a hypernym of $w_2$ if $w_1$ refers to a concept that generalises the concept referred to by $w_2$, for example the term \emph{animal} is a hypernym of \emph{dog} since a dog is an animal. They explain the connection to distributional generality as follows:
+%\begin{quote}
+%Although one can obviously think of counter-examples, we would generally expect that the more specific term \emph{dog} can only be used in contexts where \emph{animal} can be used and that the more general term \emph{animal} might be used in all of the contexts where \emph{dog} is used and possibly others. Thus, we might expect that distributional generality is correlated with semantic generality\ldots
+%\end{quote}
+%
+%This has been refined by \cite{Geffet:05} with the introduction of two ``distributional inclusion hypotheses''. They define these in terms of ``lexical entailment'' between senses of words, rather than the hyponymy relation which is more specific in meaning and is defined between words. They also only consider what they call ``syntactic-based features'' which would include, for example, dependency relations, and discount co-occurrences within a window as providing useful knowledge about entailment. Finally, they assume that it is possible to distinguish the ``characteristic'' features --- that is, those features that have an impact on the meaning of a word. Let $s_1$ and $s_2$ be two senses of words. Their hypotheses, then are:
+%\begin{enumerate}
+%\item If $s_1$ lexically entails $s_2$ then all the characteristic (syntactic-based) features of $s_1$ are expected to appear with $s_2$.
+%\item If all the characteristic (syntactic-based) features of $s_1$ appear with $s_2$ then we expect that $s_1$ lexically entails $s_2$. 
+%\end{enumerate}
+%
+%The two hypotheses effectively tie the meaning (in terms of lexical entailment) to specific features of the contexts that terms occur in, however, the authors do not go so far as to attempt to equate the two.
+%
+%
+
+\section{Rationale}
+
+
+
+ \subsection{Why Algebra?}
+
+% \subsection*{Algebra}
+% 
+%It is informative, before we start, to discuss some of the potential meanings and origins of the word ``algebra''.
+The word ``algebra'' originates from the arabic \emph{al-jabr}, meaning ``the reunion''  or ``the reduction'' after the work by ninth century mathematician al-Khw\=arizm\=\i{} (also responsible for the word ``algorithm''), \emph{al-Kit\=ab al--mukhta\d sar {f\=\i}  \d his\=ab al-jabr wa-l-muq\=abala}, or \emph{The Book of Summary Concerning Calculating by Reduction and Transposition}. The modern interpretations of the word within mathematics are varied, the most important of which for our purposes are as follows:
+\begin{itemize}
+\item \textbf{algebra:} the branch of mathematics in which the elementary operations of arithmetic are extended to \emph{variables}, symbols representing real numbers;\footnote{This definition is based on one in \citep{Borowski:99}.}
+\item \textbf{abstract algebra:} the study of systems in which operations are defined with specific properties, for example \emph{fields}, \emph{vector spaces}, \emph{groups} and \emph{semigroups};
+\item \textbf{algebra over a field:} a \emph{vector space} with a multiplication operation defined, satisfying certain conditions.
+\end{itemize}
+The first of these is that we are all familiar with, while the second and third meanings are those that we shall intend by the term.% When we use the term ``algebra'' we usually intend the second of these meanings, which is the most general sense, however
+Almost all of the mathematical structures we consider have an underlying \emph{vector space} structure, which means that we will also often make use of the third sense above. In addition, because of this, when we make use of the second sense there is an implied emphasis on those structures in particular that have the properties of a vector space.
+
+Our interest in the use of algebra stems from the ability of algebra to make effective use of vector representations. Vector representations are attractive for numerous reasons. Vectors are very flexible mathematical structures: they can be added, multiplied by scalars, averaged, rotated, we can measure angles between them; more generally we can operate on them (in certain cases) with matrices.
+
+Our main reason for interest in vector representations, however is the demonstrated usefulness of techniques in computational linguistics and information retrieval that make use of vectors, most notably measures of \emph{distributional similarity} \citep{Lee:99} and \emph{latent semantic analysis} \citep{Deerwester:90} and its variations. These techniques have proved useful in many applications, including automatic thesaurus extraction, word sense disambiguation, textual entailment recognition and information retrieval. We believe that the usefulness of these techniques points to an underlying property of the nature of the meaning of words: \emph{the fact that vector-based techniques are successful is an indication that meanings of words have a vector nature}.
+
+There is another reason for our interest in vector representations. We are particularly interested in representing statistical or probabilistic features of language, and vector spaces have already demonstrated their usefulness in another probabilistic setting: that of quantum mechanics. While the differences between the two situations outweigh the similarities, the analogy still provides hope for the usefulness of vector-based representations in representing meaning in language.
+
+
+\section{Approach}
+
+The task we set ourselves posed several difficult challenges. We can divide our work into distinct areas relating to these challenges:
+\begin{enumerate}
+\item \emph{Planning.} Because the scope of the problem is so broad, we had to plan continuously so that our work was beneficial. This included initially coming up with a set of requirements for the resulting theory; these were refined and simplified throughout to fit the scope of the project.
+\item \emph{Development of Philosophy.} It was found that vector based techniques often subscribe to a greater or lesser degree to a certain philosophy about meaning, specifically that \emph{meaning is determined by context}. We adopted and refined this philosophy, and as we will show in the third chapter, making a mathematical interpretation of this philosophy leads to an algebraic theory of meaning. Again, the precise nature of the mathematical interpretation was refined in a long process.
+\item \emph{Research.} We started with the assumption that the mathematics needed for the problem would already exist amongst the vast body of work in mathematics research. A large part of our work was searching the mathematical literature for parts of mathematics that would fit our requirements and philosophy.
+\item \emph{Development of Theory.} Using the requirements and philosophy, we attempted to fit the mathematics we were researching to our specific problem. Indeed what we call our ``theory'' is not much more than a direct application of existing mathematics to the problem of representing meaning as context.
+\item \emph{Application of Theory.} This theory is so general as to perhaps be better described as a ``framework'' for incorporating existing theories. Attempting to do this also helped in the development of the theoretical framework.
+\end{enumerate}
+
+% In this chapter we set out our vision for the future of computational linguistics; what we propose is no less than a revolution in the philosophical and mathematical foundations of the subject. Nevertheless as we will try and show, our proposed philosophy and mathematical framework is a natural extension of the practical techniques already in use in computational linguistics; indeed our view is that it is the result of taking existing work to its logical ends.
+% 
+%We will argue that it is not consistent for existing research to make such heavy use of statistical techniques, while the underlying philosophy and mathematics are not directly compatible with the representations arising from statistical analysis. From this perspective, what we are proposing is not controversial, however controversy may arise if the philosophy and mathematics are considered on their own merits; this will be discussed in due course.
+
+%In this chapter we summarise our vision of an algebraic approach to meaning in natural language, putting forward  the case for such an approach. We then introduce the accompanying philosophy, and give an overview of the remainder of this document.
+
+% \section{A vision of algebra and meaning}
+
+%In this section, we set out our view of a possible future for the foundations of computational linguistics. We believe that it is essential for a reasoned and logical long term development of this field to have strong theoretical foundations. It is our belief that computational linguistics has outgrown any foundations that might have once existed as the emphasis on statistical techniques  has increased, and no comprehensive formalism has yet been proposed as a replacement.
+
+%What we are proposing here is a mathematical formalism that we believe is particularly well suited to the representations resulting from statistical techniques. We view this formalism as a \emph{framework} identifying the boundaries within which exploration can begin. Having identified the boundaries, efforts can be concentrated on describing various aspects of language within the framework.
+
+%We believe the framework has many potential benefits within computational linguistics. Firstly, it aims to unify varying aspects of language from syntax to meaning within a single formalism. This has the benefit that language is viewed as a unified whole, giving us new perspectives on what meaning and language truly are.
+
+%Secondly, since the emphasis is on representing statistical aspects of meaning, there is a potential for building more robust systems. Robustness is a feature of statistical techniques, so a formalism that combines statistical representations of meaning and syntax can combine the robustness of both areas without compromise.
+
+
+\section{Planning}
+
+%The task we initially set ourselves was unarguably ambitious given the required timeframe, so we had to be careful to prioritise our efforts to some degree. Although the main focus of our work has been on clarifying and perfecting the context-theoretic framework, a lot of effort has been put into developing applications of the framework, and these have also influenced our ideas about its required nature. However a balance had to be struck, and while we believe that the context theoretic framework is now complete, there is still a lot of work to be done in the development
+ 
+ 
+In order to clarify our goal we came up with a set of requirements that we would expect our theory to satisfy.
+ 
+ \subsection{Requirements}
+
+\subsubsection*{Representation of Syntax}
+
+\newcounter{SynCount}
+\begin{list}{\emph{\Alph{SynCount}.}}{\usecounter{SynCount}}
+\item \textbf{able to represent intuitive notions of syntactic structure.} As we noted above, syntax is necessary for compositionality of meaning. Furthermore, many linguistic theories rely on being able to attach one or more parses to a phrase or sentence, so it is reasonable to require that the formalism is capable of this.
+\item \textbf{able to represent ambiguous structure within sentences}, and ambiguous meaning resulting from such structures. By this it is meant that the representation should be capable of expressing the fact that a phrase may have more than one valid parse, and that this may result in an ambiguous meaning for the phrase.
+\item \label{fuzsyn} \textbf{able to represent statistical features of syntax.} It is common to incorporate statistical information in parsers, we require here that this statistical information can be incorporated in the formalism.
+\end{list}
+
+
+\subsubsection*{Representation of Meaning}
+
+\newcounter{MeanCount}
+\begin{list}{\emph{\Alph{MeanCount}.}}{\usecounter{MeanCount}}
+\setcounter{MeanCount}{\value{SynCount}}
+\item \textbf{able to represent intuitive notions of entailment} between words, phrases and sentences. 
+\item \textbf{able to represent a \emph{restricted version} of contradiction} in natural language.
+\item \textbf{able to represent ambiguous meanings} for words and phrases.
+\item \textbf{able to represent \emph{compositionality} of meaning.}
+\item \textbf{able to represent statistical features of meaning} in language. This includes being able to represent `partial' entailment or `fuzzy' or vector meanings of the kind exemplified by statistical similarity measures and latent semantic analysis.
+%\item \textbf{able to represent non-commutative features of meaning} in language, such as anaphora and temporal semantics.
+\end{list}
+
+\subsubsection*{Aesthetic Requirements}
+\newcounter{AeCount}
+\begin{list}{\emph{\Alph{AeCount}.}}{\usecounter{AeCount}}
+\setcounter{AeCount}{\value{MeanCount}}
+\item \textbf{homogeneous:} every word should be represented in a similar manner with respect to the formalism. Most semantic formalisms attach certain types of words to parts of the formalism, for example in Boolean semantics ``and'' is interpreted as the Boolean meet operator. This is specifically ruled out here --- we would require for example that all words can be represented as elements in an algebra, or all words as operators, but not allow some words to be elements and some operators.
+\item \textbf{unified:} all features of a language should be representable within a single formalism. For example syntax and semantics should both be describable within a single formalism.
+\item \textbf{complete:} no additional information should be supplied in order to compute with the representation, for example by disambiguating a syntactically ambiguous sentence. That is, we should be able to find a representation for a string of words without specifying a parse for that string.
+\end{list}
+
+
+ \bibliographystyle{plainnat}
+ \bibliography{contexts}
+ 
+ 
+ 
+ \end{document}

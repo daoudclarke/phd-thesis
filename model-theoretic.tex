@@ -1,0 +1,486 @@
+%Bismillahi-r-Rahmani-r-Rahim
+%\documentclass[12pt]{report}
+
+%\include{head}
+
+%\begin{document}
+
+
+\chapter{Uncertainty in Logical Semantics}
+\label{model-theoretic-chapter}
+\index{logical semantics|(}
+
+The standard approach to representing meaning in natural language is to represent sentences of the language by some logical form. This is useful in situations where it is necessary to perform in-depth reasoning, however it brings with it many problems. Such systems require accurate parses of sentences in order to reason effectively, yet existing parsers\index{parsers} do not provide sufficient accuracy or coverage. Parsers will typically return a probability distribution over possible parses, however systems using logical reasoning do not make use of these probabilities. Similarly, these systems typically need to know which sense of a word was intended by the speaker in a particular context; the task of word sense disambiguation\index{word sense disambiguation} attempts to determine this, however current performance at this task is poor. Whilst there are many problems encountered by such systems, these are two that we will look at in this chapter; it is our hope however that it will be possible to generalise the ideas presented here to deal with other problems in a similar way.
+
+It is possible that these problems are inherent in the nature of language: perhaps in general there is not one correct parse for a sentence, nor is there only ever one sense of a word that can apply in a particular context. In this case it is vital that representations of the meaning of natural language can incorporate such uncertainty. Alternatively, it may be that these problems will be eventually be solved satisfactorily; in the meantime we need a way to deal with the uncertainty that results from using these techniques.
+
+To our knowledge, existing methods of representing uncertainty\index{uncertainty, representing} and ambiguity\index{ambiguity} are founded in formal semantics and do not incorporate statistical information such as the probability of a parse or the probability of the sense of a word. It is vital to make use of this information when dealing with natural language because there are so many possible sources for uncertainty. Many of the tools that are used in reaching the logical representation (part of speech taggers, parsers, word-sense disambiguation systems etc.) can provide us with statistical information about the uncertainty in a representation, thus it makes sense to incorporate this information into the representation itself. In this chapter we show how the context-theoretic framework can be used to do this, first giving a theoretical analysis of the problem, and then outlining how the ideas can be implemented practically.
+
+%The thinking amongst many people working in natural language semantics seems to be that the problems with systems that make use of use logical representations will go away once all the other problems have been solved: if we could only parse sentences and disambiguate words accurately then the systems will work fine. Unfortunately, these problems don't seem to be near to being solved; it is also questionable whether it is possible to solve them definitively: is there truly only ever one correct parse of a sentence and one sense which should be attached to a word in a particular context? Of course semanticists have tried to represent such uncertainty, however this is generally done by altering the logic itself, for example by introducing a new operator that behaves somewhat like logical disjunction. These approaches are potentially useful however they do not allow us to make use of statistical information which is often provided by modern techniques. For example, it may be useful to know that a particular sense of a word is used infrequently in comparison to the other possible senses, or to make use of an estimate of  the probability distribution over the possible parses of a sentence.
+
+The approach we take in this chapter is to first formulate logical semantics within the context-theoretic framework; this gives us the flexibility of vector spaces that we need to represent statistical information about uncertainty. For example, this will allow us to represent the meaning of a word as a weighted sum of its individual senses.
+
+Instead of dealing with a specific version of model-theoretic semantics, we give a very general treatment that can deal with any system in which strings are translated into a logical form with an implication relation defined on it; thus the ideas presented here can be applied to just about any conceivable logical system.
+%Typically, systems making use of logical representations will only be able to deal with a certain set of strings, the ``grammatical'' strings, or more accurately, the strings that the particular parser being used is able to parse. Invariably, in practical applications, there will be many strings which a typical user may provide which the system is not able to cope with, because the parser does not have wide enough coverage or is not robust enough. Widening the coverage of the parser brings with it other problems: a typical sentence will be highly syntactically ambiguous, giving an explosion of possible parses as sentence length increases. Statistical techniques help by attaching probabilities to these parses
+%In this chapter we examine context theoretic semantics as a way of incorporating information about uncertainty of meaning into model-theoretic representations of meaning.
+
+The contributions of this chapter are as follows:
+\begin{itemize}
+\item In section \ref{logical-projections} we show how logical semantics can be interpreted in a context-theoretic manner: given a way of translating natural language expressions into logical forms, we can define an algebra which represents the meaning equivalently. Given also a way of attaching probabilities to logical forms (which can be given a Bayesian interpretation), we can define a context theory allowing us to deduce degrees of entailment between expressions.
+\item In section \ref{uncertainty-section} we show how the vector-based representation allows statistical information about uncertainty of meaning and ambiguity to be incorporated; the representation of an ambiguous sentence is a weighted sum over the vector representations of its unambiguous meanings. These may be the result of syntactic ambiguity, such as multiple parses returned by a statistical parser, due to ambiguous words or some other source of uncertainty. 
+\item Computing with the representations we describe is far from straightforward. In Section \ref{practical-issues} we outline how the ideas we present may be implemented in a concrete manner, showing how a system may be built to compute a degree of entailment between two sentences.
+\item Most of this chapter relates to the representation of natural language sentences that are translated into logical form, however to demonstrate the general applicability of the context-theoretic framework, we show how (in Section \ref{context-theoretic-analysis}), given a logical representation of sentences, entailment can be defined between words and phrases, based on a context-theoretic analysis of the situation.
+\end{itemize}
+
+\section{From Logical Forms to Algebra}
+\label{logical-projections}
+
+Model-theoretic approaches generally deal with a subset of all possible strings, the language under consideration, translating sequences in the language to a logical form, expressed in another, logical language. Relationships between logical forms are expressed by an entailment relation on this logical language.
+%This is summarised formally in the following definition:
+%\begin{defn}[Translation to Logical Form]
+%A \emph{translation to logical form} for some alphabet $A$ is a subset $L$ of $A^*$, together with a logical language $\Lambda \subseteq B^*$ for some alphabet $B$ and a function $\lambda$ that assigns an element of $\Lambda$ to each element of $\lambda$ and a reflexive and transitive relation $\vdash$ on $\Lambda$ called entailment.
+%\end{defn}
+
+%Given a translation to logical form for $A$, we can associate with each sequence in the language $\lambda$ a projection on the space $\R^{\Lambda}$ that expresses the information contained in the translation.
+
+This section is about the algebraic representation of logical languages. Representing logical languages in terms of an algebra will allow us to incorporate statistical information about language into the representations. For example, if we have multiple parses for a sentence, each with a certain probability, we will be able to represent the meaning of the sentence as a probabilistic sum of the representations of its individual parses.
+
+By a \emph{logical language} we mean a language $\Lambda \subset {A'}^*$ for some alphabet $A'$, together with a relation $\vdash$ on $\Lambda$ that is reflexive and transitive; this relation is interpreted as entailment on the logical language. We will show how each element $u \in \Lambda$ can be associated with a projection on a vector space; it is these projections that define the algebra. Later we will show how this can be related to strings in the natural language $\lambda$ that we are interested in.
+
+For a subset $T$ of a set $S$, we define the projection $P_T$ on $L^\infty(S)$ by 
+$$P_T e_s = \left\{
+\begin{array}{ll}
+e_s & \text{if $s \in T$}\\
+0 & \text{otherwise}
+\end{array}
+ \right.$$
+ Where $e_s$ is the basis element of $L^{\infty}(S)$ corresponding to the element $s\in S$.
+Given $u \in \Lambda$, define $\left\downarrow_\vdash(u)\right. = \{v : v \vdash u\}$. As a shorthand we write $P_u$ for the projection $P_{\left\downarrow_\vdash(u)\right.}$ on the space $L^\infty(\Lambda)$.
+
+The projection $P_u$ can be thought of as projecting onto the space of logical statements that entail $u$. This is made formal in the following proposition:
+\begin{prop}\label{modelth}
+$P_u \le P_v$ if and only if $u \vdash v$.
+\end{prop}
+\begin{proof}
+%Since $P_x$ and $P_y$ are band projections, they are commutative, and satisfy $P_x \le P_y$ if and only if $P_xP_y = P_x$.
+%If $\lambda(x) \vdash \lambda(y)$ then
+Clearly
+\begin{equation}
+\tag{$*$}\label{projectionprod}
+P_uP_v e_w = \left\{
+\begin{array}{ll}
+e_w & \text{if $w \vdash u$ and $w \vdash v$}\\
+0 & \text{otherwise}
+\end{array},
+ \right.
+ \end{equation}
+so if $u \vdash v$ then since $\vdash$ is transitive, if $w \vdash u$ then $w \vdash v$, so we must have $P_uP_v = P_u$. The projections $P_u$ and $P_v$ are commutative, so $P_uP_v = P_u$ if and only if $P_u \le P_v$ \citep{Aliprantis:85}.
+
+Conversely, if $P_uP_v = P_u$ then it must be the case that $w \vdash u$ implies $w \vdash v$ for all $w \in \Lambda$, including $w = u$. Since $\vdash$ is reflexive, we have $u \vdash u$, so $u \vdash v$ which completes the proof.
+\end{proof}
+
+To help us understand this representation better, we will show that it is closely connected to the ideal completion\index{ideal completion} of partial orders (see Proposition \ref{ideal-completion-prop}). Define a relation $\equiv$ on $\Lambda$ by $u \equiv v$ if and only if $u \vdash v$ and $v \vdash u$. Clearly $\equiv$ is an equivalence relation; we denote the equivalence class of $u$ by $[u]$. Equivalence classes are then partially ordered by $[u] \le [v]$ if and only if $u \vdash v$. Then note that $\bigcup \down{[u]} = \left\downarrow_\vdash(u)\right.$, thus $P_u$ projects onto the space generated by the basis vectors corresponding to the elements $\bigcup \down{[u]}$, the ideal completion representation of the partially ordered equivalence classes.
+
+What we have shown here is that logical forms can be viewed as projections on a vector space. Since projections are operators on a vector space, they are themselves vectors; viewing logical representations in this way allows us to treat them as vectors, and we have all the flexibility that comes with vector spaces: we can add them, subtract them and multiply them by scalars; since the vector space is also a vector lattice, we also have the lattice operations of meet and join. As we will see in the next section, in some special cases such as that of the propositional calculus, the lattice\index{lattice!and logic} meet and join coincide with logical conjunction and disjunction.
+
+\subsection{Application: Propositional Calculus}
+\label{propositional}
+\index{propositional calculus|(}
+
+In this section we apply the ideas of the previous section to an important special case: that of the propositional calculus. We choose as our logical language $\Lambda$ the language of a propositional calculus with the usual connectives $\lor$, $\land$ and $\lnot$, the logical constants $\top$ and $\bot$ representing ``true'' and ``false'' respectively, with $u \vdash v$ meaning ``infer $v$ from $u$'', behaving in the usual way. Then:
+\begin{align*}
+P_{u\land v} &= P_uP_v
+	& P_{\lnot u} &= 1 - P_u + P_\bot\\
+P_{u\lor v} &= P_u + P_v - P_uP_v
+	& P_{\top} &=1
+\end{align*}
+%\begin{align}
+%\tag{1} \label{and} P_{u\land v} &= P_uP_v\\
+%\tag{2} \label{or} P_{u\lor v} &= P_u + P_v - P_uP_v\\
+%\tag{3} \label{not} P_{\lnot u} &= 1 - P_u + P_\bot\\
+%\tag{4} \label{true} P_{\top} &=1
+%\end{align}
+
+To see this, note that the equivalence classes of $\vdash$ form a Boolean algebra\index{Boolean algebra} under the partial ordering induced by $\vdash$, with
+\begin{align*}
+[u\land v] & = [u] \land [v]
+ & [u\lor v] & = [u] \lor [v]
+  & [\lnot u] & = \lnot[u].
+\end{align*}
+Note that while the symbols $\land$, $\lor$ and $\lnot$ refer to logical operations on the left hand side, on the right hand side they are the operations of the Boolean algebra of equivalence classes; they are completely determined by the partial ordering associated with $\vdash$.\footnote{In the context of model theory, the Boolean algebra of equivalence classes of sentences of some theory $T$ is called the \emph{Lindenbaum-Tarski} algebra of $T$ \citep{Hinman:05}.}
+
+Since the partial ordering carries over to the ideal completion we must have
+\begin{align*}
+\downnb{[u\land v]} &= \downnb{[u]} \cap \downnb{[v]}
+& \downnb{[u\lor v]} &= \downnb{[u]} \cup \downnb{[v]}
+\end{align*}
+Since $u \vdash \top$ for all $u\in \Lambda$, it must be the case that $\downnb{[\top]}$ contains all sets in the ideal completion. However the Boolean algebra of subsets in the ideal completion is larger than the Boolean algebra of equivalence classes; the latter is embedded as a Boolean sub-algebra of the former. Specifically, the least element in the completion is the empty set, whereas the least element in the equivalence class is represented as $\downnb{[\bot]}$. Thus negation carries over with respect to this least element:
+$$\downnb{[\lnot u]} = (\downnb{[\top]} - \downnb{[u]})\cup \downnb{[\bot]}.$$
+
+We are now in a position to prove the original statements:
+\begin{itemize}
+\item Since $\downnb{[\top]}$ contains all sets in the completion, $\bigcup\downnb{[\top]} = \downe{\top} = \Lambda$, and $P_\top$ must project onto the whole space, that is $P_\top = 1$.
+\item Using the above expression for $\downnb{[u \land v]}$, taking unions of the disjoint sets in the equivalence classes we have $\downe{u\land v} = \downe{u} \cap \downe{v}$. Making use of \eqref{projectionprod} in the proof to Proposition \ref{modelth}, we have $P_{u\land v} = P_uP_v$.
+\item In the above expression for $\downnb{[\lnot u]}$, note that $\downnb{[\top]} \supseteq \downnb{[u]} \supseteq{\downnb{[\bot]}}$. This allows us to write, after taking unions and converting to projections, $P_{\lnot u} = 1 - P_u + P_\bot$, since $P_\top = 1$.
+\item Finally, we know that $u\lor v \equiv \lnot(\lnot u \land \lnot v)$, and since equivalent elements in $\Lambda$ have the same projections we have
+\begin{align*}
+P_{u\lor v} &= 1 - (P_{\lnot u \land \lnot v}) + P_\bot\\
+		&= 1 - (P_{\lnot u}P_{\lnot v}) + P_\bot\\
+		&= 1 - (1 - P_u + P_\bot)(1 - P_v + P_\bot) + P_\bot\\
+		&= P_u + P_v - P_u P_v - 2P_\bot + P_\bot P_u + P_\bot P_v\\
+		&= P_u + P_v - P_u P_v
+\end{align*}
+\end{itemize}
+
+It is also worth noting that in terms of the vector lattice operations $\lor$ and $\land$ on the space of operators on $L^\infty(\Lambda)$, we have $P_{u\lor v} = P_u \lor P_v$ and $P_{u\land v} = P_u \land P_v$.
+
+\index{propositional calculus|)}
+
+\section{Representing Uncertainty}
+\label{uncertainty-section}
+\index{uncertainty, representing|(}
+
+%There are many situations in computational linguistics where we are inevitably faced with uncertainty. For example, given a long sentence in English, the chances of a parser\index{parsers} choosing one of the parses that would be identified by humans as correct is minimal; with modern statistical parsers we are left instead with a probability distribution over parses. Similarly, the task of word sense disambiguation\index{word sense disambiguation} is a long way from being solved; again, the best we can do is assign a probability distribution over the senses of a word given a particular context. Thus it seems that syntactic and lexical ambiguity are problems that can only be partially solved, at least using current techniques.
+%: there is no indication that a satisfying solution to these problems will be found in the near future. One can also debate whether attempting to resolve these ambiguities completely is entirely correct; some text is arguable inherently ambiguous.
+
+%This syntactic and lexical ambiguity results in \emph{semantic ambiguity} --- we are uncertain of the intended meaning of an expression. We believe the correct approach to this problem (in the context of traditional, logical representations of language) is to incorporate ambiguity into the representation of meaning itself. This would allow us to reason about our uncertainty of the intended meaning of expressions in a logical manner, and ultimately lead to \emph{semantic disambiguation}, in which the semantic ambiguity of an expression is reduced by analysing the possible meanings resulting from syntactic and lexical ambiguity.
+
+%We are particularly interested in incorporating statistical information about uncertainty. As far as we are aware, the problem of representing uncertainty and ambiguity in the context of statistical methods has not been tackled theoretically. We will show how the context theoretic approach, together with the ideas developed in the last section lead almost directly to a method of dealing with semantic ambiguity.
+
+%In this section we first discuss a set of requirements for a system representing ambiguity, then discuss a series of ways of incorporating these requirements:
+%\begin{itemize}
+%\item 
+%\end{itemize}
+
+%
+%\subsection{Requirements for Representing Ambiguity}
+
+In the context of logical representations of meaning, there are certain properties that we would expect from representations of ambiguity; we give an initial list of these and discuss them here --- there are potentially other features we may wish to incorporate into a more complete analysis at a later stage.
+
+
+
+\subsubsection*{Bayesianism}
+\index{Bayesianism|(}
+
+We would expect our representation to be tied closely to Bayesian reasoning, since this is the standard approach to reasoning with uncertainty. Bayesianism asserts that the correct calculus for modelling uncertainty is the mathematics of probability theory. A ``probability'' assigned to a logical sentence is then merely taken as an indication of our certainty of the truth of the sentence; it is not intended to be a scientifically measurable quantity in the sense that probabilities are often assumed to be. We would expect to be able to incorporate such probabilities into our system.
+
+\index{Bayesianism|)}
+
+\subsubsection*{Ambiguity and Logic}
+
+When dealing with ambiguity in the context of logical representations, we expect certain relationships between the representation of ambiguity and the logical representations. Specifically, if we have an ambiguous expression with two meanings, we would expect the ambiguous representation to entail the logical disjunction of two expressions. In general, we would not expect the converse, since the two are not equivalent. To see this, for example, consider the sentence $s$ = ``He saw a plant''. We wish to represent the lexical ambiguity in the word ``plant'' which we will consider can either mean an industrial plant or an organism. The two disambiguated meanings roughly correspond to the sentences $s_1$ = ``He saw an industrial plant'' and $s_2$ = ``He saw a plant organism''. We expect that each disambiguated sentence $s_i$ entails the ambiguous sentence $s$, and for the reverse we would expect some degree of entailment to exist. 
+
+\subsubsection*{Statistical Features}
+
+Similarly, we would expect the ambiguous sentence to entail the disambiguated meanings to the degree that we expect the ambiguous word to carry the relevant sense. For example, if ``plant'' is used in the sense of industrial plant 40\% of the time, then we would expect that $s$ entails $s_1$ to degree 0.4.
+
+\subsection{Representing Bayesian Uncertainty}
+\label{bayesian-uncertainty-section}
+\index{Bayesianism|(}
+
+The projection representation of translations to logical form allows us to associate an algebra (of projections) with the logical language $\Lambda$, however it does not quite give us a context theory. For that, we need a linear functional on the algebra of projections, and we will show how this can be done if we take a Bayesian approach to reasoning.
+
+We need to associate probabilities with (logical) sentences in a way that is compatible with their logical structure. For example if a sentence $s_1$ entails $s_2$ then $s_2$ should be assigned a probability at least as large as that of $s_1$. This can be done using a probability distribution over the sentences of the logical language:
+%\begin{defn}
+
+%\end{defn}
+%%Then it is easy to see the following:
+%%\begin{prop}
+%%$p$ defines a probability measure $P'$ on the ideal completion of classes of equivalent statements in $\Lambda$ by $P'(X) = \sum_{u \in \bigcup X} p(u)$ where $X$ is a set of equivalence classes in the ideal completion of equivalence classes; then $P'(\downnb{[u]}) = P(u)$.
+%%\end{prop}
+%%Thus $P$ is compatible with the logical structure defined by $\vdash$, and if $u \equiv v$ in $\Lambda$ then $P(u) = P(v)$.
+
+%Then $p_\vdash$ behaves like a probability measure with respect to the partial order structure of equivalence classes:
+
+\index{logical language!probabilistic|textbf}
+\begin{defn}[Probabilistic Logical Language]
+Let $\Lambda$ be a logical language with entailment relation $\vdash$, a probability distribution $p$ over elements of $\Lambda$ and a distinguished element $\bot \in \Lambda$ such that
+\begin{itemize}
+\item $\bot \vdash u$, and
+\item $p(u) = 0$ if $u \vdash \bot$,
+\end{itemize}
+for all $u \in \Lambda$. We call $\langle \Lambda, \vdash, \bot, p\rangle$ a probabilistic logical language. For an arbitrary subset $X$ of $\Lambda$, define $p(X) = \sum_{u\in X}p(u)$. For $u \in \Lambda$ define $p_\vdash(u) = p(\downe{u})$.
+\end{defn}
+\begin{prop}
+The function $p_\vdash$ defines a probability measure on the lattice defined by $\downarrow_\vdash$. Specifically:
+\begin{enumerate}
+\item $p_\vdash(\bot) = 0$
+\item if $\downe{u} \cap \downe{v} = \downe{\bot}$ then $p(\downe{u} \cup \downe{v}) = p_\vdash(u) + p_\vdash(v)$
+\end{enumerate}
+\end{prop}
+\begin{proof}
+\mbox{}
+\begin{enumerate}
+\item $p_\vdash(\bot) = \sum_{u\vdash\bot}p(u) = 0$.
+\item if $\downe{u} \cap \downe{v} = \downe{\bot}$ then $p(\downe{u} \cup \downe{v}) = p_\vdash(u) + p_\vdash(v) - p_\vdash(\bot) =  p_\vdash(u) + p_\vdash(v)$
+\end{enumerate}
+\end{proof}\noindent
+Thus we can think of the function $p_\vdash$ as describing the probability of a logical sentence since it has all the properties of a probability measure with respect to the lattice of equivalent sentences. This means, for example that if $s_1 \vdash s_2$ then $p_\vdash(s_1) \le p_\vdash(s_2)$ as we would expect.
+%That is, $p_\vdash$ behaves like a probability measure with respect to the partial order structure induced by $\vdash$.
+
+We can now define a linear functional on the algebra of projections:
+\begin{defn}
+Given a probability distribution $p$ over a logical language $\Lambda$, we define a vector $\hat{p}$ in $L^\infty(\Lambda)$ by
+$$\hat{p} = \sum_{u \in \Lambda} p(u)e_u$$
+We define a linear functional $\phi$ on  the space of bounded operators on $L^\infty(\Lambda)$  by
+$$\phi(F) = \|F_+(\hat{p})\|_1 - \|F_-(\hat{p})\|_1$$
+where $F_+$ and $F_-$ are the positive and negative parts of the bounded operator $F$ respectively.
+\end{defn}
+\begin{prop} If $u \in \Lambda$ for some logical language $\Lambda$ with probability distribution $p$, then
+$\phi(P_u) = p_\vdash(u)$
+\end{prop}
+\begin{proof}
+$$\phi(P_u) = \|P_u\hat{p}\|_1 = \sum_{v \in \downe{u}}p(v) = p_\vdash(u)$$
+\end{proof}
+
+Using the linear functional we can define a context theory\index{context theory} for logical sentences. Since context theories are defined in terms of an alphabet, we have to define it in terms of a finite set $A$ of symbols with each symbol representing a sentence in $\Lambda$. We associate a bounded operator $\hat{x}$ on the space $L^\infty(\Lambda)$ with each element $x\in A$: we have $\hat{x} = P_u$, where $u$ is the logical sentence corresponding to $x$; thus we have a context theory, although only for a finite subset of sentences of $\Lambda$. In practice this should not be a problem, since we only need to be able to interpret a finite number of sentences at any one time.
+
+\index{Bayesianism|)}
+
+\subsection{Representing Syntactic Ambiguity}
+
+One of the major problems facing engineers of natural language systems is how to deal with syntactic ambiguity. Most modern wide-coverage parsers will return many parses for a single sentence, together with a probability distribution over these parses. How are we to make use of this probability distribution while reasoning with the logical representations of the sentences?
+
+We make the simplifying assumption that different parses of a sentence apply in different contexts, so for each context the sentence can occur in there is exactly one parse that applies. We also assume for now that there is a single interpretation $s_i$ of the sentence $s$ for each possible parse.
+%Taking this view, we can interpret the probability of a parse as the sum of the probabilities of all the contexts the string may occur in
+%We can interpret the probability distribution as an indication of the likelihood of the parse applying in different contexts: in some contexts the sentence occurs in one parse may be favoured over another.
+Thus we can view the context vector of a sentence as the sum of the context vectors of the individual interpretations of the sentence that are attached to each parse:
+$$\hat{s} = \sum_i \hat{s}_i,$$
+where $\hat{s}_i$ is the context vector representing interpretation $s_i$. We can interpret the probability given to each parse by the parser as contributing to the context theoretic probability of the corresponding interpretation of the sentence as follows:
+$$\phi(\hat{s}_i) = p(s_i)p_\vdash(u_i),$$
+where $u_i$ is the logical representation of interpretation $s_i$; i.e.~the probability of the interpretation is the probability of the meaning of the interpretation multiplied by the probability of the parse. This will be the case if we represent a sentence as a weighted sum of its individual interpretations, where the weights are given by the probability of the corresponding parse:
+$$\hat{s} = \sum_i p(s_i)P_{u_i}.$$
+%Then the probability given by the linear functional $\phi$  will be
+%$$\phi(\hat{s}) = \sum_i p(s_i)p_\vdash(u_i)$$
+%where $u_i$ is the logical representation of sense $s_i$; that is the probability of the sentence is the weighted sum of the probabilities of the meanings of its senses.
+where $P_{u_i}$ is the projection representing the interpretation $s_i$ of sentence $s$. The probability of the sentence as a whole is thus given by $\phi(\hat{s}) = \sum_i p(s_i)p_\vdash(u_i)$.
+
+Note that because of the vector lattice based framework, we are able to take probabilistic sums of the representations of sentences, and the lattice operations are still well defined, enabling us to calculate the degree of entailment between two sentences represented in this way.
+
+This recipe can of course be applied more generally to deal with other forms of uncertainty: for example, any uncertainty about lexical ambiguity, anaphora resolution, part of speech tagging etc.~can be incorporated into a probabilistic sum of the resulting semantic representations of the different analyses. The situation would be similar to the one above: we would have a set of interpretations of a single sentence, each with a probability and a logical representation; the sentence itself would then be represented as a weighted sum of the vector representation of the individual interpretations, with weights given by the probabilities.
+%The description we have given up to now can only deal with representations of sentences however; in order to demonstrate the generality of our framework, it is instructive to give a more in-depth context-theoretic analysis of logic based semantics; allowing us to examine representations of phrases and sentences and compute entailment between them.
+
+
+\subsection{A Context Theoretic Analysis of Logical Representations}
+\label{context-theoretic-analysis}
+
+The algebraic description of logic given in the previous section is useful for giving us an intuition of how logic can be interpreted geometrically as projections, however it can only deal with descriptions of logic at the sentence level. It would be useful in addition to have a description of the logical representation of language in terms of vectors that also told us how words and phrases should be represented. Such a description would allow us to  examine representations of phrases and sentences and compute entailment between them. In this section, we show how such a description can be constructed. This will allow us to represent a word in terms of a sum of its senses, where the logical behaviour of each individual sense is well defined, and provide us with a deeper insight into the relationship between model-theoretic and context-theoretic descriptions of meaning.
+
+In order to represent words however, we are going to need a more comprehensive representation. There are potentially many ways to do this, for example, we could attempt to construct an algebra in terms of semigroups that contains the properties we are looking for. The approach we will describe, however, is context-theoretic in nature, bearing many similarities to the context vectors of a string defined previously.
+%; in fact, we will show that the description we give can be viewed as a corpus model incorporating knowledge about the logical representation.
+
+The approach we will take is as follows: we first associate with each string a function that maps contexts to vectors representing the logical interpretation of the string in that context. We define an appropriate linear functional for this vector space and show that the representation incorporates the logical structure. We then show that the vector representation can be viewed as originating from a generalisation of a corpus model, demonstrating the context-theoretic nature of the definition.
+
+\index{probabilistic logical translation|textbf}
+\begin{defn}[Probabilistic Logical Translation]
+A probabilistic logical translation is a tuple $\langle\Lambda,\vdash, \bot, p, \lambda, \mu\rangle$ such that $\langle\Lambda,\vdash, \bot, p\rangle$ is a probabilistic logical language, $\lambda$ is some language and $\mu$ is a function from $\lambda$ to $\Lambda$.
+\end{defn}
+
+The language $\lambda$ is intended to represent a natural language, and the function $\mu$ the process of obtaining a logical sentence in $\Lambda$ for each sentence in $\lambda$.
+
+%Let us assume we have some language $\lambda \subseteq A^*$ and a probabilistic logical translation from $\lambda$ to $\Lambda$ with probability distribution $p$ and entailment relation $\vdash$.
+%We then give the following definition to associate a vector $\tilde{x}$ with each string $x \in A^*$:
+%\begin{defn}
+%We denote equivalence classes of $\Lambda$
+%\end{defn}
+\begin{defn}
+\label{x-tilde}
+Let $\langle\Lambda,\vdash, \bot, p, \lambda, \mu\rangle$ be a probabilistic logical translation where $\lambda \subseteq A^*$. For $x\in A^*$ we define the function $\tilde{x}$ from $A^*\times A^*$ to $L^1(\Lambda)$ by
+$$\tilde{x}(a,b) = \begin{cases}
+\sum_{u \in \down{\mu(axb)}} p(u)e_u & \text{if $axb \in \lambda$}\\
+0 & \text{otherwise.}
+\end{cases}$$
+\end{defn}
+
+The function $\tilde{x}$ maps a context $(a,b)$ to a vector representing the sum of all the logical representations that entail the logical translation of $axb$. Note that since $\tilde{x}$ is a function to a vector lattice, it can be viewed itself as a vector lattice, with the vector and lattice operations defined point-wise: for example $(\tilde{x} + \tilde{y})(a,b) = \tilde{x}(a,b) + \tilde{y}(a,b)$, $(\alpha \tilde{x})(a,b) = \alpha \tilde{x}(a,b)$ and $(\tilde{x} \land \tilde{y})(a,b) = \tilde{x}(a,b) \land \tilde{y}(a,b)$.
+
+We also define a linear functional $\varphi$ on the vector space by
+$$\varphi(u) = \|u_+(\epsilon,\epsilon)\|_1 - \|u_-(\epsilon,\epsilon)\|_1$$
+
+This description in terms of functions incorporates information about entailments between sentences, whilst remaining context-theoretic in nature. The next proposition shows how logical and probabilistic properties of sentences of $\lambda$ are preserved in the vector representation.
+\begin{prop}
+If $x,y \in \lambda$ and $\mu(x) \vdash \mu(y)$ then $\Ent(x,y) = 1$; if $p$ is non-zero everywhere on $\Lambda$ except $\bot$ then the converse also holds. Moreover, if $x\in \lambda$, then $\varphi(\tilde{x}) = p_\vdash(\mu(x))$
+\end{prop}
+\begin{proof}
+If $x,y \in \lambda$ and $\mu(x) \vdash \mu(y)$ then clearly $\tilde{x}(\epsilon,\epsilon) \le \tilde{y}(\epsilon,\epsilon)$, so $\Ent(x,y) = 1$. Conversely, if $\Ent(x,y) = 1$ then by the definition of $\varphi$ it must be the case that $0 < \tilde{x}(\epsilon,\epsilon) \le \tilde{y}(\epsilon,\epsilon)$, hence $x,y \in \lambda$. If $p$ is non-zero everywhere on $\Lambda - \{\bot\}$ then the only way this can be true is if $\mu(x) \vdash \mu(y)$. To see this, assume that $\mu(x) \nvdash \mu(y)$; then there exists an element of $\down{\mu(x)}$ that is not in $\down{\mu(y)}$, hence $\tilde{x}(\epsilon,\epsilon)$ will be non-zero in a component for which the corresponding component of $\tilde{y}(\epsilon,\epsilon)$ will be zero; hence $\tilde{x}(\epsilon,\epsilon)\nleq \tilde{y}(\epsilon,\epsilon)$, thus by contradiction, $\mu(x) \vdash \mu(y)$.
+\end{proof}
+
+Thus we have a vector based description of the language which preserves the logical and probabilistic nature of the translation, however we have not yet shown that this description is context-theoretic in nature --- i.e.~that the definition we have given has properties in common with context theories (other than that strings are represented by vectors). In fact, we will show a very close relationship between the description and the definition of meaning in terms of context that we used in the discussion on corpus models in chapter \ref{meaning-context}. We will need a more general definition than that used previously however --- the probabilistic nature of a corpus model is too restrictive to encompass the description we have given. Instead we define a \emph{general corpus model}\index{corpus model!general|textbf} on an alphabet $A$ to be a positive real-valued function over $A^*$. The definition of the context vector $\hat{x}$ of a string $x\in A^*$ still holds with a general corpus model; and again the vector space $\mathcal{A}$ generated by all such vectors is an algebra under the multiplication defined by concatenation of strings. What we will show is that a general corpus model can be associated with every probabilistic logical translation of a language.
+
+\begin{prop}
+Given a probabilistic logical translation $T = \langle\Lambda,\vdash, \bot, p, \lambda, \mu\rangle$ for $\lambda\subseteq A^*$  there exists a general corpus model $C_T$ over an alphabet $B$ and a one-to-one function $\psi$ from the space $V$ of functions from $A^*\times A^*$ to $L^1(\Lambda)$ to $L^\infty(B^*\times B^*)$ such that $\psi(\tilde{x}) = \hat{x}$.
+\end{prop}
+\begin{proof}
+Let $B = A\cup A' \cup \{\diamond\}$ where $\diamond$ is an additional symbol, $\diamond \notin A \cup A'$. Define $C_T$ by:
+$$C_T(x\diamond m) = p(m)$$
+for all $x \in \lambda$ and all $m \in \down{\mu(x)}$, and $C_T$ is zero for all other elements of $B^*$. Let $u(a,b,m)$ be the basis element of $V$ which maps $(a,b) \in A^*\times A^*$ to $e_m$ in $L^1(\Lambda)$ and maps all other elements of $A^*\times A^*$ to $0$. Then we define $\psi$ by its operation on these basis elements:
+$$\psi(u(a,b,m)) = e_{(a,b\,\diamond\,m)}.$$
+Because $\diamond$ is not in $A$ or $A'$ this function must be one to one. Then using Definition \ref{x-tilde},
+$$\tilde{x}(a,b\diamond m) = C_T(axb\diamond m) = p(m)$$
+if $axb \in \lambda$ and $m\in\down{\mu(x)}$. Thus
+$$\psi(\tilde{x}) = \sum_{a,b\,:\,axb \in \lambda}\left[ \sum_{m \in \down{\mu(axb)}} p(m)e_{(a,b\diamond m)}\right] = \hat{x}.$$
+\end{proof}
+
+This is an important result since it means that given a logical description of a language, we can construct a general corpus model incorporating this logical description, allowing us to make a strong link between logical and context-theoretic approaches: it allows us to think of the logical representation of a string as arising from the contexts in which the string occurs in a general corpus model. It also means that since the vector space $\mathcal{A}$ generated by the context vectors of $C$ is an algebra\index{algebra}, the vector space $\mathcal{A}'$ generated by the vectors $\{\tilde{x} : x \in A^*\}$ is also an algebra, again with multiplication defined by concatenation: $\tilde{x}\cdot \tilde{y} = \widetilde{xy}$. This is guaranteed to be well defined since it is well defined in the vector space $\mathcal{A}$ defined by $C_T$.
+
+\subsection{Semantic Corpus Models}
+\index{corpus model!semantic|(}
+
+According to the context theoretic framework we have developed, the linear functional $\varphi$ when applied to the vector representation of a string is supposed to give the ``probability'' of that string. Clearly there is no such concept in model-theoretic semantics --- we can attach probabilities to logical forms giving them a Bayesian interpretation, but the concept of a probability of a string itself is foreign to model theoretic semantics. In fact the linear functional $\varphi$ we have defined behaves exactly like this: when $x$ is a sentence of the language $\lambda$, $\varphi(x)$ is the probability of the logical representation of $x$; if $x$ is not in the language, $\varphi(x)$ is zero; thus $\varphi$ does not conform to the context-theoretic ideal.
+
+Yet if we are to truly find a way to combine context-theoretic techniques with model-theoretic approaches, we must find a way to link the concept of a probability of a string with these logical approaches; we should look for a linear functional that behaves more like a probability while still not ignoring the model theoretic nature of the representation.
+
+In the linear functional $\varphi$ we are only using one context $(\epsilon,\epsilon)$; one way to give a non-zero probability to phrases that aren't sentences would be to consider other contexts. However here we face a practical problem; if we use all contexts, the value is not guaranteed to be finite.
+
+One solution is to think of the probability\index{probability!of a string} of a string as being composed of two parts: the probability of the meaning of the string, and the probability that the meaning is expressed in that particular way. We can describe this by a probability distribution $q(x)$ over elements of $\lambda$, where $q$ satisfies the requirement
+$$\sum_{x\in A^*}\left(\sum_{u \in \down{\mu(x)}}p(u)\right)q(x) = 1.$$
+We can interpret this value as the conditional probability of observing string $x$ given that a string with a meaning at least as specific as the meaning of $x$ (its logical translation entails the logical translation of $x$) has been observed. Thus $q$ satisfies the requirement
+
+%One solution is to view a corpus model as being defined by a two stage generation process, in which first a logical representation is generated and then a particular sentence is chosen from the set of sentences that translate to that logical representation --- note that for each sentence $u\in \Lambda$ there may be several sentences $x\in\lambda$ such that $\mu(x) = u$. Thus we assume that there is some conditional probability $q(x|u)$ of generating the (natural language) sentence $x$ given the logical sentence $u$. Thus sentences in $\lambda$ are viewed as being generated by
+%This allows us to define a corpus model
+
+%The value $q(x)$ can be thought of as the likelihood of observing the string $x\in \lambda$ independent of the meaning of $x$; it is a measure of how ``normal'' the expression is in conveying the desired meaning: a high value of $q(x)$ indicates that the meaning of $x$ is highly likely to be expressed in this way. in practice this could be a simple model based on $n$-grams, for example.
+
+We then give a new definition of the representation of a string in the vector space: it is still a function from $A^*\times A^*$ to $L^1(\Lambda)$; we define
+$$\tilde{x}_q(a,b) = \begin{cases}
+\sum_{u \in \down{\mu(axb)}} q(axb)p(u)e_u & \text{if $axb \in \lambda$}\\
+0 & \text{otherwise.}
+\end{cases}$$
+When we use the general corpus model translation we defined in the previous section, we must define
+$$C(x\diamond m) = q(x)p(m)$$
+for all $x \in \lambda$ and all $m \in \down{\mu(x)}$, with $C$ zero for all other elements of $B^*$. We can view $C$ as being generated by a two stage process:
+\begin{enumerate}
+\item Choose a sentence $m\in\Lambda$ according to the probability distribution $p(m)$.
+\item Choose a sentence $x\in\lambda$ such that $\mu(x) \in \down{m}$ according to $q(x)$.
+\end{enumerate}
+Because of the requirement we placed on $q$, we must have $\|C\|_1 = \sum_{u \in B^*} C(u) = 1$, so $C$ is a corpus model. Having a corpus model allows us to use the original linear functional $\phi$ defined for corpus models to measure the probability of a string. How are we to interpret this probability? We can think of $C$ as a ``semantic'' corpus model: it generates strings according to the probability $p$ of their meaning as well as the probability $q$ that this meaning is expressed in that particular way.
+
+
+
+%In practice, we can use a value for $q(x)$ that indicates the likelihood of the occurrence of $x$ irrespective of its meaning; for example this may be a probability estimated from unigram or bigram values, or a simple heuristic based on the length of the string.
+
+\index{corpus model!semantic|)}
+
+%\subsection{Semantic Corpus Models}
+
+%The ideas we have just discussed lead us to think about corpora in a different way. We can view the probability of a string as being composed of two parts: the probability of its meaning, and the probability that the meaning is expressed in that particular way. We formalise this with the idea of a \emph{semantic corpus model}. A semantic corpus model first generates a logical sentence $u$ from $\Lambda$ according to the probability $p(u)$. Given a particular logical sentence $u$, there may be many sentences $x\in \lambda$ such that $\mu(x) = u$, thus we need a probability distribution $p(x|[u])$ that describes the probability of observing a string $x$ given that the logical translation of the string is in the equivalence class of $u$. We use the equivalence class of $u$ since all the strings in this class are assumed to have the same meaning in the logical language. Thus we have the following corpus model $C$:
+%$$C(x) = p(\mu(x))p(x|[\mu(x)])$$
+
+
+\subsection{Representing Lexical Ambiguity}
+\index{ambiguity!lexical|(}
+
+The work of the previous section gives us the tools with which to describe lexical ambiguity within the context-theoretic framework. We are interested in descriptions of word sense ambiguity that allow us to incorporate statistical information about the probabilities of different senses and reason  about these in a way that is consistent with the context-theoretic philosophy.
+
+Let us take a simple model of word sense ambiguity in which each word $w$ takes a finite number $n$ of senses $S(w) = \{w_1, w_2, \ldots w_n\}$. We assume that given a particular context $(a,b)$, we know which sense of the word is intended: each context is associated with exactly one sense in $S(w)$ so that the context completely disambiguates $w$. We can associate with each sense $w_i$ a set $[w_i]$ of contexts in which the word $w$ takes sense $w_i$. Similarly, given a corpus model $C$ we can define a context vector $\hat{w}_i$ with each sense $w_i$ which represents the contexts that that particular sense of $w$ occurs in:
+$$\hat{w}_i(a,b) = \begin{cases}
+\hat{w}(a,b) = C(awb) & \text{if } (a,b) \in [w_i]\\
+0 & \text{otherwise.}
+\end{cases}$$
+Given this definition, we see that the context vectors of the senses of a word are disjoint in the vector lattice, and the context vector of a word is equal to the sum of the context vector of its senses: $\hat{w} = \sum_{i} \hat{w}_i$. Note that, just as we would expect, the context-theoretic probability of a word is the sum of the probability of its individual senses. Note also that the representations of the senses are disjoint because we assumed that each context completely disambiguated the word; if we relax this condition they will not necessarily be disjoint. Disjointness is thus not an essential feature, indeed it may not be useful in cases where a word has senses that are closely related.
+
+We can define multiplication of senses with context vectors in a very straightforward way:
+$$(\hat{w}_i \cdot u)(a,b) = \begin{cases}
+(\hat{w}\cdot u)(a,b) & \text{if } (a,b) \in [w_i]\\
+0 & \text{otherwise,}
+\end{cases}$$
+for $u \in \mathcal{A}$, and similarly for left-hand multiplication. This allows us to see how ambiguous words are partially disambiguated as they are concatenated with other words: we have
+$$\hat{w}\cdot\hat{x} = \sum_i\hat{w}_i\cdot\hat{x}.$$
+Thus as $w$ is concatenated with a string $x$, its representation remains the sum of its senses multiplied by $\hat{x}$, however since each sense only occurs in a subset of the possible contexts, $x$ has the effect of partially disambiguating $w$, and the left hand side of the equation becomes more similar to one of the summands.
+
+This analysis provides us with a simple formula for representing a word in terms of its senses, given the methods of the previous sections: we treat each sense exactly as if it were an unambiguous word; build a context-theoretic representation using the senses, then represent the ambiguous word as the sum of the representation of its individual senses. For example, using the ideas of the previous section, we can define a semantic corpus model based on a probabilistic logical translation in which we assume we only ever deal with senses, for which the logical translation can be well defined. We can then represent the word as the sum of the representation of its individual senses. The probabilistic logical translation and the function $q$ can be interpreted as disambiguating\index{word sense disambiguation} the word. There are several kinds of disambiguation that can occur:
+\begin{itemize}
+\item We do not distinguish between different parts of speech when we talk about senses; for example the representation of a word like ``book'' will include both noun and verb parts. As words are concatenated with this word, only the senses that can make the phrase grammatical (i.e.~that occur as a substring of $\lambda$) will remain, disambiguating parts of speech\index{parts of speech, disambiguating}.
+\item The entailment relation and $p$ provide \emph{semantic disambiguation}\index{semantic disambiguation}: in a particular context those senses which lead to sentences which are meaningless and thus whose meaning is assigned a value of $0$ by $p$ will be eliminated so that only senses which are meaningful in the context remain. Similarly, senses which produce a meaning in the given context which is very unlikely will be assigned a low probability by $p$.
+\item The function $q$ provides \emph{statistical disambiguation}\index{statistical disambiguation} --- it reduces emphasis on senses of words which are statistically unlikely based on the context, although the resulting meaning may not be unlikely; thus this function has a r\^ole similar to current word sense disambiguation techniques.
+\end{itemize}
+
+We have shown in this section that the framework provides ample room for the representation of word sense ambiguity and its disambiguation; an ambiguous word can be represented by summing the representations of individual senses. Although this is a simple analysis of the situation it gives us a method for representing lexical ambiguity and a picture of how words are disambiguated within the framework: as more context is added to a word it gradually becomes less ambiguous.
+
+\index{ambiguity!lexical|)}
+
+%For the purposes of this thesis, we take a simple model of what it means for a word to be ambiguous. We assume that each word $w$ has a finite number of senses $S(w)$, and that each time the word occurs in some context, only one of these senses is intended. Thus in this model, a word has a distinct number of meanings, and each time the word is used, the user intends only one of these meanings.
+%Generally, we don't know which meaning is intended when a word is used, although in the field of word-sense disambiguation, use is often made of \emph{sense-tagged} corpora, which specify for each word which sense it is supposed was intended by the speaker. In a sense tagged corpus, each occurrence of a word $w$ is replaced by one of its senses $S(w)$. Following this idea, we can define a sense-tagged corpus model $C_S$ of a corpus model $C$ as a corpus model in which the alphabet $A$ of $C$ has been replaced by an alphabet $A_S = \bigcup\{S(w) : w\in A\}$ of senses of the words in $A$, and each occurrence of the words in $C$ have been replaced by one of their senses. That is, if $C(w_1w_2\ldots w_n) = \alpha$, for $w_i \in A$, then there exists $w_s \in S(w_1)S(w_2)\ldots S(w_n)$ such that $C_S(w_s) = \alpha$, and 
+
+\index{uncertainty, representing|)}
+
+\section{Outline of Possible Implementations}
+\label{practical-issues}
+
+We chose to describe the models of the preceding sections in a manner which was extremely general and also mathematically simple. This allowed us to present the concepts clearly without concern for how we could represent and compute with such models. Clearly it is impractical to explicitly represent a sentence as a sum over a (potentially infinite) number of dimensions. Instead, we imagine that in practice, systems that make use of the mathematics we have presented here will make use of standard representations for the logical aspect of the representation; the statistical or algebraic aspects can then be computed separately, while making use of the existing algorithms for computing with logic.
+
+To make this clearer, we will outline how such a system may be constructed. 
+We assume we have at our disposal a method for computing entailments between sentences of the logical language $\Lambda$. In most cases, $\Lambda$ will include the propositional calculus\index{propositional calculus} as a subset, and thus the equivalence classes of $\vdash$ will form a Boolean algebra. The main problem facing us is the function $p$ which is defined on sentences of $\Lambda$. In fact, we can do without $p$ itself, and assume we have at our disposal the function $p_\vdash$ which will be a probability measure on the Boolean algebra\index{Boolean algebra} of equivalence classes of $\vdash$. This means we will not have to compute sums of $p$ over sentences of $\Lambda$, a potentially impossible task. The function $p_\vdash$ can be assigned in many ways, for example:
+\begin{itemize}
+\item A simple heuristic could be used. For example, this could be an information-theory inspired measure based on the length of the logical expression: $p_\vdash(u) = k^{-|u|}$ where $k$ is a constant and $|u|$ is the length of the shortest member of the equivalence class of $u \in \Lambda$. This would have the advantage of being simple to compute yet fairly consistent with the requirements of $p_\vdash$: in general it is likely that if $u\vdash v$ then $p_\vdash(u) \le p_\vdash(v)$ will hold since $v$ can be expressed at least as simply as $u$.
+\item A value for $p_\vdash$ could be assigned based on a probabilistic logic: this may be a fuzzy logic\index{fuzzy logic} such as \L ukasiewicz logic\index{Lukasiewicz logic@\L ukasiewicz logic} \citep{Kundu:94} or Basic Fuzzy Logic \citep{Hajek:98}, or a first order logic such as that of \cite{Nilsson:86} and later variations.
+\end{itemize}
+Both these approaches could make use of techniques that assign probabilities to concepts in an ontology; these are described in Chapter \ref{ontologies}. 
+
+We assume for now that we are only interested in the representation of sentences; all uncertainty is described by a weighted sum over representations of sentences. Given a natural language sentence the system may for example parse the sentence and perform word sense disambiguation and anaphora resolution. Each of these can result in probabilistic information about which parses, senses and referents are intended, thus we will be left with a probability distribution over possible interpretations of the sentence.  Each interpretation is completely unambiguous and thus ready to be translated into logic; for efficiency purposes, these could be sorted by probability, and only the most probable interpretations retained. We will thus have a logical expression for each interpretation and we can compute the probability $p_\vdash$ for each of these.
+%\begin{itemize}
+%\item Parse the sentence. A statistical parser\index{parsers} such as RASP \citep{Briscoe:06} can return the top $n$ parses with their probabilities. It includes a statistical part of speech tagger that retains the most probable parses for each word for input to the parser.
+%\item Perform word sense disambiguation\index{word sense disambiguation} and anaphora resolution\index{anaphora resolution}. Both of these can result in probabilistic information about which senses and referents are intended.
+%\item Combine probabilistic information from parsing, word sense disambiguation and anaphora resolution information. This would result in a list of interpretations of sentences, each with a specific parse, a sense for each word and a resolved referent for each anaphor, together with a probability. Each interpretation is completely unambiguous and thus ready to be translated into logic. For efficiency purposes, these could be sorted by probability, and only the most probable interpretations retained.
+%\item Translate each interpretation into a logical form.
+%\item Compute the probability $p_\vdash$ for each logical translation.
+%\end{itemize}
+
+At the end of this process, a sentence $s$ is represented as a list of pairs $\langle u_i, \alpha_i\rangle$, each specifying a logical translation $u_i$ and the probability $\alpha_i$ of the combined statistical information. At this point we can compute probabilities for sentences using the linear functional $\phi$:
+$$\phi(\tilde{s}) = \sum_i \alpha_i p_\vdash(u_i),$$
+where $p_\vdash(u_i)$ is the probability of the logical sentence $u_i$. However these probabilities are unlikely to coincide with our normal conception of the probability of a string, since they are the combination of probabilities assigned by the parser and probabilities of logical expressions, which need not necessarily coincide with the probabilities of strings. We can compensate for this however, by making use of a function $q'(u_i | s_i)$ which specifies the probability of the logical expression $u_i$ given that it is translated from the specific interpretation $s_i$ of the sentence under consideration, similar to the function $q$ we discussed earlier --- however this is clearly a difficult value to estimate directly. On the other hand, the problem of estimating the probability of a string is well understood; we can make use of one of the many language modelling techniques to do this, for example we could use an $n$-gram. This value of the probability of a string then provides a renormalising condition which allows us make the vector representing the string fit the expected probability of the string; define a constant $c_s = l(s)/\phi(\tilde{s})$, where $l(s)$ is the probability assigned to the string $s$ by the language model. The renormalised string is then represented by the list of pairs $\langle u_i, \beta_i\rangle$ where $\beta_i = c_s\alpha_i$. The renormalising constant $c_s$ thus plays the role of the function $q'$.
+
+Computing the degree of entailment between the representations of strings causes some difficulties. This is because we have represented strings as sums over the vector representations of logical sentences which are not disjoint in the vector lattice. Given two such representations $\tilde{s}_1 = \sum_i \beta^{(1)}_i\tilde{u}^{(1)}_i$ and $\tilde{s}_2 = \sum_i \beta^{(2)}_i\tilde{u}^{(2)}_i$, where $\tilde{u}^{(k)}_i$ is the vector representation of the logical expression $u^{(k)}_i$, we need to compute $\phi(\tilde{s}_1 \land \tilde{s}_2)$ in order to obtain the degree of entailment. However addition does not distribute with respect to the lattice meet operation except when the addition is between disjoint elements of the vector lattice; since the vector representations of the logical sentences are not in general disjoint, there is no way to find $\tilde{s}_1\land\tilde{s}_2$ in terms of the meets of their summands. The solution to this is to find a set $S$ of disjoint logical sentences such all the $u_i$ can be written as a disjunction of elements of $S$. This is possible using the canonical form\index{Boolean algebra!canonical form} of a Boolean algebra in which each element is written as a join of \emph{minterms} \citep{Birkhoff:48}. (This could potentially be computationally expensive --- given $n$ sentences there could be $2^n$ minterms.) For disjoint positive elements $a$ and $b$ of a vector lattice, $a \lor b = a + b$, so given the set $S$ each sentence $u_i$ can be written as a sum of disjoint elements, the meet operation becomes trivial and the degree of entailment can easily be computed.
+
+An alternative approach is to compute a lower bound on the degree of entailment\index{entailment!degree of}. Since $\beta^{(k)}_iu^{(k)}_i \le \tilde{s}_k$ for each $i$ and $s_k$, we have
+$\beta^{(1)}_i\tilde{u}^{(1)}_i \land \beta^{(2)}_j\tilde{u}^{(2)}_j  \le \tilde{s}_1\land\tilde{s}_2$
+for all $i$ and $j$, and hence
+$$\phi_\mathrm{min}(\tilde{s}_1\land\tilde{s}_2) = \max_{i,j}\left[ \phi(\beta^{(1)}_i\tilde{u}^{(1)}_i \land \beta^{(2)}_j\tilde{u}^{(2)}_j)\right]  \le \phi(\tilde{s}_1\land\tilde{s}_2).$$
+The left hand side thus provides us with a lower bound $\phi_\mathrm{min}(\tilde{s}_1\land\tilde{s}_2)$ on the context-theoretic probability of the meet of the representations of the two sentences, which can be used to calculate the degree of entailment. This lower bound can be thought of as the greatest probability obtained by taking meets between individual interpretations of the two sentences. It is straightforward to calculate:
+$$\phi_\mathrm{min}(\tilde{s}_1\land\tilde{s}_2) = \max_{i,j}\left[ (\min\{\beta^{(1)}_i,\beta^{(2)}_j\})p_\vdash(u^{(1)}_i\land u^{(2)}_j) \right].$$
+Note that  $\land$ here is logical conjunction from the language $\Lambda$. This is possible since in a logic with the propositional calculus as a subset, the vector representation of the logical conjunction of two sentences will be the same as the vector lattice meet of the representations of the individual sentences, for the reason discussed in Section \ref{propositional}. The lower bound on the degree of entailment $\Ent(s_1,s_2)$ is then given by $\phi_\mathrm{min}(\tilde{s}_1\land\tilde{s}_2)/\phi(\tilde{s}_1)$.
+
+\subsection{Entailment between words and phrases}
+
+Computing entailment between words and phrases using the ideas of Section \ref{context-theoretic-analysis} and subsequent sections is clearly more challenging than computing entailment between sentences, since we need to calculate a sum over all contexts $(a,b) \in A^*$. One approach to this problem would be to use a Monte-Carlo technique to estimate the entailment by taking a sample of contexts. In fact, only those contexts which give a sentence in $\lambda$ will contribute to the sum, and heuristics could be used to skew the sample towards those contexts which are likely to be important for the string under consideration.
+
+\section{Conclusion}
+
+We have presented a context-theoretic analysis of logical semantics for natural language, and shown how the flexibility of the vector representation that comes with the context-theoretic framework allows the incorporation of statistical information about uncertainty into the representation. This provides us with a principled way of reasoning with uncertainty and ambiguity in meaning.
+
+We discussed some requirements that we may expect of a system that represents ambiguity and uncertainty in natural language, namely:
+\begin{itemize}
+\item that the system be able to reason with uncertainty in a probabilistic fashion, following a Bayesian\index{Bayesianism} philosophy. The mathematics we have described allows for the incorporation of information about the probability of meaning, in the Bayesian sense.
+\item that the system deals with ambiguity in a way that agrees with our intuition and that incorporates statistical information about this ambiguity. This is true of the ideas presented here: an ambiguous word or phrase is represented as a weighted sum of its unambiguous meanings. It is the weights given to these meanings that allow statistical information to be incorporated.
+\end{itemize}
+
+We have also shown how a system may be implemented using the ideas presented here, and outlined how the computational problems involved may be solved.
+
+It should be noted that the approaches presented in this chapter are just a few ways of dealing with the problems of ambiguity and uncertainty in logical semantics within the context-theoretic framework; it is likely that future work within the framework will bring to light new approaches and computational techniques.
+
+Among the problems that need addressing are questions surrounding multi-word expressions and non-compositionality --- is there a way to identify context-theoretic properties of words and phrases that may indicate non-compositionality, and how may existing approaches to representing non-compositionality be incorporated into the framework? These are questions that we hope to address in future work.
+
+Other areas of interest for future work include looking at how different probabilistic logics relate to the framework and which are best suited to it and to representing natural language, looking at computational procedures for calculating or estimating the degree of entailment when using logical semantics, especially between words and phrases, and other ways to make logical semantics more robust, for example by combining them with other context theories.
+
+\index{logical semantics|)}
+
+
+%The models described in the previous section are simple to define in mathematical terms but several issues arise when it comes to computing with such models. Essentially there are two problems: one of representation and computation and one of estimation: how are we to represent and compute with structures such as a probability distribution over an infinite number of contexts, and secondly, how can we estimate values for these structures given the data available? Clearly both of these are large and complex problems; there is no definitive solution to either of them, but we will give some suggestions to clarify how we expect the ideas we have presented here to be used.
+
+%As for the issue of estimation, there are two functions we need to estimate, $p$ and $q$. There are existing techniques that can be applied to help estimate both of these. In the case of $p$, it is easy enough to get a reasonable estimate; for example we could build logical translations of a corpus of text, and train a statistical grammar on the resulting sentences so that we can attach probabilities to each element of $\Lambda$. However, when it comes to computing with this structure, what we most often need is $p_\vdash$ which requires summing over an infinite number of strings of $\Lambda$. It is clearly much easier in this case to define a function $p_\vdash$ that behaves as 
+
+%As for the problem of representation and computation, it is clearly impractical in general to compute the quantities directly as we have described them. For example, computing the degree of entailment between two sentences using a probabilistic logical translation requires 
+
+%%\subsection{Probabilistic Logics}
+
+%%The ideas we have presented so far are extremely general, however in their current form they are practically not very useful. For example, 
+%we are often required to compute the function $p_\vdash$ which requires summing the value of $p$ over a potentially infinite number of sentences of $\Lambda$. We chose this method of presentation purely because of its generality: we did not want to tie ourselves down to one particular probabilistic formalism.
+
+%Fortunately, in general, a lot more structure will be available, which allows the calculations to be greatly simplified. Specifically, most of the time we will deal with logics which include the propositional calculus as a subset. This means that the partial ordering on equivalence sets defined by $\vdash$ will be a Boolean algebra, as we saw before, and the function $p_\vdash$ will behave as a probability measure with respect to the Boolean algebra. In this case, instead of dealing with a function $p$ we can directly define a function $p_\vdash$, making calculations of entailments simple.
+
+%\subsection{Representing Syntactic Ambiguity}
+
+%\bibliographystyle{plainnat}
+%\bibliography{contexts.bib}
+
+%\end{document} 

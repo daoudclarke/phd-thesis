@@ -1,0 +1,515 @@
+%%Bismillahi-r-Rahmani-r-Rahim
+%\documentclass{report}
+
+%\include{head}
+%\usepackage{fancyvrb}
+%\usepackage{pstricks}
+
+%\begin{document}
+
+\chapter{Background}
+\label{background}
+
+
+\section{Philosophy}
+\label{philosophy}
+\index{philosophy of meaning|(}
+The development of a theory of meaning inevitably requires subscription to a philosophy of \emph{what meaning is}. We are interested in describing representations resulting from techniques that make use of context in order to determine meaning, therefore it is natural that we look for a philsophy in which meaning is closely connected to context. The closest we have found is in the ideas of \cite{Firth:57}, and before him, \cite{Wittgenstein:53}.
+
+\subsection{Wittgenstein}
+\index{Wittgenstein, Ludwig|(}
+
+Wittgenstein was concerned with understanding language for the purpose of applying it to philosophy. He believed that many errors in philosophical reasoning arose out of an incorrect understanding of what meaning is. In \emph{Philosophical Investigations} Wittgenstein especially combats the idea that the meaning of a word is an object:
+\begin{quote}
+1. ``When they (my elders) named some object, and accordingly moved towards something, I saw this and I grasped that the thing was called by the sound they uttered when they meant to point it out.  Their intention was shown by their bodily movements, as it were the natural language of all peoples; the expression of the face, the play of the eyes, the movement of other parts of the body, and the tone of the voice which expresses our state of mind in seeking, having, rejecting, or avoiding something.  Thus, as I heard words repeatedly used in their proper places in various sentences, I gradually learnt to understand what objects they signified; and after I had trained my mouth to form these signs, I used them to express my own desires.''\footnote{A quotation from Augustine (Confessions, I.8.)}
+ 
+These words, it seems to me, give us a particular picture of the essence of human language.  It is this: the individual words in language name objects --- sentences are combinations of such names. In this picture of language we find the roots of the following idea: Every word has a meaning.  The meaning is correlated with the word.  It is the object for which the word stands.
+\end{quote}
+He later continues, ``That philosophical concept of meaning has its place in a primitive idea of the way language functions''.
+
+Wittgenstein's own idea of meaning is later expressed as follows:
+\begin{quote}
+43. For a large class of cases --- though not for all --- in which we employ the word ``meaning'' it can be defined thus: the meaning of a word is its use in the language.
+\end{quote}
+In other words, if we know exactly how a word should be used, then in general, we know its meaning.\index{meaning!as use} Note that Wittgenstein requires that we know the ``use'' of a word rather than merely the contexts it is used in. This implies a much stronger knowledge since it seems to require knowing the reason behind using a word in terms of the impact it will produce; knowing the contexts a word occurs in merely means we can list the particular situations in which the use of the word is appropriate.
+\index{Wittgenstein, Ludwig|)}
+
+
+\subsection{Firth}
+\index{Firth, J.~R.|(}
+
+\cite{Honeybone:05} describes Firth's perception of language:
+\begin{quote}
+\ldots Firth saw language as a set of  events which speakers uttered, a mode of action, a way of  ``doing  things'',  and  therefore  linguists should focus on speech events themselves. This rejected  the  common view that speech acts are only interesting for linguists to gain access to the  ``true'' object of study --- their underlying grammatical systems.
+
+As utterances occur in real-life contexts, Firth argued that their meaning derived  just as much from the particular situation in which they occurred as from the string of  sounds  uttered.  This  integrationist  idea, which  mixes  language with the objects  physically present during a conversation to ascertain the meaning involved, is known  as Firth's ``contextual theory of meaning''\ldots
+\end{quote}
+This is summed up in the famous quote, ``You shall know a word by the company it keeps''  \citep{Firth:57}.
+
+Firth comes closer to the idea of ``meaning as context''\index{meaning!as context} as it used in modern techniques in  computational linguistics in his article \emph{Modes of Meaning} \citep{Firth:57a} in discussing ``collocation'':
+\begin{quote}
+The following sentences show that a part of the meaning of the word \emph{ass} in modern colloquial English can be by collocation:
+\begin{enumerate}
+\item An ass like Bagson might easily do that.
+\item He is an ass.
+\item You silly ass!
+\item Don't be an ass!
+\end{enumerate}
+One of the meanings of \emph{ass} is its habitual collocation with an immediately preceding \emph{you silly}, and with other phrases of address or of personal reference.
+\end{quote}
+He then clarifies the relationship between what he calls ``meaning by collocation'' and ``contextual meaning'':
+\begin{quote}
+It must be pointed out that meaning by collocation is not at all the same thing as contextual meaning, which is the functional relation of the sentence to the processes of a context of situation in the context of culture.
+\end{quote}
+For Firth, part of the meaning of a word may be determined by ``collocation'', but to know its meaning is to know its ``use'' in the general sense of Wittgenstein.
+
+\index{Firth, J.~R.|)}
+
+
+%Wittgenstein and Firth appear to come close to a philosophy in agreement with modern techniques in computational linguistics, since these are based around analysing how a word is used, their contexts (in large text corpora) in order to determine their meaning. Of course many aspects of their ``use'' (as Wittgenstein intended it) or ``context'' (as Firth intended it) are ignored: the techniques do not generally take into account the person speaking or writing, or the time or location in which it was spoken or written. We may call these the ``general context'' --- modern techniques make use of the ``specific context'', the other words occurring in the region of the word of interest.
+
+\subsection{Harris}
+\index{Harris, Zellig|(}
+\index{distributional!hypothesis|(}
+
+Neither Wittgenstein nor Firth make strong statements connecting meaning to its observed textual context. The first to do this was 
+ \cite{Harris:68}, whose work is often cited as first presenting the \emph{distributional hypothesis}: that words will occur in similar contexts if and only if they have similar meanings. Harris is the first to suggest that meanings of words can be determined by statistical analysis of their occurrences in large amounts of text.
+
+He describes this idea as follows \citep[section 2.3 (b)]{Harris:85}:
+\begin{quote}
+The fact that, for example, not every adjective occurs with every noun can be used as a measure of meaning difference. For it is not merely that different members of the one class have different selections of members of the other class with which they are actually found. More than that: if we consider words or morphemes $A$ and $B$ to be more different in meaning than $A$ and $C$, then we will often find that the distributions of $A$ and $B$ are more different than the distributions of $A$ and $C$. In other words, difference of meaning correlates with difference of distribution.
+
+If we consider \emph{oculist} and \emph{eye-doctor} we find that, as our corpus of actually occurring utterances grows, these two occur in almost the same environments\ldots In contrast, there are many sentence environments in which \emph{oculist} occurs but \emph{lawyer} does not: e.g.~\emph{I've had my eyes examined by the same oculist for twenty years}, or \emph{Oculists often have their prescription blanks printed for them by opticians}. It is not a question of whether the above sentence with \emph{lawyer} substituted is true or not; it might be true in some situation. It is rather a question of the relative frequency of such  environments with \emph{oculist} and with \emph{lawyer}, or of whether we will obtain \emph{lawyer} here if we ask an informant to substitute any word he wishes for \emph{oculist} (not asking which words have the same meaning).
+\end{quote}
+Harris also proposes the idea that similarity in meaning can be quantified in terms of the difference in their environments (contexts):
+\begin{quote}
+If $A$ and $B$ have almost identical environments except chiefly for sentences which contain both, we say they are synonyms: \emph{oculist} and \emph{eye-doctor}. If $A$ and $B$ have some environments in common and some not (e.g.~\emph{oculist} and \emph{lawyer}) we say that they have different meanings, the amount of meaning difference corresponding roughly to the amount of difference in their environments. (This latter amount would depend on the numerical relation of different to same environments, with more weighting being given to differences of selectional subclasses.) If $A$ and $B$ never have the same environment, we say that they are members of two different grammatical classes (this aside from homonymity and from any stated position where both these classes occur).
+\end{quote}
+
+There is a subtle distinction between the two statements
+\begin{enumerate}
+\item Words that have similar meanings will occur in similar contexts.
+\item Words that occur in similar contexts will have similar meanings.
+\end{enumerate}
+Harris does not seem to make this distinction explicitly, however it is clear from the above passage that he intends both since he proposes that ``difference of meaning correlates with difference of distribution'' in addition to proposing that words with similar meanings occur in similar contexts. For this reason we have stated the distributional hypothesis as ``words will occur in similar contexts if and only if they have similar meanings''.
+
+While Harris notes that distributional features extend beyond the sentence level, he does not attempt to extend the connection between meaning and context significantly beyond the word level. He also talks only about similarity in meaning, and does not discuss the asymmetric relationship of entailment, and how this relates to context.
+\index{Harris, Zellig|)}
+\index{distributional!hypothesis|)}
+
+\subsection{Later Developments}
+
+Harris's distributional hypothesis has been the inspiration for much of the statistical work on determining meaning from corpora. Very recently, attempts have been made to refine the distributional hypothesis.\index{distributional!hypothesis}
+
+\cite{Weeds:04} take this one step further with the introduction of the idea of ``distributional generality''.\index{distributional!generality} A term $w_1$ is distributionally more general than another term $w_2$ if $w_2$ occurs in a subset of the contexts that $w_1$ occurs in. They relate this to their measures of precision and recall which they use to define a variety of measures of distributional similarity\index{distributional!similarity}.
+
+The idea is that distributional generality may be connected to \emph{semantic generality}. An example of this is the \emph{hypernymy relation}\index{hypernymy} or ``is a'' relation between nouns: a word $w_1$ is a hypernym of $w_2$ if $w_1$ refers to a concept that generalises the concept referred to by $w_2$, for example the term \emph{animal} is a hypernym of \emph{dog} since a dog is an animal. They explain the connection to distributional generality as follows:
+\begin{quote}
+Although one can obviously think of counter-examples, we would generally expect that the more specific term \emph{dog} can only be used in contexts where \emph{animal} can be used and that the more general term \emph{animal} might be used in all of the contexts where \emph{dog} is used and possibly others. Thus, we might expect that distributional generality is correlated with semantic generality\ldots
+\end{quote}
+
+This has been refined by \cite{Geffet:05} with the introduction of two ``distributional inclusion hypotheses''.\index{distributional!inclusion hypotheses} They define these in terms of ``lexical entailment''\index{entailment!lexical} between senses of words, rather than the hypernymy relation which is more specific in meaning and is defined between words. They also only consider what they call ``syntactic-based features'' which would include, for example, dependency relations, and discount co-occurrences within a window as providing useful knowledge about entailment. Finally, they assume that it is possible to distinguish the ``characteristic'' features --- that is, those features that have an impact on the meaning of a word. Let $s_1$ and $s_2$ be two senses of words. Their hypotheses, then are:
+\begin{enumerate}
+\item If $s_1$ lexically entails $s_2$ then all the characteristic (syntactic-based) features of $s_1$ are expected to appear with $s_2$.
+\item If all the characteristic (syntactic-based) features of $s_1$ appear with $s_2$ then we expect that $s_1$ lexically entails $s_2$. 
+\end{enumerate}
+
+The two hypotheses effectively tie the meaning (in terms of lexical entailment) to specific features of the contexts that terms occur in, however, the authors do not go so far as to attempt to equate the two.
+
+\subsection{Discussion}
+
+We view the ideas we have presented here as a progression in our understanding of meaning; this is not to say that each author was aware of the previous author's work, but that the ideas themselves relate to the previous ones. Wittgenstein\index{Wittgenstein, Ludwig} first attempted to free people from existing perceptions of meaning by proposing that knowledge of the meaning of a word meant nothing more than knowing how to use it. Firth\index{Firth, J.~R.} then proposed that part of the meaning of a word may be by collocation in his example of the word ``ass''. Harris\index{Harris, Zellig} went further in his proposal that words occur in similar contexts if and only if they have similar meanings. Recent work arising from computational techniques refines this idea by focussing on distributional and semantic generality, suggesting that a term with a more general meaning will occur in a wider range of contexts.
+
+None of the authors go so far as to equate meaning with context: for example, Harris talks only about how meanings of words relate to one another, and that similarity and difference of meaning can be determined by examining the contexts words occur in. Thus Harris does not contradict earlier philosophers, since it is possible to know how the meanings of words relate to one another without knowing their meaning as Wittgenstein intended it.
+
+For practical purposes of applications in computing however, we argue that knowing how meanings relate to one another is enough. This is something that has become clearer through the development of the notion of textual entailment, which can be applied to so many areas in natural language processing yet only requires a relative understanding of meaning. For this reason, in this thesis we will equate meaning with context, that is, we assume that a relative knowledge of meaning is sufficient. This is not a statement of our philosophical position, rather it is a simplification that is convenient for the problem we are addressing. We hope however that through this simplification and subsequent mathematical analysis we will be able to give a new perspective on meaning that can add to and enrich, rather than detract from, existing ideas of meaning.
+
+%\section{The Problem}
+
+%We wish to elaborate more on the specific problem that we wish to solve. To do this, we will give an introduction to vector-based techniques, specifically Latent Semantic Analysis and variations on the technique, and measures of distributional similarity. We will then look in more detail at the Textual Entailment Challenge and approaches to solving the problem. Finally we will discuss why we believe a vector-based theory of meaning will benefit researchers tackling such problems.
+
+
+% \section{Words and Vectors --- Existing Work}
+% 
+%The purpose of this section is to review existing work on representing words using vectors. All of the work we are aware of focuses on automatic techniques to determine some aspect of the meaning of words, or relationships between their meanings, based on the contexts they occur in within some large corpus of text. It is this that has led us to formalise meaning in terms of context, and thus it is informative for us to study these techniques. In particular we wish to focus on the mathematical properties of vectors involved in such analyses; this will allow us to abstract from these techniques to gain an insight into the nature of meaning.
+ 
+%Measures of distributional similarity attempt to put a measure of similarity on terms based on the contexts they occur in. Terms are represented by ``feature vectors'' whose nature depends on what features of the contexts we are interested in modeling, for example dependency relations might be used to form these vectors. Once these vectors are obtained, numerous mathematical formulae are available to measure similarity, for example, we can choose this to be the cosine of the angle between the vectors. 
+
+%In latent semantic analysis, vectors are also used to represent contexts that terms occur in, although in this case, the context is more commonly defined by looking at terms that occur within a window, or simply considering what documents a term occur. A different kind of analysis is applied, which attempts to deduce ``latent'' information about the meaning of a term by means of a dimensionality reduction. The resulting vectors are a compact representation of the meaning of the term, and have proved useful in information retrieval applications.
+
+\index{philosophy of meaning|)}
+\section{Vector Based Representations of Meaning}
+\label{vector-based}
+
+%Vector-based representations of meaning have arisen out of the wide availability of large text corpora and computing power which allows the statistical analysis of these corpora.
+By ``vector-based representations of meaning'' we really mean two main areas of research: that of latent semantic analysis\index{latent semantic analysis} and its variants, and that of measures of distributional similarity\index{distributional!similarity} between natural language expressions. In general, both these areas involve representing expressions in terms of vectors which are built according to the contexts that the expression of interest occurs in in some large corpus. Figure \ref{fruit} gives a sample of occurrences of the term ``fruit'' in the British National Corpus; typically context vectors are built from many more occurrences of a term.
+
+In latent semantic analysis, a transformation is applied to the vectors, resulting in a new vector representation of an expression which is supposed to describe ``latent'' features of meaning of the expression. By contrast, measures of distributional similarity leave the initial vector representation intact, but use mathematical analysis to measure the similarity between these vectors in various ways.
+
+Both techniques are dependent on how the initial vectors are built:%, which is crucial to their effectiveness for different applications:
+\begin{itemize}
+\item The vector representation of an expression may depend purely on what document the expression occurs in: the representation is simply the multiset or bag of document identifiers corresponding to occurrences of the expression. The order of occurrences of words in a document is thus deemed unimportant in this model. Each dimension of the vector representation corresponds to a document in the corpus, and the size of a component of the representation of a word will be its frequency of occurrence in the corresponding document.
+\item In a \emph{windowing model} the representation of an expression is built from words that occur within a certain ``window'' of $n$ words from the expression of interest; again order of occurrence is unimportant. Each dimension of the vector representation now corresponds to a different word that expressions may co-occur with.
+\item The text may be parsed with a dependency parser and some or all of the resulting dependency relations are then used to build vectors. In this case, each dimension would correspond to a different relationship: a noun occurring as object of a verb would be in a different dimension to the same noun occurring as the subject of the verb.
+\end{itemize}
+The first of these relates closely to information retrieval applications, and it was this application that led to the development of latent semantic analysis; the second representation is also commonly used in latent semantic analysis. Variations on the third representation are more commonly used in measures of distributional similarity.
+
+\begin{figure}
+\begin{Verbatim}[fontsize=\scriptsize]
+end some medicine for her, but she will need fruit and  milk, and some other special things that
+our own. Here we give you ideas for foliage, fruit and  various festive trimmings that you can i
+part II). However, other strategies can bear fruit  and are described under three sections which
+       supper Ñ tomatoes, potato chips, dried fruit and cake. And  they drank water out of tea-cu
+erent days, as  the East Berliners queue for fruit and cheap stereos, a Turkish  beggar sleeps i
+dening; and  Pests -- how to control them on fruit and vegetables. Both are  produced by the Hen
+me,"Silver Queen" is male so will never bear fruit    At the opposite end of the prickliness sca
+ lifted away    Like an orange lifted from a fruit-bowl    And darkness, blacker    Than an oil-
+ed in your  wreath. Christmas ribbon and wax fruit can be added for colour.  Essentials are scis
+e you need to start developing your very own fruit  collection    KEEPING OUT THE COLD    Need e
+ly with Jeyes fluid    THE KITCHEN GARDEN    FRUIT    Cut out cankers on fruit trees, except tho
+wn and watered    AUTUMN HUES    Foliage and fruit enrich the autumn garden, whether glowing  th
+- have forgotten  the maxim: " tel arbre tel fruit ". If I were  willing  to  unstitch the past 
+ of three children of Alfred Roger Ackerley, fruit importer  of London, and his mistress, Janett
+rful didactic spirit, much that was to  bear fruit in his years as a mature artist. Although thi
+e all made with natural vegetable, plant and fruit ingredients  such as chamomile, kukai nut and
+ack in the soup.    He re-visits the Copella fruit juice farm in Suffolk, the  business he told 
+rategic relationship" with Lotus, the first  fruit of which is a mail gateway between Office and
+, choose your plants  carefully to enjoy the fruit of your labour all year round.    PLACES TO V
+ and I love chips.  Otherwise I'll nibble on fruit or something to convince myself  that I'm eat
+ tone and felt the  softness and warmth of a fruit ripening against a wall? If she  had she migh
+ol place to set. Calories per  slice: 395    Fruit Scones with cinnamon Butter    (makes 12)    
+ought me water. Another monster gave me some fruit  to eat. A few monsters lay against my body a
+ney fungus.    Cut out diseased wood on most fruit trees    VEGETABLES    Continue winter diggin
+age and chafing.    Remove old, unproductive fruit trees by cutting them down to  shoulder heigh
+ITCHEN GARDEN    FRUIT    Cut out cankers on fruit trees, except those on peaches, plums  and ch
+ps  remain, then stir in the sugar and dried fruit. Using a round-  ended knife, stir in the mil
+ of a homeland, well others dream too,    De fruit was forbidden an now yu can't chew,    How ca
+onnoisseurs. We take a bite from an unusual  fruit. We come away neither nourished nor ravished,
+\end{Verbatim}
+
+\caption{Occurrences and some context of occurrences of the word \emph{fruit} in the British National Corpus.}
+\label{fruit}
+\end{figure}
+
+
+\subsection{Latent Semantic Analysis}
+\index{latent semantic analysis|(}
+
+The technique of latent semantic analysis and the similar probabilistic techniques that followed it, arose from the work of \cite{Deerwester:90}, in the context of the task of information retrieval. We will give only a brief overview here, since the details are not directly relevant to our work.
+
+It is common in information retrieval to represent a term by the vector of documents it occurs in. Table \ref{fruittable} gives a set of hypothetical occurrences of six terms in eight documents. Given a user query term, the information retrieval software may return the documents that have the most occurrences of that term. From the vector perspective, the documents are identified with the \emph{components} of the vector representation of a term; given a query term, the most suitable document corresponds to the \emph{greatest component} of the term's vector representation.
+
+It is often the case, however, that there are documents that are suitable matches for a given query which do not contain that query term often, or even at all. These will not be returned by the straightforward matching technique, and latent semantic analysis aims to get around this problem. It aims to deduce ``latent'' information about where terms may be expected to appear, by reducing the number of dimensions in which vectors are represented. This is performed in such a way that the most important components of meaning are retained, while those thought to represent noise are discarded.  This \emph{dimensionality reduction} has the effect of moving vectors that were unrelated closer together, as they are ``squashed'' into a space of lower dimensionality. For example, in table \ref{fruittable}, \emph{banana} and \emph{orange} never occur together, however they both occur with \emph{apple} and \emph{fruit} which provides evidence that they are related. Latent semantic analysis aims to deduce this relation.
+
+%Latent semantic analysis works by reducing the number of dimensions in which information can be stored, keeping only the most important information about the original matrix.
+
+Figure \ref{reduce} is intended to give an idea of how this works. The outer rectangles represent  the matrices arrived at by singular value decomposition, their product gives the original matrix representing the table of term-document co-occurrences. These matrices are arranged so that the most important information is stored in the top and left areas, with less important information being stored towards the bottom and right. In latent semantic analysis, a rectangle of the most important information is chosen (the inner rectangles); this information is kept and the remaining areas of the matrices (those shaded in the diagram) are discarded --- these are assumed to contain only noise information.
+ 
+\begin{figure}
+\begin{center}
+\input{matrices.pst}
+\end{center}
+\caption{Matrix decomposition and dimensionality reduction in latent semantic analysis.}
+\label{reduce}
+\end{figure}
+ 
+Table \ref{approx} shows the latent semantic analysis approximation to table \ref{fruittable}. In this case we chose to keep only two dimensions for the inner rectangles. We can see that in the new table, \emph{banana} and \emph{orange} now have components in common --- latent semantic analysis has forced them into a shared space. Because there were only two dimensions available, the term \emph{computer}, which before only shared components with \emph{apple} has been forced nearer to all the other terms, but remains closest to the term \emph{apple} as we would expect.
+
+Latent semantic analysis works as follows. The matrix $M$ representing the original table can be decomposed into three matrices, $$M = UDV,$$ where $U$ and $V$ are unitary matrices and $D$ is a diagonal matrix containing the \emph{singular values} of $M$. Figure \ref{reduce} shows how the dimensionality reduction is performed. The decomposition can be rearranged so that the most important components --- those with the greatest singular values --- are in the top left of the matrix $D$, the dimensionality reduction is then performed by discarding the less important components, resulting in smaller matrices $U'$, $V'$ and $D'$. The matrix $M$ is then \emph{approximated} by the product of the new matrices, $M \simeq U'D'V'$.
+
+For example, if we take table \ref{fruittable} as matrix $M$, then the decomposed and reduced matrices are those in figure \ref{decompose}. In this case we chose to keep only two dimensions corresponding to the greatest singular values ($12.8$ and $9.46$); keeping more dimensions would mean that more features of the original matrix would be preserved.
+\begin{table}
+\newcommand\T{\rule[-1.2ex]{0pt}{3.7ex}}
+
+\begin{center}
+\begin{tabular}{|l|cccccccc|}
+\hline
+	 	& $d_1$\T	& $d_2$	& $d_3$	& $d_4$	& $d_5$ & $d_6$ & $d_7$ & $d_8$\\
+\hline
+banana\T	& 2		& --		& --		& --		& 5		& --		& 5		& --\\
+apple\T	& 4		& 3		& 4		& 6		& 3		& --		& --		& --\\
+orange\T	& --		& 2		& 1		& --		& --		& 7		& --		& 3\\
+fruit\T	& --		& 1		& 3		& --		& 4		& 3		& 5		& 3\\
+tree\T	& --		& --		& 5		& --		& --		& 5		& --		& --\\
+computer\T& --		& --		& --		& 6		& --		& --		& --		& --\\
+\hline
+\end{tabular}
+\caption{A table of hypothetical occurrences of words in a set of documents, $d_1$ to $d_8$.}
+\label{fruittable}
+\end{center}
+\end{table}
+
+\begin{figure}
+$$\left( \begin{array}{cc}
+.335  &  -.175 \\
+.504   & -.619 \\
+.392   & .514\\
+.564   & .177\\
+.374   & .341\\
+.141   & -.415 
+\end{array}\right)
+\left( \begin{array}{cc}
+  12.8   &   0  \\
+   0   &   9.46
+\end{array}\right)
+\left( \begin{array}{cc}
+.209   &  -.298  \\
+.223    & -.0686 \\
+.466   & .0295 \\
+.302   &  -.655  \\
+.425   &  -.213  \\
+.492   &  .617 \\
+.351   & .00101\\
+.224    & .219 \\
+\end{array}\right)^\mathrm{T}$$
+\caption{The matrices $U'$, $D'$ and $V'$ formed from singular value decomposition and dimensionality reduction. The product approximates the original matrix in table \ref{fruittable}. Here $A^\mathrm{T}$ is used to mean the transpose of matrix $A$.}
+\label{decompose}
+\end{figure}
+
+\begin{table}
+\newcommand\T{\rule[-1.2ex]{0pt}{3.7ex}}
+
+\begin{center}
+\begin{tabular}{|l|cccccccc|}
+\hline
+	 	& $d_1$\T	& $d_2$	& $d_3$	& $d_4$	& $d_5$ & $d_6$ & $d_7$ & $d_8$\\
+\hline
+banana\T & 1.40 & 1.08 & 1.95 & 2.40 &  2.19 & 1.09 &  1.51 & .597 \\
+apple\T	& 3.11 & 1.85 & 2.84 & 5.80 &  4.00 & -.44 &  2.26 &  .17 \\
+orange\T	& -.40 & .795 & 2.48 & -1.68 & 1.10 & 5.49 &  1.77 & 2.20 \\
+fruit\T	& 1.02 & 1.50 & 3.41 & 1.08 &  2.71 & 4.60 &  2.53 & 1.99 \\
+tree\T	& .041 & .847 & 2.33 & -.68 &  1.35 & 4.36 &  1.68 & 1.78 \\
+computer\T& 1.56 & .679 & .731 & 3.13 &  1.62 & -1.53 & .635 & -.455\\
+\hline
+\end{tabular}
+\caption{An approximation to the table obtained from a singular value decomposition followed by a dimensionality reduction to two dimensions.}
+\label{approx}
+\end{center}
+\end{table}
+
+
+Latent semantic analysis in its original form has some problems many of which have now been resolved to a large degree by new techniques. For example, the new, approximate matrix may contain negative values, as our example shows (table \ref{approx}). This is undesirable, as the matrix is intended to represent expected co-occurrence frequencies, and these cannot be negative; this is a result of the technique's lack of grounding in a sound probabilistic analysis of the situation.
+\index{latent semantic analysis|)}
+\subsection{Probabilistic Latent Semantic Analysis}
+\index{latent semantic analysis!probabilistic|(}
+
+
+\begin{figure}
+\begin{center}
+\input{plsa.pst}
+\end{center}
+\caption{The probabilistic latent semantic analysis model of words $w$ and documents $d$ modelled as dependent on a latent variable $z$.}
+\label{plsa}
+\end{figure}
+
+Probabilistic latent semantic analysis \citep{Hofmann:99} is a technique which has the same aim as latent semantic analysis, but solves the problems of the technique in a probabilistic fashion, resolving the issue of negative values, and putting the technique on a firmer theoretical foundation. It treats the occurrence of a word $w$ and a document $d$ as random variables, and postulates the existence of a hidden variable $z$ (see figure \ref{plsa}), and makes the assumption that $d$ and $w$ are independent conditioned on $z$. The parameters of the model are the probability distributions $P(z)$, $P(w|z)$ and $P(d|z)$. As \cite{Hofmann:99} shows, these can be estimated by the Expectation Maximisation algorithm, using the following equations for the Expectation step
+$$P(z|d,w) = \frac{P(z)P(d|z)P(w|z)}{\sum_{z' \in \mathcal{Z}}P(z')P(d|z')P(w|z')}$$
+and the Maximisation step
+\begin{eqnarray*}
+P(w|z) &\propto& \sum_{d\in\mathcal{D}} n(d,w)P(z|d,w)\\
+P(d|z) &\propto& \sum_{w\in\mathcal{W}} n(d,w)P(z|d,w)\\
+P(z) &\propto& \sum_{d\in\mathcal{D}} \sum_{w\in\mathcal{W}} n(d,w)P(z|d,w)
+\end{eqnarray*}
+where $\mathcal{D}$ denotes the set of documents, $\mathcal{W}$ the set of words and $\mathcal{Z}$ the set of values that the hidden variable $z$ may take, and $n(d,w)$ represents the observed count of the number of occurrences of word $w$ in document $d$.
+
+\cite{Hofmann:99} demonstrates the results of his analysis by selecting specific values for $z$ and showing the ten most probable words according to $P(w|z)$. For example, they identified two values of $z$ relating to the term ``power'' one which related to radiating objects in astronomy and one relating to electrical engineering (see Table \ref{power-table}).
+
+\begin{table}
+\begin{center}
+\begin{tabular}{|c|c|}
+\hline
+$z_1$ & $z_2$\\
+\hline\hline
+POWER & load\\
+spectrum & memori\\
+omega & vlsi\\
+mpc & POWER\\
+hsup & systolic\\
+larg & input\\
+redshift & complex\\
+galaxi & arrai\\
+standard & present\\
+model & implement\\
+\hline
+\end{tabular}
+\caption{Most probable words given two topic variables relating to the term ``power'' (taken from \cite{Hofmann:99}).}
+\label{power-table}
+\end{center}
+\end{table}
+
+%The resulting parameters can be used, for example, to estimate the probability of observing a word $w_1$ given that a word $w_2$ has been observed:
+%$$P(w_1|w_2) = \sum_{z\in\mathcal{Z}}p(w_1|z)P(z|w_2).$$
+
+
+
+\index{latent semantic analysis!probabilistic|)}
+\subsection{Latent Dirichlet Allocation}
+\label{lda-section}
+\index{latent Dirichlet allocation|(}
+
+Latent Dirichlet allocation \citep{Blei:03} provides an even more in-depth Bayesian analysis of the situation. \citeauthor{Blei:03} claim that the problem with probabilistic latent semantic analysis is that there is an assumed finite number of documents. This is not the true situation, they claim: the documents available should be viewed as a sample from an infinite set of documents. In order to achieve this, they model documents as samples from a \emph{multinomial distribution} --- a generalisation of the binomial distribution.
+
+\begin{figure*}
+\begin{center}
+%\scalebox{0.8}{
+\input{dirichlet.tex}
+\caption{Graphical representation of the Dirichlet model, adapted from \cite{Blei:03}. The inner box shows the choices that are repeated for each word in the document; the outer box the choice that is made for each document; the parameters outside the boxes are constant for the model.}
+\label{graphical}
+\end{center}
+\end{figure*}
+
+%We were interested in using probabilistic models of corpora to estimate probabilities of existence, and our search for a principled probabilistic model led us to Latent Dirichlet Allocation \cite{Blei:03}.
+
+%Latent Dirichlet Allocation (LDA) follows the same vein as Latent Semantic Analysis (LSA) \cite{Deerwester:90} and Probabilistic Latent Semantic Analysis (PLSA) \cite{Hofmann:99} in that it can be used to build models of corpora in which words within a document are considered to be exchangeable; so that a document is treated as a bag of words. LSA performs a singular value decomposition on the matrix of words and documents which brings out hidden ``latent'' similarities in meaning between words, even though they may not occur together.
+
+%In contrast PLSA and LDA provide probabilistic models of corpora using Bayesian methods. LDA differs from PLSA in that, while the latter assumes a fixed number of documents, LDA assumes that the data at hand is a sample from an infinite set of documents, allowing new documents to be assigned probabilities in a straightforward manner.
+
+\begin{figure}
+\begin{center}
+\framebox[7.5cm]{\parbox{7cm}{
+\begin{enumerate}
+\item Choose $\theta \sim$ Dirichlet$(\alpha)$
+\item For each of the $N$ words:
+\begin{enumerate}
+\item Choose $z \sim$ Multinomial$(\theta)$
+\item Choose $w$ according to $p(w|z)$
+\end{enumerate}
+\end{enumerate}}}
+\end{center}
+\caption{Generative process assumed in the Dirichlet model}
+\label{generative}
+\end{figure}
+
+Figure \ref{graphical} shows a graphical representation of the latent Dirichlet allocation generative model, and figure \ref{generative} shows how the model generates a document of length $N$. In this model, the probability of occurrence of a word $w$ in a document is considered to be a multinomial variable conditioned on a $k$-dimensional ``topic'' variable $z$. The number of topics $k$ is generally chosen to be much fewer than the number of possible words, so that topics provide a ``bottleneck'' through which the latent similarity in meaning between words becomes exposed.
+
+The topic variable is assumed to follow a multinomial distribution parameterised by a $k$-dimensional variable $\theta$, satisfying $$\sum_{i=1}^k \theta_i = 1,$$
+and which is in turn assumed to follow a Dirichlet distribution. The Dirichlet distribution is itself parameterised by a $k$-dimensional vector $\alpha$. The components of this vector can be viewed as determining the marginal probabilities of topics, since:
+\begin{eqnarray*}
+p(z_i) & = & \int p(z_i|\theta)p(\theta)d\theta\\
+	   & = & \int \theta_i p(\theta)d\theta.
+\end{eqnarray*}
+This is just the expected value of $\theta_i$, which is given by
+$$p(z_i) = \frac{\alpha_i}{\sum_j \alpha_j}.$$
+
+The model is thus entirely specified by $\alpha$ and the conditional probabilies $p(w|z)$ which we can assume are specified in a $k\times V$ matrix $\beta$ where $V$ is the number of words in the vocabulary. The parameters $\alpha$ and $\beta$ can be estimated from a corpus of documents by a variational expectation maximisation algorithm, as described by \cite{Blei:03}.
+
+Latent Dirichlet allocation was applied by \cite{Blei:03} to the tasks of document modelling, document classification and collaborative filtering. They compare latent Dirichlet allocation to several techniques including probabilistic latent semantic analysis; latent Dirichlet allocation outperforms these on all of the applications. Recently, latent Dirichlet allocation has been applied to the task of word sense disambiguation \citep{Cai:07,Boyd-Graber:07} with significant success.
+
+\index{latent Dirichlet allocation|)}
+
+
+
+\subsection{Measures of Distributional Similarity}
+
+\index{distributional!similarity|(}
+
+The use of distributional similarity measures (or often, more accurately, distance measures) has been an area of intense interest in computational linguistics in recent years \citep{Lin:98a,Lee:99,Curran:02,Kilgarriff:03,Weeds:04}. The technique arose from attempts to apply statistical techniques to Harris' distributional hypothesis \citep{Hindle:90,Pereira:93,Dagan:94}, and has been applied in many areas of computational linguistics, including automatic thesaurus generation \citep{Grefenstette:94, Lin:98a, Curran:02} and word sense disambiguation \citep{Dagan:97,McCarthy:04}. Distributional similarity has also been applied to the problems of determining relationships between phrasal patterns \citep{Lin:01} and detecting compositionality \citep{McCarthy:03}.
+
+
+ A wide variety of measures have been suggested; we describe here some of the most commonly used. The variety of measures derives from the variety of ways of viewing the occurrences of words in their contexts; of these, some of the most important are as follows (see table \ref{simmeasures}):
+\begin{itemize}
+\item We can associate a vector $u$ with a word $w$ in the manner previously described; the components of the vector are the frequencies of occurrence of $w$ in each component $c$. Viewing occurrences in contexts from this perspective leads to measures based on the geometric properties of the vectors.
+\item We can renormalise the vector $u$ to give a probability distribution $p$ over contexts. This leads to information theoretic measures of dissimilarity based on standard measures of the difference in probability distributions.
+\item A consideration of which of the contexts are most important leads to measures which emphasise certain contexts over others, for example, mutual information may be used as an indication of which features are important.
+\end{itemize}
+
+\begin{table}
+\newcommand\T{\rule[-2.1ex]{0pt}{5.2ex}}
+\begin{center}
+\begin{tabular}{|l|rcl|}
+
+\hline
+\emph{Measure} & \multicolumn{3}{|c|}{\emph{Formula}\T} \\
+\hline\hline
+Cosine\T & $\cos \theta$&=& $\frac{u\cdot v}{\|u\|\|v\|}$\\
+Euclidean distance\T & $\|u - v\|$&=& $\sqrt{\sum_i (u_i - v_i)^2}$\\
+City block distance\T & $\|u - v\|_1$ &=& $\sum_i |u_i - v_i|$\\
+\hline
+Kullback-Leibler\T & $D(p\|q)$ &=& $\sum_c p \log\frac{p}{q}$\\
+Jenson-Shannon\T & $\mathrm{dist}_\mathit{JS}(q,p)$ &=& $\frac{1}{2}(D(p\|\frac{p+q}{2}) + D(q\|\frac{p+q}{2}))$\\
+$\alpha$-skew\T & $\mathrm{dist}_\alpha(q,p)$ & = & $D(p\|(\alpha q + (1-\alpha)p))$\\
+\hline
+Jaccard's\T & $\mathrm{sim}_\mathit{ja}(w_2,w_1)$ &=& $\frac{|F(w_1) \cap F(w_2)|}{|F(w_1) \cup F(w_2)|}$\\
+Jaccard's (MI)\T & $\mathrm{sim}_\mathit{ja+mi}(w_2,w_1)$ &=& $\frac{|S(w_1) \cap S(w_2)|}{|S(w_1) \cup S(w_2)|}$\\
+Lin's\T & $\mathrm{sim}_\mathit{lin}(w_2,w_1)$ &=& $\frac{\sum_{S(w_1)\cap S(w_2)}I(c,w_1) + I(c,w_2)}{\sum_{S(w_1)} I(c,w_1) + \sum_{S(w_2)} I(c,w_2)}$\\
+\hline
+\end{tabular}
+\caption{Eight measures of similarity and distance: geometric measures between vectors $u$ and $v$, where $u_i$ indicates the components of vector $u$, $u\cdot v$ indicates the dot product and $\|u\|$ denotes the Euclidean norm of $u$; measures based on the Kullback-Leibler divergence, where $p$ and $q$ are estimates of probability distributions describing the occurrences of words in contexts $c$; and measures based on the features of a word, either defined with respect to probability of occurrence, $F(w) = \{c : P(c|w) > 0\}$ or with respect to mutual information (this is also called the support of $w$), $S(w) = \{c : I(c,w) > 0\}$, where the mutual information $I$ is given by $I(c,w) = \log(P(c|w)/P(c))$.}
+\label{simmeasures}
+\end{center}
+\end{table}
+
+\subsubsection*{Geometric measures}
+
+The most obvious are those with a clear geometric interpretation, namely measuring angles and distances between vectors (see table \ref{simmeasures}). The cosine of the angle between vectors is often used as a measure of similarity since it takes values between $0$ and $1$ and is equal to $1$ only when the vectors are exactly the same. The Euclidean distance is the measure familiar to us in physical space and the $L^1$ norm\index{L1 norm@$L^1$ norm} or ``city block'' distance corresponds to the distance measured using only vertical and horizontal lines (in two dimensions).
+
+\subsubsection*{Information theoretic measures}
+
+The more complex measures are more probabilistic in nature; vectors are normalised so that they can be considered as an estimate of a probability distribution over contexts. The basis of many of these measures is the Kullback-Leibler (KL) divergence $D(p\|q) = \sum_c p \log\frac{p}{q}$ \index{Kullback-Leibler divergence} of two distributions $p$ and $q$. This measures the inefficiency of describing the true distribution $p$ while assuming the distribution is $q$, and is thus an (asymmetric) measure of the difference between the two distributions. Using the KL divergence directly is not generally practical however, as it will be infinite if there is a context $c$ for which $q(c) = 0$ and $p(c) \neq 0$. The Jenson-Shannon and $\alpha$-skew measures get around this problem.
+
+\subsubsection*{Feature-based measures}
+
+The ``features'' of a word are those contexts which are considered to provide interesting information about the word. The features can simply be the contexts that occur with non-zero probability with a word, as used in Jaccard's coefficient, which measures the proportion of contexts occurring with either word that are shared by both words.  An alternative is to include only those contexts with positive mutual information, $I$, where $I(c,w) = \log(P(c|w)/P(c))$, this can be applied directly to the formula for Jaccard's coefficient,\index{Jaccard's coefficient} and also leads to Lin's measure,\index{Lin, Dekang} which is based on an information theoretic analysis of similarity \citep{Lin:98a}.
+
+
+\index{distributional!similarity|)}
+
+
+\section{Discussion}
+
+The most important aspects of the work we have discussed for our 
+purposes are those which they have in common --- they are all techniques 
+which attempt to describe something about the meaning of a term based on the 
+contexts the term appears in. The techniques are all flexible as to the 
+exact interpretation of what context is --- for example, a window of text 
+may be used or a bag of grammatical relations. The input to the techniques 
+is a bag or multiset of pairs of terms and contexts. We can also view this 
+input as representing a term as a function from the set of contexts to the 
+natural numbers, or more generally, as positive, real-valued functions on 
+the set of contexts. Equivalently, we can think of such functions as 
+positive elements of a real vector space whose dimensionality is given by 
+the number of contexts. It is this latter perspective that is the starting 
+point for our theory of meaning as context that is developed in the next 
+chapter. 
+ 
+From here the techniques differ: latent semantic analysis and its variants 
+attempt to transform these vectors to extract ``latent'' information about 
+their meaning, while measures of distributional similarity leave the vectors 
+as they are but make use of various methods to measure the similarity or 
+difference between the vectors. Whilst our theory builds on what is common 
+between the techniques, there are elements of each that will be of 
+importance to us later. The concept of \emph{corpus model} that we describe 
+in the next chapter is a generalisation of the generative model of a corpus 
+that is used in latent Dirichlet allocation. Distributional similarity has 
+made use of various norms; this is an important topic for us in the 
+development of \emph{context theoretic probability} in the next chapter. We 
+also discuss the relationship between certain measures of distributional 
+similarity and context theories in Section \ref{dist-sim-projections-section}. 
+
+%\section{Language Models}
+%\index{language models|(}
+
+%Language models are probabilistic models of language that have a wide range of applications in computational linguistics. Language models can be thought of as describing a machine that outputs symbols from an alphabet $A$ at random according to some probability distribution based on what it has output previously. A string $x\in A^*$ can be interpreted as the event that the first $|x|$ symbols output by the machine are equal to the symbols in $x$. It is generally assumed that the machine does not stop outputting symbols, thus a language model effectively describes a probability distribution over infinitely long strings of symbols in $A$.
+
+%It is normally possible to describe language models simply however as, inevitably, simplifying assumptions are made. An important class of language models are the $n$-grams, which assume a conditional independence relationship between occurrences of strings over length $n$. The simplest of these is with $n = 1$, in which each symbol is assumed to occur independently of what preceded it, so
+%$$P(a_1a_2\ldots a_m) = P(a_1)P(a_2)\ldots P(a_m),$$
+%For $a_i \in A$. With $n = 2$ (known as a bigram model), we have
+%$$P(a_1a_2\ldots a_m) = P(a_1a_2)P(a_3 | a_2) \ldots P(a_m | a_{m-1}),$$
+%where we use the conditional notation $P(x|y)$ to mean $P(yx) / P(y)$, for $x,y \in A^*$. In general, for an $n$-gram, we have
+%$$P(a_1a_2\dots a_m) = P(a_1a_2\dots a_n)P(a_{n+1} | a_2\dots a_n)\dots P(a_m | a_{m - n + 1}\dots a_{m - 1}).$$
+%\index{language models|)}
+%\subsection{Properties of Vectors for Meaning}
+%\subsection{Outstanding Issues in Existing Work}
+ 
+%\subsection{Case Study: Textual Entailment} 
+
+
+%\section{Model-Theoretic Semantics}
+%\label{model-theoretic}
+
+% \bibliographystyle{plainnat}
+% \bibliography{contexts}
+% 
+% 
+% 
+% \end{document}

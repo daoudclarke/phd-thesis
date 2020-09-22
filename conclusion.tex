@@ -1,0 +1,105 @@
+%Bismillahi-r-Rahmani-r-Rahim
+
+\chapter{Conclusions and Future Work}
+
+We have presented a context-theoretic framework for natural language semantics. The framework is founded on the idea that meaning in natural language can be determined by context, and is inspired by techniques that make use of statistical properties of language by analysing large text corpora. Such techniques can generally be viewed as representing language in terms of vectors. These techniques are currently used in applications such as textual entailment recognition, however the lack of a theory of meaning that incorporates these techniques means that they are often used in a somewhat ad-hoc manner. The purpose behind the framework is to provide a unified theoretical foundation for such techniques so that they may used in a principled manner.
+
+\section{Summary of Part I}
+
+In Part I of the thesis we define the framework, giving background to our definition and developing a model of meaning as context; we then abstract this theory by choosing certain properties of the model to form the basis of the framework.
+
+\subsection*{Chapter \ref{background}}
+
+In this chapter we gave an overview of the philosophical background of the notion of meaning as context. Our purpose in doing this was both to show how the techniques which make use of context can be viewed as arising out of these ideas, and to provide a grounding for the ideas we present in our framework.
+
+Wittgenstein proposed that ``meaning is use'': knowing the meaning of a word is the same as knowing how to use it. Firth was interested in the ``context'' of a word in the sense of the situation in which a word was used and the objects that are physically present; he said ``you shall know a word by the company it keeps''. He also said however that part of the meaning of a word may be by collocation. The example he gives is of the word ``ass'', part of whose meaning is by collocation with expressions such as a preceding ``you silly'' --- this idea is much closer in spirit to more recent ideas of meaning as context, however Firth does not go as far as claiming all words may be considered in this way. The first to do this was Harris, whose famous distributional hypothesis discussed the relationship between meanings of words and the distribution of their contexts. He said that words will occur in similar contexts if and only if they have similar meanings.
+
+More recently, it was proposed by \cite{Weeds:04} that the property of distributional generality may be correlated to semantic generality, i.e.~that if a word occurs in a wider set of contexts than another word, its meaning is also likely to be more general, and vice-versa. This idea was taken up by \cite{Geffet:05} specifically for lexical semantics with their distributional inclusion hypotheses, which effectively equate the meaning of a word in terms of entailment to specific features of the contexts that the word occurs in.
+
+In this chapter we also introduced the techniques which inspired the framework, looking at latent semantic analysis and its variations and measures of distributional similarity. We first discussed the different methods for building context vectors that are common to all the techniques --- for example whether the context is considered to be a certain window of text surrounding the word or whether dependency features are used.
+
+We discussed three related techniques: latent semantic analysis, probabilistic latent semantic analysis and latent Dirichlet allocation. These can all be viewed as attempting to build a model that extracts ``latent'' information from the context vectors that is assumed to relate to their meaning. Latent semantic analysis does this by means of a singular value decomposition which allows the important information in the vectors to be extracted by reducing the dimensionality of the representation. Doing this forces vectors to become closer to one another allowing ``latent'' relationships between words to be detected that would not be seen looking at the context vectors alone. This technique is not ideal however as it is not probabilistic in nature and the resulting representation can be hard to interpret, for example it may contain negative values. Both probabilistic latent semantic analysis and latent Dirichlet allocation provide a probabilistic analysis of the situation. In the former it is postulated that there is a hidden variable that is responsible for the occurrence of words and contexts, which are conditionally independent given this variable. The latter technique defines a generative model of a corpus which describes an infinite array of documents --- this overcomes a perceived limitation in probabilistic latent semantic analysis which considers only a fixed number of possible contexts.
+
+We then looked at measures of distributional similarity. Instead of building models based on context vectors, these attempt to measure the similarity or difference between the vectors directly. Certain of the measures used can be given a geometric interpretation, while some are information theoretic in nature, for example being based on the Kullback-Leibler divergence. Some measures are based on the ``features'' of a term --- those contexts that are considered to provide useful information about a word, this may for example be those with positive mutual information.
+
+
+\subsection*{Chapter \ref{meaning-context}}
+
+This chapter forms the heart of the thesis. In it we build an abstract mathematical model that gives a specific interpretation of what it means for meaning to be determined by context. We propose that a string is represented by a vector that represents the contexts it occurs in in a corpus model --- an abstraction of a text corpus that allows infinite possible documents. We examine mathematical properties of the model which then form the basis of the context-theoretic framework later in the chapter.
+
+We discuss the concept of distributional generality and show how it relates to the model. Specifically we show that space of context vectors can be thought of as a vector lattice, and we propose that the partial ordering of the lattice structure can be thought of as describing entailment between strings: generally if one context vector is less than or equal to another in this partial ordering it is because the latter occurs in a wider range of contexts, thus we make the assumption that it is also more general in meaning.
+
+We then define the context-theoretic probability in terms of the model of the meaning as context. This provides us with a way to measure the size of context vectors that is similar to familiar notions of the probability of a string. This definition enables us to define a degree of entailment between strings. This is important because we assume that it is unlikely that a string will completely entail another according to the partial order of their context vectors, instead we allow degrees of entailment between strings based on a Bayesian interpretation of the context-theoretic probability.
+
+We show how the vector space generated by context vectors can be considered as an algebra over a field where concatenation of strings is interpreted as multiplication in the vector space. This is important because it informs us about the allowed nature of multiplication in the vector space: addition must distribute with respect to the product. We incorporate this property as a central feature of the framework.
+
+In the second part of the chapter we define the framework itself. We call implementations of the framework context theories since we view them as describing theories about the contexts that strings occur in. We require that context theories have some of the properties of the model of meaning as context; specifically, words must be represented as vectors in an algebra that also incorporates a compatible lattice structure and the context-theoretic probability must be described.
+
+\section{Summary of Part II}
+
+In Part II we look at applications of the framework, in order to demonstrate its effectiveness in applications. We look at four areas: that of textual entailment, representing ambiguity and uncertainty in logical semantics, relating taxonomies to the framework and representing syntax.
+
+\subsection*{Chapter \ref{entailment-chapter}}
+
+In this chapter we review approaches to recognising textual entailment, the task of determining, given two sentences, whether the first entails the second. We summarise the PASCAL Recognising Textual Entailment Challenge and approaches taken by entrants to the challenge. We examine in detail the probabilistic framework of \citeauthor{Glickman:05} for textual entailment, which has similar aims as our own framework. Theirs requires the second sentence (the hypothesis) to be given a logical interpretation however; this is not ideal for many approaches to textual entailment since they often make use of context-based representations of meaning that cannot easily be given logical interpretations.
+
+We then examine approaches to the task that made use of logical representations of meaning and methods of making such systems robust. These included systems which used scoring or cost-based systems to allow simplifications to logical representations in order to reason effectively, systems that made use of classifiers  in which the results of logical inference are one ``feature'' in the classifier, and systems which used model building. What was lacking in many of these approaches was a firm theoretical foundation that would provide guidelines as to how to make the systems more robust in a principled manner.
+
+In the second part of this chapter we showed how existing approaches to textual entailment can be considered within the context-theoretic framework. We first describe context theories for simple approaches to the task such as lexical and subsequence matching. We then analyse \citeauthor{Glickman:05}'s approach to the task, showing how it relates to the framework. This leads us to an adaptation of their approach which deals with the problem of data sparseness using latent Dirichlet allocation to form a context theory.
+
+\subsection*{Chapter \ref{model-theoretic-chapter}}
+
+A major aim of the framework is to provide insight into the problems of uncertainty and ambiguity in natural language, especially when making use of logical representations of language. Because logical systems\index{logical semantics} on their own are generally brittle, in natural language applications such as that of recognising textual entailment ways have to be found to make the systems more robust, and reasoning about uncertainty is one way in which this can be done. In this chapter we showed how logical semantics can be described in terms of context theories; this provided us with guidance as to how to represent uncertainty and ambiguity within the framework. We described how uncertainty arising from parsing and other sources can be incorporated into the  representation, and discussed the representation of word sense ambiguity within the framework. We outlined a possible way of implementing these ideas, showing how computational problems in dealing with the representation can be overcome. We also discuss how entailment can be represented between words and phrases within the framework, using logical semantics.
+
+%we showed how logical semantics can be viewed from the context-theoretic perspective; this provided us with guidance as to how to represent uncertainty and ambiguity within the framework, incorporating statistical information about this uncertainty into the representations. We also outlined how a system making use of our ideas could be implemented.
+
+\subsection*{Chapter \ref{ontologies}}
+
+In this chapter we discussed the relationship between ontological and vector-based representations of lexical semantics, presenting several ways of constructing vector based representations of a taxonomy using what we call vector lattice completions. We described several such completions: a probabilistic completion that allows the incorporation of the probability of a concept into the taxonomy, a distance preserving completion that preserves the Jiang-Conrath measure of distance in the ontology in the vector lattice structure, and a completion that uses a smaller number of dimensions for certain taxonomies. We also discuss how the representations of concepts in the vector lattice may be combined to form representations of ambiguous words.
+
+\subsection*{Chapter \ref{syntax-chapter}}
+
+In the last chapter we discussed the representation of syntactic structure within the framework, identifying categorial grammar and link grammar as being most suited to the context-theoretic approach. We give an overview of some of the different types of categorial grammar and show that the Lambek calculus can be described in terms of a context theory; we also discuss why the other types of categorial grammar are not so well suited to the context-theoretic approach.
+
+We give a detailed analysis of link grammar and describe it in terms of context theories in two different ways: in terms of operators on an infinite dimensional vector space, and in terms of inverse semigroups. The former leads us to a new description of a simple form of stochastic link grammar as well as a method of computing with link grammars using matrices. The latter shows how the structure of a sentence may be incorporated into its vector representation, bringing us a step nearer to incorporating semantic information into such representations.
+
+\section{Future Work}
+
+We divide future work into two sections, possible practical investigations arising directly from the work we have discussed, and theoretical issues that remain unresolved.
+
+\subsection{Practical Investigations}
+
+Chapters \ref{entailment-chapter} and \ref{model-theoretic-chapter} raise many possibilities for the design of systems to recognise textual entailment within the framework:
+\begin{itemize}
+\item Variations on substring matching: experiments with different weighting schemes for substrings, allowing partial commutativity of words or phrases, and replacing words with vectors representing their context, using tensor products of these vectors instead of concatenation.
+\item Extensions of Glickman and Dagan's approach and our own context-theoretic approach using latent Dirichlet allocation, perhaps using other corpus models perhaps based on $n$-grams or other models in which words don't commute, or a combination of context theories based on commutative and non-commutative models.
+\item Implementations of the outline described in Chapter \ref{model-theoretic-chapter} for representing uncertainty in logical semantics: here there are many possible variations based on what information on uncertainty is included (from parsing, part-of-speech tagging, word sense disambiguation and so on), what logical representation is used, what methods of assigning probabilities to logical statements and to strings are used, and what computational procedure is used to calculate or estimate the degree of entailment.
+\item Weighted combinations of any of the above techniques. A question that will then need to be addressed is how to find an optimum weighting scheme for the different context theories.
+\end{itemize}
+All of these ideas could be evaluated using the data sets from the Recognising Textual Entailment Challenges.
+
+Several areas of investigation are suggested by Chapter \ref{ontologies}. The first concerns the construction of ideal completions: it would be interesting to construct ideal completions for real taxonomies such as that of WordNet, and investigate the consequences of performing various types of dimensionality reduction (for example singular valued decomposition or random projections) on the resulting representations, to see for example how the quality of the representation degrades as the size of the vector space is reduced.
+
+The vector lattice completions suggest new ontological distance measures, for example the $l^p$ norms can be used on any of the vector lattice completion representations. It would be interesting to see how these compare to existing measures of ontological distance in applications.
+
+Another area of investigation suggested by this chapter is the possibility of using vector lattice completions together with measures of distributional similarity to construct ontologies automatically. If enough of a correlation can be found between distance in the vector lattice and measures of distributional distance or similarity then the latter could be used to attempt to place a concept in the vector lattice and hence in the ontology. A related idea is that of ontological smoothing: the positions of concepts in the vector lattice could be altered based on measures of distributional similarity and the resulting representations compared to the original representation in applications.
+
+The most promising area for investigation arising from Chapter \ref{syntax-chapter} is that of matrix-based parsing of link grammars. The practicality of this idea needs to be investigated in detail; one possibility is that dimensionality reductions may be used to perform statistical parsing efficiently with matrices. Other areas include looking at computational procedures for dealing with the context-theoretic representation of the Lambek calculus.
+
+\subsection{Theoretical Investigations}
+
+Several areas for investigation are suggested by Chapter \ref{meaning-context}. Proving Conjecture \ref{conjecture} may provide further insight into the nature of meaning as context, as well as giving evidence for our requirement that a context theory should be a lattice ordered algebra (instead of just a partially ordered algebra). A further interesting question is which algebras are isomorphic to the context algebra of some corpus model. It may be that stronger conditions can be placed on context theories to restrict the formalism to such algebras --- such implementations would truly deserve to be called ``context theories''\index{context theory}.
+
+In Chapter \ref{ontologies} we only considered the representation of the ``is-a'' relation of ontologies. An interesting question is how other ontological relationships such as meronymy and antonymy may be expressed within the vector lattice structure.
+
+An area of interest suggested by the work in Chapter \ref{syntax-chapter} is the use of free probability\index{free probability} to combine context theories --- this seems to us a very promising area for future work that may lead to entirely new representations of language. Our hope is that we will eventually be able to take a vector based model of meaning and combine it with a statistical model of syntax to produce a complete vector-based semantics for natural language, by combining the corresponding context theories using free probability. Because of the statistical nature of both aspects of this construction, such a semantics would be robust, and there may be potential for computing efficiently with this semantics using matrices and dimensionality reductions.
+
+A subject that we have not considered much in this thesis is the issue of multi-word expressions and non-compositionality. What predictions does the context-theoretic framework make about non-compositionality? Answering this may lead us to new techniques for recognising and handling multi-word expressions and non-compositionality.
+
+%A recurring problem when considering the implementation of some of the ideas we have discussed is the issue of very high or infinite dimensionality of the vector spaces under consideration. A possible solution that we have suggested is the use of dimensionality reductions\index{dimensionality reduction} such as random projections. This is an area that requires much further work to determine the usefulness of such approaches, and the best way to apply them. The potential rewards however, should be great, allowing the representation of meaning and syntax using (relatively) low dimensionality vectors and matrices.
+
+Of course it is hard to predict the benefits that may result from what we have presented, since we have given a way of thinking about meaning in natural language that in many respects is new. This new way of thinking opens the door to the unification of logic-based and vector-based methods in computational linguistics, and the potential fruits of this union are many.
+
+%What is new is the insistence on representing phrases and sentences using vectors in the same way that words often are,
+%What is new is the idea that larger parts of speech can be represented as vectors by composing the representations of the component parts.
+ %It will undoubtedly be a while before we find the best methods of doing this, and the best representations and algorithms to compute with them.

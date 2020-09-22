@@ -1,0 +1,38 @@
+\begin{thebibliography}{5}
+\expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
+\expandafter\ifx\csname url\endcsname\relax
+  \def\url#1{{\tt #1}}\fi
+
+\bibitem[Blei et~al.(2003)Blei, Ng, and Jordan]{Blei:03}
+David~M. Blei, Andrew~Y. Ng, and Michael~I. Jordan.
+\newblock Latent dirichlet allocation.
+\newblock {\em Journal of Machine Learning Research}, 3:\penalty0 993--1022,
+  2003.
+
+\bibitem[Geffet and Dagan(2005)]{Geffet:05}
+Maayan Geffet and Ido Dagan.
+\newblock The distributional inclusion hypotheses and lexical entailment.
+\newblock In {\em Proceedings of the 43rd Annual Meeting of the Association for
+  Computational Linguistics (ACL'05)}, pages 00--00, University of Michigan,
+  2005.
+\newblock URL \url{http://www.aclweb.org/anthology/P05-1014}.
+
+\bibitem[Glickman and Dagan(2005)]{Glickman:05}
+Oren Glickman and Ido Dagan.
+\newblock A probabilistic setting and lexical cooccurrence model for textual
+  entailment.
+\newblock In {\em ACL-05 Workshop on Empirical Modeling of Semantic Equivalence
+  and Entailment}, 2005.
+
+\bibitem[Weeds et~al.(2004)Weeds, Weir, and McCarthy.]{Weeds:04}
+Julie Weeds, David Weir, and Diana McCarthy.
+\newblock Characterising measures of lexical distributional similarity.
+\newblock In {\em Proceedings of the 20th International Conference of
+  Computational Linguistics, COLING-2004, Geneva, Switzerland.}, 2004.
+
+\bibitem[Widdows(2004)]{Widdows:04}
+Dominic Widdows.
+\newblock {\em Geometry and Meaning}.
+\newblock Center for the Study of Language and Information, Stanford, 2004.
+
+\end{thebibliography}

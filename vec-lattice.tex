@@ -1,0 +1,51 @@
+%Bismillahi-r-Rahmani-r-Rahim
+\documentclass{report}
+
+\input{head}
+
+\begin{document}
+
+\section{Riesz Spaces and Positive Operators}
+
+The previous two sections have described formalisms commonly used to describe meaning: broadly speaking, that of vector spaces and that of lattices. Until now, little attention within computational linguistics has been paid to how to combine these two areas. There is a large body of research within mathematical analysis into an area which merges the two formalisms: the study of \emph{partially ordered vector spaces}, \emph{vector lattices} (or \emph{Riesz spaces}), and \emph{Banach lattices}, and a special class of operators on these spaces called \emph{Positive operators}.
+
+It is our belief that this area provides exciting new opportunities for combining the new, vector based representations, with old, ontological representations of meaning, and also provides a means of defining entailment between vector based representations.
+
+The definitions and propositions of this section can be found in \cite{Abramovich:00} and \cite{Aliprantis:85}.
+
+\begin{defn}[Partially ordered vector space]
+A partially ordered vector space $V$ is a real vector space together with a partial ordering $\le$ such that:
+\vspace{0.1cm}\\
+\indent if $x \le y$ then $x + z \le y + z$\\
+\indent if $x \le y$ then $\alpha x \le \alpha y$
+\vspace{0.1cm}\\
+for all $x,y,z \in V$. Such a partial ordering is called a \emph{vector space order} on $V$. If $\le$ defines a lattice on $V$ then the space is called a \emph{partially ordered vector space} or \emph{Riesz space}.
+
+A vector $x$ in $V$ is called \emph{positive} if $x \ge 0$. The \emph{positive cone} of a partially ordered vector space $V$ is the set $V^+ = \{x \in V : x \ge 0\}$
+\end{defn}
+
+The positive cone has the following properties:
+\begin{eqnarray*}
+X^+ + X^+ \subseteq X^+\\
+\alpha X^+ \subseteq X^+\\
+X^+ \cap (-X^+) = \{0\}
+\end{eqnarray*}
+Any subset $C$ of $V$ satisfying the above three properties is called a \emph{cone} of $V$.
+
+\begin{prop}
+If $C$ is a cone in a real vector space $V$, then the relation $\le$ defined by $x \le y$ iff $y - x \in C$ is a vector space order on $V$, with $X^+ = C$.
+\end{prop}
+
+Part of our thesis is that meanings can be represented as positive elements of a vector space. If this is the case, then we can view words as operating on these meanings. Operators which map positive elements to positive elements are called \emph{positive}; there is a large body of work studying such operators.
+
+
+\begin{defn}[Positive Operators]
+An operator $A$ on a vector space $V$ is called \emph{positive} if $x \ge 0$ implies $Ax \ge 0$. It is called \emph{regular} if it can be denoted as the difference between two positive operators.
+\end{defn}
+
+Surprisingly, the set of regular operators on a vector space themselves form a vector lattice.
+
+\begin{defn}[Lattice Homomorphism]
+\end{defn}
+
+\end{document} 

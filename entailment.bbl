@@ -1,0 +1,107 @@
+\begin{thebibliography}{16}
+\expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
+\expandafter\ifx\csname url\endcsname\relax
+  \def\url#1{{\tt #1}}\fi
+
+\bibitem[Akhmatova(2005)]{Akhmatova:05}
+Elena Akhmatova.
+\newblock Textual entailment resolution via atomic propositions.
+\newblock In  \citet{RTE1}.
+
+\bibitem[Bar-Haim et~al.(2006)Bar-Haim, Dagan, Dolan, Ferro, Giampiccolo,
+  Magnini, and Szpektor]{Bar-Haim:06}
+Roy Bar-Haim, Ido Dagan, Bill Dolan, Lisa Ferro, Danilo Giampiccolo, Bernardo
+  Magnini, and Idan Szpektor.
+\newblock The second pascal recognising textual entailment challenge.
+\newblock In {\em Proceedings of the Second PASCAL Challenges Workshop on
+  Recognising Textual Entailment}, 2006.
+
+\bibitem[Bayer et~al.(2005)Bayer, Burger, Ferro, Henderson, and Yeh]{Bayer:05}
+Samuel Bayer, John Burger, Lisa Ferro, John Henderson, and Alexander Yeh.
+\newblock {MITRE}'s submissions to the {EU} pascal {RTE} challenge.
+\newblock In  \citet{RTE1}.
+
+\bibitem[Bos(2005)]{Bos:05}
+Johan Bos.
+\newblock Towards wide-coverage semantic interpretation.
+\newblock In {\em Proceedings of Sixth International Workshop on Computational
+  Semantics IWCS-6}, page 42?53, 2005.
+
+\bibitem[Bos and Markert(2006)]{Bos:06}
+Johan Bos and Katja Markert.
+\newblock When logical inference helps determining textual entailment (and when
+  it doesn’t).
+\newblock In {\em Proceedings of the Second PASCAL Challenges Workshop on
+  Recognising Textual Entailment}, 2006.
+
+\bibitem[Dagan et~al.(2005{\natexlab{a}})Dagan, Glickman, and
+  Magnini]{Dagan:05}
+Ido Dagan, Oren Glickman, and Bernardo Magnini.
+\newblock The pascal recognising textual entailment challenge.
+\newblock In {\em Proceedings of the PASCAL Challenges Workshop on Recognising
+  Textual Entailment}, 2005{\natexlab{a}}.
+
+\bibitem[Dagan et~al.(2005{\natexlab{b}})Dagan, Glickman, and Magnini]{RTE1}
+Ido Dagan, Oren Glickman, and Bernardo Magnini, editors.
+\newblock {\em Proceedings of the PASCAL Challenges Workshop on Recognising
+  Textual Entailment}, 2005{\natexlab{b}}.
+
+\bibitem[Delmonte et~al.(2005)Delmonte, Tonelli, Boniforti, Bristot, and
+  Pianta]{Delmonte:05}
+Rodolfo Delmonte, Sara Tonelli, Marco Aldo~Piccolino Boniforti, Antonella
+  Bristot, and Emanuele Pianta.
+\newblock {VENSES} - a linguistically-based system for semantic evaluation.
+\newblock In  \citet{RTE1}.
+
+\bibitem[Fowler et~al.(2005)Fowler, Hauser, Hodges, Niles, Novischi, and
+  Stephan]{Fowler:05}
+Abraham Fowler, Bob Hauser, Daniel Hodges, Ian Niles, Adrian Novischi, and Jens
+  Stephan.
+\newblock Applying {COGEX} to recognize textual entailment.
+\newblock In  \citet{RTE1}.
+
+\bibitem[Glickman and Dagan(2005)]{Glickman:05}
+Oren Glickman and Ido Dagan.
+\newblock A probabilistic setting and lexical cooccurrence model for textual
+  entailment.
+\newblock In {\em ACL-05 Workshop on Empirical Modeling of Semantic Equivalence
+  and Entailment}, 2005.
+
+\bibitem[Hickl et~al.(2006)Hickl, Williams, Bensley, Roberts, Rink, and
+  Shi]{Hickl:06}
+Andrew Hickl, John Williams, Jeremy Bensley, Kirk Roberts, Bryan Rink, and Ying
+  Shi.
+\newblock Recognizing textual entailment with lcc's groundhog system.
+\newblock In {\em Proceedings of the Second PASCAL Challenges Workshop}, 2006.
+
+\bibitem[Kaplan(2000)]{Kaplan:00}
+Aaron~Nathan Kaplan.
+\newblock {\em A computational model of belief}.
+\newblock PhD thesis, University of Rochester. Dept. of Computer Science, 2000.
+
+\bibitem[Klein and Manning(2003)]{Klein:03}
+Dan Klein and Christopher~D. Manning.
+\newblock Accurate unlexicalized parsing.
+\newblock In {\em Proceedings of the 41st Annual Meeting of the Association for
+  Computational Linguistics}, 2003.
+
+\bibitem[Raina et~al.(2005)Raina, Haghighi, Cox, Finkel, Michels, Toutanova,
+  MacCartney, de~Marneffe, Manning, and Ng]{Raina:05}
+Rajat Raina, Aria Haghighi, Christopher Cox, Jenny Finkel, Jeff Michels,
+  Kristina Toutanova, Bill MacCartney, Marie-Catherine de~Marneffe,
+  Christopher~D. Manning, and Andrew~Y. Ng.
+\newblock Robust textual inference using diverse knowledge sources.
+\newblock In  \citet{RTE1}.
+
+\bibitem[Tatu and Moldovan(2006)]{Tatu:06}
+Marta Tatu and Dan~I. Moldovan.
+\newblock A logic-based semantic approach to recognizing textual entailment.
+\newblock In {\em ACL}. The Association for Computer Linguistics, 2006.
+
+\bibitem[Zanzotto et~al.(2006)Zanzotto, A.AMoschitti, Pennacchiotti, and
+  Pazienza]{Zanzotto:06}
+F.~M. Zanzotto, A.AMoschitti, M.~Pennacchiotti, and M.~T. Pazienza.
+\newblock Learning textual entailment from examples.
+\newblock In {\em Proceedings of the Second PASCAL Challenges Workshop}, 2006.
+
+\end{thebibliography}

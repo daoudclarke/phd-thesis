@@ -1,0 +1,64 @@
+%%Created by jPicEdt 1.4: mixed JPIC-XML/LaTeX format
+%%Tue Apr 13 16:37:05 BST 2004
+%%Begin JPIC-XML
+%<?xml version="1.0" standalone="yes"?>
+%<jpic width="30.62" height="35.62">
+%<multicurve points="(3.75,23.75);(3.75,23.75);(13.75,33.75);(13.75,33.75)"
+%	 stroke-width="0.3" stroke-color="#000000"
+%	 fill-style="none"
+%	 />
+%<multicurve points="(3.75,23.75);(3.75,23.75);(3.75,13.75);(3.75,13.75)"
+%	 stroke-width="0.3" stroke-color="#000000"
+%	 fill-style="none"
+%	 />
+%<multicurve points="(3.75,13.75);(3.75,13.75);(13.75,3.75);(13.75,3.75)"
+%	 stroke-width="0.3" stroke-color="#000000"
+%	 fill-style="none"
+%	 />
+%<multicurve points="(13.75,3.75);(13.75,3.75);(28.75,18.75);(28.75,18.75)"
+%	 stroke-width="0.3" stroke-color="#000000"
+%	 fill-style="none"
+%	 />
+%<multicurve points="(28.75,18.75);(28.75,18.75);(13.75,33.75);(13.75,33.75)"
+%	 stroke-width="0.3" stroke-color="#000000"
+%	 fill-style="none"
+%	 />
+%<ellipse p1="(11.88,35.62)" p2="(15.62,35.62)" p3="(15.62,31.88)" angle-start="0" angle-end="0" closure="open"
+%	 stroke-width="0.3" stroke-color="#000000"
+%	 fill-color="#000000" fill-style="solid"
+%	 />
+%<ellipse p1="(26.88,20.62)" p2="(30.62,20.62)" p3="(30.62,16.88)" angle-start="0" angle-end="0" closure="open"
+%	 stroke-width="0.3" stroke-color="#000000"
+%	 fill-color="#000000" fill-style="solid"
+%	 />
+%<ellipse p1="(1.88,25.62)" p2="(5.62,25.62)" p3="(5.62,21.88)" angle-start="0" angle-end="0" closure="open"
+%	 stroke-width="0.3" stroke-color="#000000"
+%	 fill-color="#000000" fill-style="solid"
+%	 />
+%<ellipse p1="(1.88,15.62)" p2="(5.62,15.62)" p3="(5.62,11.88)" angle-start="0" angle-end="0" closure="open"
+%	 stroke-width="0.3" stroke-color="#000000"
+%	 fill-color="#000000" fill-style="solid"
+%	 />
+%<ellipse p1="(11.88,5.62)" p2="(15.62,5.62)" p3="(15.62,1.88)" angle-start="0" angle-end="0" closure="open"
+%	 stroke-width="0.3" stroke-color="#000000"
+%	 fill-color="#000000" fill-style="solid"
+%	 />
+%</jpic>
+%%End JPIC-XML
+%PsTricks content-type (pstricks.sty package needed)
+%Add \usepackage{pstricks} in the preamble of your LaTeX file
+\psset{xunit=1mm,yunit=1mm,runit=1mm}
+\psset{linewidth=0.3,dotsep=1,hatchwidth=0.3,hatchsep=1.5,shadowsize=1}
+\psset{dotsize=0.7 2.5,dotscale=1 1}
+\begin{pspicture}(0,0)(30.62,35.62)
+\psline[]{-}(3.75,23.75)(13.75,33.75)
+\psline[]{-}(3.75,23.75)(3.75,13.75)
+\psline[]{-}(3.75,13.75)(13.75,3.75)
+\psline[]{-}(13.75,3.75)(28.75,18.75)
+\psline[]{-}(28.75,18.75)(13.75,33.75)
+\rput{0}(13.75,33.75){\psellipse[fillstyle=solid](0,0)(1.87,-1.87)}
+\rput{0}(28.75,18.75){\psellipse[fillstyle=solid](0,0)(1.87,-1.87)}
+\rput{0}(3.75,23.75){\psellipse[fillstyle=solid](0,0)(1.87,-1.87)}
+\rput{0}(3.75,13.75){\psellipse[fillstyle=solid](0,0)(1.87,-1.87)}
+\rput{0}(13.75,3.75){\psellipse[fillstyle=solid](0,0)(1.87,-1.87)}
+\end{pspicture}

@@ -1,0 +1,520 @@
+\begin{thebibliography}{84}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Abramovich and Aliprantis(2002)]{Abramovich:02}
+Y.~A. Abramovich and Charalambos~D. Aliprantis.
+\newblock \emph{An Invitation to Operator Theory}.
+\newblock American Mathematical Society, 2002.
+
+\bibitem[Abrusci(1991)]{Abrusci:91}
+V.~M. Abrusci.
+\newblock Phase semantics and sequent calculus for pure noncommutative
+  classical linear propositional logic.
+\newblock \emph{The Journal of Symbolic Logic}, 56:\penalty0 1403--1451, 1991.
+
+\bibitem[Akhmatova(2005)]{Akhmatova:05}
+Elena Akhmatova.
+\newblock Textual entailment resolution via atomic propositions.
+\newblock In  \citet{RTE1}.
+
+\bibitem[Alfonseca and Manandhar(2002)]{Alfonseca:02}
+Enrique Alfonseca and Suresh Manandhar.
+\newblock Extending a lexical ontology by a combination of distributional
+  semantics signatures.
+\newblock \emph{Lecture Notes in Computer Science}, 2473, 2002.
+
+\bibitem[Aliprantis and Burkinshaw(1985)]{Aliprantis:85}
+Charalambos~D. Aliprantis and Owen Burkinshaw.
+\newblock \emph{Positive Operators}.
+\newblock Academic Press, 1985.
+
+\bibitem[Bangalore and Joshi(1999)]{Bangalore:99}
+Srinivas Bangalore and Aravind~K. Joshi.
+\newblock Supertagging: An approach to almost parsing.
+\newblock \emph{Computational Linguistics}, 25\penalty0 (2):\penalty0 237--265,
+  1999.
+
+\bibitem[Bar-Haim et~al.(2006)Bar-Haim, Dagan, Dolan, Ferro, Giampiccolo,
+  Magnini, and Szpektor]{Bar-Haim:06}
+Roy Bar-Haim, Ido Dagan, Bill Dolan, Lisa Ferro, Danilo Giampiccolo, Bernardo
+  Magnini, and Idan Szpektor.
+\newblock The second pascal recognising textual entailment challenge.
+\newblock In \emph{Proceedings of the Second PASCAL Challenges Workshop on
+  Recognising Textual Entailment}, 2006.
+
+\bibitem[Bar-Hillel(1950)]{Bar-Hillel:50}
+Yehoshua Bar-Hillel.
+\newblock On syntactical categories.
+\newblock \emph{Journal of Symbolic Logic}, 15\penalty0 (1):\penalty0 1--16,
+  1950.
+
+\bibitem[Bar-Hillel()]{Bar-Hillel:64}
+Yehoshua Bar-Hillel.
+\newblock \emph{Language and Information: Selected Essays on their Theory and
+  Application}.
+\newblock Addison-Wesley Publishing Co., Reading, MA., 1964.
+
+\bibitem[Bayer et~al.(2005)Bayer, Burger, Ferro, Henderson, and Yeh]{Bayer:05}
+Samuel Bayer, John Burger, Lisa Ferro, John Henderson, and Alexander Yeh.
+\newblock {MITRE}'s submissions to the {EU} pascal {RTE} challenge.
+\newblock In  \citet{RTE1}.
+
+\bibitem[Birkhoff(1973)]{Birkhoff:48}
+Garrett Birkhoff.
+\newblock \emph{Lattice Theory}.
+\newblock Amer. Math. Soc. Colloquium Publications, New York, 1973.
+
+\bibitem[Blackburn and Bos(2005)]{Blackburn:05}
+Patrick Blackburn and Johan Bos.
+\newblock \emph{Representation and Inference for Natural Language}.
+\newblock CSLI, 2005.
+
+\bibitem[Blei et~al.(2003)Blei, Ng, and Jordan]{Blei:03}
+David~M. Blei, Andrew~Y. Ng, and Michael~I. Jordan.
+\newblock Latent {Dirichlet} allocation.
+\newblock \emph{Journal of Machine Learning Research}, 3:\penalty0 993--1022,
+  2003.
+
+\bibitem[Bos(2005)]{Bos:05}
+Johan Bos.
+\newblock Towards wide-coverage semantic interpretation.
+\newblock In \emph{Proceedings of Sixth International Workshop on Computational
+  Semantics IWCS-6}, page 42?53, 2005.
+
+\bibitem[Bos and Markert(2006)]{Bos:06}
+Johan Bos and Katja Markert.
+\newblock When logical inference helps determining textual entailment (and when
+  it {doesn't}).
+\newblock In \emph{Proceedings of the Second PASCAL Challenges Workshop on
+  Recognising Textual Entailment}, 2006.
+
+\bibitem[Boyd-Graber et~al.(2007)Boyd-Graber, Blei, and Zhu]{Boyd-Graber:07}
+Jordan Boyd-Graber, David Blei, and Xiaojin Zhu.
+\newblock A topic model for word sense disambiguation.
+\newblock In \emph{Proceedings of the 2007 Joint Conference on Empirical
+  Methods in Natural Language Processing and Computational Natural Language
+  Learning (EMNLP-CoNLL)}, pages 1024--1033, 2007.
+
+\bibitem[Cai et~al.(2007)Cai, Lee, and Teh]{Cai:07}
+Junfu Cai, Wee~Sun Lee, and Yee~Whye Teh.
+\newblock Improving word sense disambiguation using topic features.
+\newblock In \emph{Proceedings of the 2007 Joint Conference on Empirical
+  Methods in Natural Language Processing and Computational Natural Language
+  Learning (EMNLP-CoNLL)}, pages 1015--1023, 2007.
+
+\bibitem[Casadio and Lambek(2002)]{Casadio:02}
+Claudia Casadio and Joachim Lambek.
+\newblock A tale of four grammars.
+\newblock \emph{Studia Logica}, 71\penalty0 (3):\penalty0 315--329, 2002.
+
+\bibitem[Clark and Pulman(2007)]{Clark:07}
+Stephen Clark and Stephen Pulman.
+\newblock Combining symbolic and distributional models of meaning.
+\newblock In \emph{Proceedings of the AAAI Spring Symposium on Quantum
+  Interaction}, pages 52--55, Stanford, CA, 2007.
+
+\bibitem[Clarke(2006)]{Clarke:06}
+Daoud Clarke.
+\newblock Meaning as context and subsequence analysis for textual entailment.
+\newblock In \emph{Proceedings of the Second PASCAL Recognising Textual
+  Entailment Challenge}, 2006.
+
+\bibitem[Curran and Moens(2002)]{Curran:02}
+James~R. Curran and Marc Moens.
+\newblock Improvements in automatic thesaurus extraction.
+\newblock In \emph{ACL-SIGLEX Workshop on Unsupervised Lexical Acquisition},
+  Philadelphia, 2002.
+
+\bibitem[Dagan et~al.(1994)Dagan, Pereira, and Lee]{Dagan:94}
+Ido Dagan, Fernando Pereira, and Lillian Lee.
+\newblock Similarity-based estimation of word cooccurrence probabilities.
+\newblock In \emph{32nd Annual Meeting of the ACL}, pages 272--278, 1994.
+
+\bibitem[Dagan et~al.(1997)Dagan, Lee, and Pereira]{Dagan:97}
+Ido Dagan, Lillian Lee, and Fernando C.~N. Pereira.
+\newblock Similarity-based methods for word sense disambiguation.
+\newblock In \emph{ACL}, pages 56--63, 1997.
+
+\bibitem[Dagan et~al.(2005{\natexlab{a}})Dagan, Glickman, and
+  Magnini]{Dagan:05}
+Ido Dagan, Oren Glickman, and Bernardo Magnini.
+\newblock The pascal recognising textual entailment challenge.
+\newblock In \emph{Proceedings of the PASCAL Challenges Workshop on Recognising
+  Textual Entailment}, 2005{\natexlab{a}}.
+
+\bibitem[Dagan et~al.(2005{\natexlab{b}})Dagan, Glickman, and Magnini]{RTE1}
+Ido Dagan, Oren Glickman, and Bernardo Magnini, editors.
+\newblock \emph{Proceedings of the PASCAL Challenges Workshop on Recognising
+  Textual Entailment}, 2005{\natexlab{b}}.
+
+\bibitem[Deerwester et~al.(1990)Deerwester, Dumais, Furnas, Landauer, and
+  Harshman]{Deerwester:90}
+Scott Deerwester, Susan Dumais, George Furnas, Thomas Landauer, and Richard
+  Harshman.
+\newblock Indexing by latent semantic analysis.
+\newblock \emph{Journal of the American Society for Information Science},
+  41\penalty0 (6):\penalty0 391--407, 1990.
+
+\bibitem[Delmonte et~al.(2005)Delmonte, Tonelli, Boniforti, Bristot, and
+  Pianta]{Delmonte:05}
+Rodolfo Delmonte, Sara Tonelli, Marco Aldo~Piccolino Boniforti, Antonella
+  Bristot, and Emanuele Pianta.
+\newblock {VENSES} - a linguistically-based system for semantic evaluation.
+\newblock In  \citet{RTE1}.
+
+\bibitem[Fellbaum(1989)]{Fellbaum:98}
+Christaine Fellbaum, editor.
+\newblock \emph{Word{N}et: An Electronic Lexical Database}.
+\newblock The {MIT} Press, Cambridge, Massachusetts, 1989.
+
+\bibitem[Firth(1957{\natexlab{a}})]{Firth:57}
+John~R. Firth.
+\newblock A synopsis of linguistic theory 1930--1955.
+\newblock In F.~Palmer, editor, \emph{Selected Papers of J. R. Firth}. Longman,
+  London, 1957{\natexlab{a}}.
+
+\bibitem[Firth(1957{\natexlab{b}})]{Firth:57a}
+John~R. Firth.
+\newblock Modes of meaning.
+\newblock In \emph{Papers in Linguistics 1934--1951}. Oxford University Press,
+  London, 1957{\natexlab{b}}.
+
+\bibitem[Fowler et~al.(2005)Fowler, Hauser, Hodges, Niles, Novischi, and
+  Stephan]{Fowler:05}
+Abraham Fowler, Bob Hauser, Daniel Hodges, Ian Niles, Adrian Novischi, and Jens
+  Stephan.
+\newblock Applying {COGEX} to recognize textual entailment.
+\newblock In  \citet{RTE1}.
+
+\bibitem[Geffet and Dagan(2005)]{Geffet:05}
+Maayan Geffet and Ido Dagan.
+\newblock The distributional inclusion hypotheses and lexical entailment.
+\newblock In \emph{Proceedings of the 43rd Annual Meeting of the Association
+  for Computational Linguistics (ACL'05)}, University of Michigan, 2005.
+
+\bibitem[Girard(1987)]{Girard:87}
+J.~Y. Girard.
+\newblock Linear logic.
+\newblock \emph{Theoretical Computer Science}, 50:\penalty0 1--102, 1987.
+
+\bibitem[Glickman and Dagan(2005)]{Glickman:05}
+Oren Glickman and Ido Dagan.
+\newblock A probabilistic setting and lexical cooccurrence model for textual
+  entailment.
+\newblock In \emph{ACL-05 Workshop on Empirical Modeling of Semantic
+  Equivalence and Entailment}, 2005.
+
+\bibitem[Grefenstette(1994)]{Grefenstette:94}
+Gregory Grefenstette.
+\newblock \emph{Explorations in automatic thesaurus discovery}.
+\newblock Kluwer Academic Publishers, Dordrecht, NL, 1994.
+
+\bibitem[H\'{a}jek(1998)]{Hajek:98}
+Petr H\'{a}jek.
+\newblock Basic fuzzy logic and {BL}-algebras.
+\newblock \emph{Soft Computing---A Fusion of Foundations, Methodologies and
+  Applications}, 2\penalty0 (3):\penalty0 124--128, September 1998.
+
+\bibitem[Harris(1968)]{Harris:68}
+Zellig Harris.
+\newblock \emph{Mathematical Structures of Language}.
+\newblock Wiley, New York, 1968.
+
+\bibitem[Harris(1985)]{Harris:85}
+Zellig Harris.
+\newblock Distributional structure.
+\newblock In Jerrold~J. Katz, editor, \emph{The Philosophy of Linguistics},
+  pages 26--47. Oxford University Press, 1985.
+
+\bibitem[Hickl et~al.(2006)Hickl, Williams, Bensley, Roberts, Rink, and
+  Shi]{Hickl:06}
+Andrew Hickl, John Williams, Jeremy Bensley, Kirk Roberts, Bryan Rink, and Ying
+  Shi.
+\newblock Recognizing textual entailment with {LCC}'s groundhog system.
+\newblock In \emph{Proceedings of the Second PASCAL Challenges Workshop}, 2006.
+
+\bibitem[Hindle(1990)]{Hindle:90}
+Donald Hindle.
+\newblock Noun classification from predicate-argument structures.
+\newblock In \emph{Proceedings of the 28th annual meeting on Association for
+  Computational Linguistics}, pages 268--275, 1990.
+
+\bibitem[Hinman(2005)]{Hinman:05}
+P.~Hinman.
+\newblock \emph{Fundamentals of Mathematical Logic}.
+\newblock A.~K.~Peters, 2005.
+
+\bibitem[Hofmann(1999)]{Hofmann:99}
+Thomas Hofmann.
+\newblock Probabilistic latent semantic analysis.
+\newblock In \emph{Proceedings of the 15th Conference on Uncertainty in AI},
+  pages 289--296. Morgan Kaufmann, 1999.
+
+\bibitem[Honeybone(2005)]{Honeybone:05}
+Patrick Honeybone.
+\newblock {J.~R.~Firth}.
+\newblock In S.~Chapman and C.~Routledge, editors, \emph{Key Thinkers in
+  Linguistics and the Philosophy of Language}. Edinburgh University Press,
+  2005.
+
+\bibitem[Howie(1976)]{Howie:76}
+J.~M. Howie.
+\newblock \emph{An Introduction to Semigroup Theory}.
+\newblock Academic Press, London, 1976.
+\newblock ISBN 0-12-356950-8.
+
+\bibitem[Jiang and Conrath(1998)]{Jiang:97}
+Jay~J. Jiang and David~W. Conrath.
+\newblock Semantic similarity based on corpus statistics and lexical taxonomy.
+\newblock In \emph{Proceedings of the International Conference on Research in
+  Computational Linguistics}, 1998.
+
+\bibitem[Kamp and Reyle(1993)]{Kamp:93}
+Hans Kamp and Uwe Reyle.
+\newblock \emph{From Discourse to Logic: Introduction to Modeltheoretic
+  Semantics of Natural Language, Formal Logic and Discourse Representation
+  Theory}, volume~42 of \emph{Studies in linguistics and philosophy}.
+\newblock Kluwer, Dordrecht, 1993.
+
+\bibitem[Kaplan(2000)]{Kaplan:00}
+Aaron~Nathan Kaplan.
+\newblock \emph{A computational model of belief}.
+\newblock PhD thesis, University of Rochester. Dept. of Computer Science, 2000.
+
+\bibitem[Kilgarriff(2003)]{Kilgarriff:03}
+Adam Kilgarriff.
+\newblock Thesauruses for natural language processing.
+\newblock In \emph{Proceedings of the Joint Conference on Natural Language
+  Processing and Knowledge Engineering}, pages 5--13, Beijing, China, 2003.
+
+\bibitem[Klein and Manning(2003)]{Klein:03}
+Dan Klein and Christopher~D. Manning.
+\newblock Accurate unlexicalized parsing.
+\newblock In \emph{Proceedings of the 41st Annual Meeting of the Association
+  for Computational Linguistics}, 2003.
+
+\bibitem[Kundu and Chen(1994)]{Kundu:94}
+S.~Kundu and J.~Chen.
+\newblock Fuzzy logic or {Lukasiewicz} logic: a clarification.
+\newblock In Zbigniew~W. Ra{\'s} and Maria Zemankova, editors,
+  \emph{Proceedings of the 8th International Symposium on Methodologies for
+  Intelligent Systems}, volume 869 of \emph{LNAI}, pages 56--64, Berlin,
+  October 1994. Springer.
+\newblock ISBN 3-540-58495-1.
+
+\bibitem[Kyburg and Teng(2001)]{Kyburg:01}
+Henry~E. Kyburg and Choh~Man Teng.
+\newblock \emph{Uncertain Inference}.
+\newblock Cambridge University Press, 2001.
+
+\bibitem[Lafferty et~al.(1992)Lafferty, Sleator, and Temperley]{Lafferty:92}
+John Lafferty, Daniel Sleator, and Davy Temperley.
+\newblock Grammatical trigrams: {A} probabilistic model of {LINK} grammar.
+\newblock In \emph{Proc.\ of the AAAI Fall Symposium on Probabilistic
+  Approaches to Natural Language. Cambridge, MA, 1992}, pages 89--97, Menlo
+  Park, CA, 1992. AAAI Press.
+
+\bibitem[Lambek(1958)]{Lambek:58}
+J.~Lambek.
+\newblock The mathematics of sentence structure.
+\newblock \emph{American Mathematical Monthly}, 65:\penalty0 154--169, 1958.
+
+\bibitem[Lambek(1993)]{Lambek:93}
+J.~Lambek.
+\newblock From categorial grammar to bilinear logic.
+\newblock In Kosta Do{\v{s}}en and Peter Schroeder-Heister, editors,
+  \emph{Substructural Logics}, pages 207--238. Oxford Univ.\null{} Press, 1993.
+
+\bibitem[Lambek(2001)]{Lambek:01}
+Joachim Lambek.
+\newblock Type grammars as pregroups.
+\newblock \emph{Grammars}, 4\penalty0 (1):\penalty0 21--39, 2001.
+
+\bibitem[Lee(1999)]{Lee:99}
+Lillian Lee.
+\newblock Measures of distributional similarity.
+\newblock In \emph{Proceedings of the 37th Annual Meeting of the Association
+  for Computational Linguistics (ACL-1999)}, pages 23--32, 1999.
+
+\bibitem[Lin(1998)]{Lin:98a}
+Dekang Lin.
+\newblock Automatic retrieval and clustering of similar words.
+\newblock In \emph{Proceedings of the 36th Annual Meeting of the Association
+  for Computational Linguistics and the 17th International Conference on
+  Computational Linguistics (COLING-ACL '98)}, pages 768--774, Montreal, 1998.
+
+\bibitem[Lin and Pantel(2001)]{Lin:01}
+Dekang Lin and Patrick Pantel.
+\newblock {DIRT} --- discovery of inference rules from text.
+\newblock In Foster Provost and Ramakrishnan Srikant, editors,
+  \emph{Proceedings of the Seventh {ACM} {SIGKDD} International Conference on
+  Knowledge Discovery and Data Mining ({KDD}-01)}, pages 323--328, New York,
+  August ~26--29 2001. ACM Press.
+
+\bibitem[Lodhi et~al.(2002)Lodhi, Saunders, Shawe-Taylor, Cristianini, and
+  Watkins]{Lodhi:02}
+Huma Lodhi, Craig Saunders, John Shawe-Taylor, Nello Cristianini, and Chris
+  Watkins.
+\newblock Text classification using string kernels.
+\newblock \emph{Journal of Machine Learning Research}, 2:\penalty0 419--444,
+  2002.
+
+\bibitem[Manning and Sch{\"u}tze(1999)]{Manning:99}
+Christopher Manning and Hinrich Sch{\"u}tze.
+\newblock \emph{Foundations of Statistical Natural Language Processing}.
+\newblock MIT Press, Cambridge, MA, 1999.
+
+\bibitem[Mccarthy et~al.(2003)Mccarthy, Keller, and Carroll]{McCarthy:03}
+Diana Mccarthy, Bill Keller, and John Carroll.
+\newblock Detecting a continuum of compositionality in phrasal verbs.
+\newblock In \emph{Proceedings of the ACL-SIGLEX Workshop on Multiword
+  Expressions: Analysis, Acquisition and Treatment}, 2003.
+
+\bibitem[McCarthy et~al.(2004)McCarthy, Koeling, Weeds, and
+  Carroll]{McCarthy:04}
+Diana McCarthy, Rob Koeling, Julie Weeds, and John Carroll.
+\newblock Finding predominant word senses in untagged text.
+\newblock In \emph{ACL '04: Proceedings of the 42nd Annual Meeting on
+  Association for Computational Linguistics}, page 279, Morristown, NJ, USA,
+  2004. Association for Computational Linguistics.
+\newblock \doi{http://dx.doi.org/10.3115/1218955.1218991}.
+
+\bibitem[Munn(1974)]{Munn:74}
+W.~D. Munn.
+\newblock Free inverse semigroup.
+\newblock \emph{Proceedings of the London Mathematical Society}, 29:\penalty0
+  385--404, 1974.
+
+\bibitem[{National Library of Medicine}(1998)]{National:98}
+{National Library of Medicine}.
+\newblock {UMLS Knowledge Sources}.
+\newblock {National Library of Medicine, U.S. Dept. of Health and Human
+  Services, 8th edition}, 1998.
+
+\bibitem[Nilsson(1986)]{Nilsson:86}
+N.~Nilsson.
+\newblock Probabilistic logic.
+\newblock \emph{Artificial Intelligence}, 28:\penalty0 71--87, 1986.
+
+\bibitem[Papadimitriou et~al.(1998)Papadimitriou, Raghavan, Tamaki, and
+  Vempala]{Papadimitriou:98}
+Christos~H. Papadimitriou, Prabhakar Raghavan, Hisao Tamaki, and Santosh
+  Vempala.
+\newblock Latent semantic indexing: {A} probabilistic analysis.
+\newblock In Laura Haas and Ashutosh Tiwary, editors, \emph{Proceedings of the
+  Seventeenth ACM SIGACT-SIGMOD-SIGART Symposium on Principles of Database
+  Systems}, volume~27, pages 159--168, Seattle, Washington, 1998. ACM Press.
+
+\bibitem[Pekar and Staab(2003)]{Pekar:03}
+Viktor Pekar and Steffen Staab.
+\newblock Word classification based on combined measures of distributional and
+  semantic similarity.
+\newblock In \emph{Proc. Research Notes of the 10th Conference of the European
+  Chapter of the Association for Computational Linguistics, April 12-17,
+  Budapest, Hungary}, 2003.
+
+\bibitem[Pentus(1995)]{Pentus:95}
+Mati Pentus.
+\newblock Models for the lambek calculus.
+\newblock \emph{Annals of Pure and Applied Logic}, 75:\penalty0 179--213, 1995.
+
+\bibitem[Pereira et~al.(1993)Pereira, Tishby, and Lee]{Pereira:93}
+Fernando Pereira, Naftali Tishby, and Lillian Lee.
+\newblock Distributional clustering of {English} words.
+\newblock In \emph{Proceedings of {ACL}-93}, 1993.
+
+\bibitem[Rada et~al.(1989)Rada, Mili, Bicknell, and Blettner]{Rada:89}
+R.~Rada, H.~Mili, E.~Bicknell, and M.~Blettner.
+\newblock Development and application of a metric on semantic nets.
+\newblock \emph{IEEE Transactions on Systems, Man, and Cybernetics},
+  19\penalty0 (1):\penalty0 17--30, January-February 1989.
+
+\bibitem[Raina et~al.(2005)Raina, Haghighi, Cox, Finkel, Michels, Toutanova,
+  MacCartney, de~Marneffe, Manning, and Ng]{Raina:05}
+Rajat Raina, Aria Haghighi, Christopher Cox, Jenny Finkel, Jeff Michels,
+  Kristina Toutanova, Bill MacCartney, Marie-Catherine de~Marneffe,
+  Christopher~D. Manning, and Andrew~Y. Ng.
+\newblock Robust textual inference using diverse knowledge sources.
+\newblock In  \citet{RTE1}.
+
+\bibitem[Resnik(1995)]{Resnik:95}
+Philip Resnik.
+\newblock Using information content to evaluate semantic similarity in a
+  taxonomy.
+\newblock In \emph{IJCAI}, pages 448--453, 1995.
+
+\bibitem[Sahlgren and Karlgren(2002)]{Sahlgren:02}
+Magnus Sahlgren and Jussi Karlgren.
+\newblock Vector-based semantic analysis using random indexing for
+  cross-lingual query expansion.
+\newblock \emph{Lecture Notes in Computer Science}, 2406:\penalty0 169--176,
+  2002.
+
+\bibitem[Sleator and Temperley(1991)]{Sleator:91}
+Daniel~D. Sleator and Davy Temperley.
+\newblock Parsing english with a link grammar.
+\newblock Technical Report CMU-CS-91-196, Department of Computer Science,
+  Carnegie Mellon University, 1991.
+
+\bibitem[Sleator and Temperley(1993)]{Sleator:93}
+Daniel~D. Sleator and Davy Temperley.
+\newblock Parsing english with a link grammar.
+\newblock In \emph{The Third International Workshop on Parsing Technologies},
+  August 1993.
+
+\bibitem[Tatu and Moldovan(2006)]{Tatu:06}
+Marta Tatu and Dan~I. Moldovan.
+\newblock A logic-based semantic approach to recognizing textual entailment.
+\newblock In \emph{ACL}. The Association for Computer Linguistics, 2006.
+
+\bibitem[Voiculescu(1997)]{Voiculescu:97}
+Dan-Virgil Voiculescu.
+\newblock \emph{Free Probability Theory}.
+\newblock American Mathematical Society, 1997.
+
+\bibitem[Weeds(2003)]{Weeds:03}
+Julie Weeds.
+\newblock \emph{Measures and Applications of Lexical Distributional
+  Similarity}.
+\newblock PhD thesis, Department of Informatics, University of Sussex, 2003.
+
+\bibitem[Weeds et~al.(2004)Weeds, Weir, and McCarthy.]{Weeds:04}
+Julie Weeds, David Weir, and Diana McCarthy.
+\newblock Characterising measures of lexical distributional similarity.
+\newblock In \emph{Proceedings of the 20th International Conference of
+  Computational Linguistics, COLING-2004, Geneva, Switzerland.}, 2004.
+
+\bibitem[Widdows(2003)]{Widdows:03}
+Dominic Widdows.
+\newblock Orthogonal negation in vector spaces for modelling word-meanings and
+  document retrieval.
+\newblock In \emph{Proceedings of the 41st Annual Meeting of the Association of
+  Computational Linguistics, 2003, Sapporo, Japan}, pages 136--143, 2003.
+
+\bibitem[Widdows(2004)]{Widdows:04}
+Dominic Widdows.
+\newblock \emph{Geometry and Meaning}.
+\newblock Center for the Study of Language and Information, Stanford, 2004.
+
+\bibitem[Wittgenstein(1953)]{Wittgenstein:53}
+Ludwig Wittgenstein.
+\newblock \emph{Philosophical Investigations}.
+\newblock Macmillan, New York, 1953.
+\newblock G. Anscombe, translator.
+
+\bibitem[Wood(1993)]{Wood:93}
+Mary~McGee Wood.
+\newblock \emph{Categorial Grammars}.
+\newblock Routledge, London, 1993.
+
+\bibitem[Zanzotto et~al.(2006)Zanzotto, A.AMoschitti, Pennacchiotti, and
+  Pazienza]{Zanzotto:06}
+F.~M. Zanzotto, A.AMoschitti, M.~Pennacchiotti, and M.~T. Pazienza.
+\newblock Learning textual entailment from examples.
+\newblock In \emph{Proceedings of the Second PASCAL Challenges Workshop}, 2006.
+
+\end{thebibliography}

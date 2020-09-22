@@ -1,0 +1,392 @@
+%Bismillahi-r-Rahmani-r-Rahim
+%\documentclass[11pt]{report}
+
+% \newcommand{\Cont}{\mathrm{Cont}}
+%\input{head}
+
+%\begin{document}
+
+\chapter{Meaning as Context}
+
+We discussed in the previous chapter how vectors intended to represent the meaning of terms can be formed by looking at the contexts that terms appear in. However, these techniques do not provide any guidance as to how to represent the meaning of sentences or phrases in terms of these vector representations. Our approach to solving this problem is to build an abstract model of language based on the notion of meaning as context. In this chapter we describe such a model, in which both words and sequences of words are represented by vectors. We are then able to examine the mathematical properties of this model, providing guidelines as to how to combine vector representations of  words to form representations of phrases and sentences. These properties form the basis of the framework described in the next chapter.
+
+%In this chapter, we shall abstract this idea and develop a theory of \emph{meaning as context}. That is, we find a simple way to model text corpora, and define the notion of context with respect to such models, allowing us to associate context vectors with each string. We then examine the mathematical properties of these vectors; these properties will form the basis of the general formalism introduced in the next chapter.
+
+In particular there are three key properties that we will discuss:
+\begin{itemize}
+\item The vectors associated with strings can be endowed with a lattice structure, making the object of study a \emph{vector lattice}. This can be seen by looking in a very general manner at the way in which vectors in computational linguistics are derived. We shall interpret the associated partial ordering relation of the lattice as \emph{entailment}; thus the lattice structure can be thought of as carrying the ``meaning''.
+\item We can define multiplication on the vector space in such a manner that the vector associated with the concatenation of two strings is the product of the vectors associated with each individual string. Remarkably, the multiplication makes the vector space an \emph{algebra over a field} --- a structure which has been the object of much study in mathematics.
+\item We shall show that according to this model, the size of the context vector of a term should correspond to its frequency of occurrence, we call this measure the \emph{context theoretic probability} of a vector, denoted $\phi$. This value makes two probability spaces from context vectors in two separate ways: the lattice structure of the vector space can be viewed as a (traditional, measure-theoretic) probability space using using $\phi$, while the algebra becomes a \emph{non-commutative probability space} with $\phi$ as a linear functional.
+\end{itemize}
+These properties put strong requirements on the nature of an algebra to represent natural language; and it is these properties that will be required of any implementation of our framework which we will describe later. We will also show how a \emph{degree of entailment} can be defined in terms of context vectors according to the ideas of distributional generality described previously. Later, when we discuss implementations of the framework, the same definition of the degree of entailment can be employed to the implementations because they have the same properties as the structure we derive in this chapter. This approach ensures that we can measure entailment for any implementation of the framework in a manner consistent with the context-theoretic philosophy.
+
+
+\section{Corpus Models}
+
+We wish to build an abstract mathematical model based on techniques which build vector representations of words in terms of their contexts. These techniques are designed to deal with a limited amount of data, however in our abstract model, we are free to imagine that we have at our disposal an unlimited amount of data. This allows us to choose a very simple definition of what we mean by ``context'' --- the context of a string will be the strings surrounding that string in a document. We are able to do this because we can always find enough data in our abstract model (we assume there is no problem of data sparseness). Simplifying the definition of context allows us to easily examine the mathematical properties of our model.
+
+We view a real world text corpus (a finite collection of documents) as a sample of some hypothetical infinite collection of documents. 
+ Specifically, we assume a \emph{probabilistic generative model} of corpora \citep{Blei:03}; one way to define such models is as follows:
+\begin{defn}[Corpus Model]
+%A corpus model $C$ over an alphabet $A$ is an element of $L^1(A^*)^+$. 
+A corpus model $C$ on a set $A$ of symbols is a probability distribution over $A^*$.
+\end{defn} %\noindent
+%This means that a corpus model is a function from $A^*$, the set of all strings formed from some set of symbols $A$, to the real numbers, which is non-negative everywhere, and for which the $L^1$ norm (the sum of the components) is finite. Thus from any corpus model $C$ we can obtain a probability distribution over $A^*$ by $C/\|C\|_1$.
+%Given a corpus model $C$, we can view a corpus as having been produced by a machine which repeatedly outputs strings according to the probability distribution $C/\|C\|_1$.
+
+We can view a (real world) corpus as having been produced by a machine which repeatedly outputs strings according to the probability distribution $C$. Note that the machine is oblivious to what strings it has output previously; we can think of the individual strings output by the machine as \emph{documents}: the order of the strings is unimportant with respect to the machine, and typically the order of documents in a corpus is unimportant (whereas the order of sentences, for example, often is important). Of course if may be useful in practice to think of the strings as sentences, paragraphs or any other unit of text.
+
+Abstracting in this way allows us to discover the nature of meaning as context according to our assumptions in the hypothetical situation of having an infinite amount of data available to us by analysing the mathematical properties of the resulting mathematical structure. It also allows us to make use of techniques which build corpus models from finite corpora, such as Latent Dirichlet Allocation and associate meanings with strings according to the corpus model generated from the finite corpus.
+
+\section{Meaning as Context}
+
+ How should we think about the meaning of an expression? For many applications in computational linguistics it suffices to know the relationships between the meanings of expressions: for example we should know if one entails another, or if two expressions are contradictory. For the purposes of what follows, we shall assume a purely \emph{relative} interpretation of the word ``meaning''; that is knowing the meaning of an expression means knowing how the expression relates to other expressions.
+
+Techniques such as those discussed in the previous chapter typically build vector representations of meaning based on the context in which words or phrases appear; such representations only describe meaning in the relative sense described above.
+%Because of their use of context, we can call these \emph{context-theoretic} representations of meaning. 
+
+Because of the problem of data sparseness, these techniques typically only make use of a part of the context of a string, for example using a limited window and ignoring the order of words in this window. Because we are assuming we have at our disposal a corpus model in which data sparseness is not a problem, we instead make full use of the context: the context of an expression in a document is  everything surrounding the expression in the document.
+
+
+Mathematically, the context vector of a string $x$ will be a function over pairs of strings $(u,v)$ with $u,v \in A^*$ such that $uxv$ is a document. More formally:
+\begin{defn}
+The context vector of a string $x \in A^*$ in a corpus defined by $C$ is a real-valued function $\hat{x}\in L^\infty(A^*\times A^*)$  on the set of contexts $A^* \times A^*$, defined by
+$$\hat{x}(u,v) = C(uxv).$$
+\end{defn}
+
+We stated here that the context vector of a string lives in the vector space $L^\infty(A^*\times A^*)$, that is, the set of bounded functions from $A^*\times A^*$ to the real numbers; we know that the functions are bounded because they are formed from the probability distribution $C$.
+
+Thus, from this definition, we are able to associate with each string in $A^*$ a vector representing the contexts it occurs in in the corpus model $C$, accordingly, we have all the properties of vector spaces at our disposal to study strings with respect to $C$: for example, we can add, subtract and scale their associated context vectors.
+
+%A similar construction has proved to be of importance in the theory of formal languages and automata, for example it is used to define the syntactic monoid of a language. It is hoped that our construction will prove to be of similar importance in the foundations of statistical computational linguistics.
+
+\section{Entailment}
+
+Consider the methods of forming vectors for terms described in the last chapter. In each method, vectors are formed from components which correspond to different contexts that the term may occur in: the components may correspond to words the term can occur with, or its possible dependency relations with other terms. What is important to note is that components of vectors in computational linguistics applications are \emph{attached to concepts}; the exact method of determining the vectors is not of importance to us here.
+
+In fact, this situation is somewhat special in comparison to other applications of vectors. For example, we live in a universe with three (observable) spatial dimensions. If we want, we can find a \emph{basis} (see \ref{basis}) for this space, consisting of three vectors, $x$, $y$ and $z$, say, allowing us to locate any point in space by a linear combination of these vectors; equivalently we can decompose any vector into components with respect to this basis. However, in general, we don't have a \emph{preferred} choice of basis. There may be a basis which is convenient for us to use (for example we may choose $x$ and $y$ to be north and east and $z$ to be up, with a length of 1 meter, for some particular location on earth), but there is no fundamental reason for us to prefer that basis.
+
+In contrast, in computational linguistics, we are automatically provided with a basis purely by the way in which vectors are formed from components. For example, if we build the vector representation of a term by looking at the words occurring in a certain window of text, the dimensionality of the resulting vector space will be the same as the number of different words, and by default we will make use of a basis which has a basis vector corresponding to each different word. This fact is so obvious that its importance has been overlooked, but in reality it has profound implications for the properties we should expect from vector spaces in computational linguistics.
+
+Careful consideration of this fact, can, we believe, lead us to answer one of the most difficult questions in the foundations of computational linguistics, regarding the relationship between vector representations of meaning and the older ontological and logical representations of meaning, based in lattice theory. This issue is touched on by \cite{Widdows:04}, where the implication is that the solution lies in generalising vector and lattice structures by weakening the mathematical requirements. In contrast, we will argue that all the necessary structure is already present and implicit in existing representations, which can be simultaneously be considered as vector spaces and lattices --- they are \emph{vector lattices} (see Section \ref{vector-lattices}).
+
+\begin{figure}
+\begin{center}
+\input{orangefruit2.pst}
+\caption{Vector representations of the terms \emph{orange} and \emph{fruit} based on hypothetical occurrences in six documents (see the previous chapter) and their vector lattice meet.}
+\label{orangefruit}
+\end{center}
+\end{figure}
+
+Any vector space together with a basis can be considered as a vector lattice: the meet and join operations can be defined as the component-wise minimum and maximum respectively. Figure \ref{orangefruit} shows two vectors representing the contexts of the terms \emph{orange} and \emph{fruit} based on their hypothetical occurrences in six documents, described in the previous chapter, and shows how their meet (component-wise minimum) is derived. Note that it is only because we are able to describe these vectors in terms of their components that we can define the lattice operations: the lattice operations are defined with respect to that particular basis, and if we had chosen a different basis the lattice operations would be different.
+
+The vectors we discussed in the previous chapter were finite-dimensional; the context vector $\hat{x}$ of a string just defined is potentially infinite-dimensional. The same argument applies however: we can decompose the vector into components relating to individual contexts; for example, the basis vector corresponding to the context $(u,v)$, for $u,v \in A^*$ is the function which takes the value 1 on $(u,v)$ and 0 everywhere else on $A^*\times A^*$. Because we can decompose vectors in this way, we can again define lattice operations as component-wise minimum and maximum.
+
+As with any lattice, there is an associated partial ordering; in this case, we write $\hat{x} \le \hat{y}$ if each component of $\hat{x}$ is less than or equal to the corresponding component of $\hat{y}$. In terms of contexts, this means that the string $x$ occurs in each context that $y$ occurs in at least as frequently. Relating this back to the concept of distributional generality discussed in the previous chapter, we may state the following hypothesis: \emph{a string fully entails another string if and only if the first occurs with equal or lower probability in all the contexts that the second occurs in}; or $x$ entails $y$ if and only if $\hat{x} \le \hat{y}$.
+
+In fact, we expect this situation to occur rarely; it is more likely that a string will share a proportion of its contexts with other strings. In order to be able to describe such ``partial entailment'' we need to have a way of measuring the size of such vectors, and this is the topic of the next section.
+
+%\section{Entailment}
+
+%Our next assumption is based on the ideas of distributional generality in \citep{Weeds:04} and the distributional inclusion hypotheses of \cite{Geffet:05} discussed previously:
+%\begin{assumption} A string fully entails another string if the first occurs with lower probability in all the contexts that the second occurs in.
+%\end{assumption}\noindent
+%The lattice ordering of the vector space generated by context vectors is a partial ordering on the context vectors of expressions; it is this partial ordering that we should interpret as entailment according to the last assumption. That is, an expression $x$ entails an expression $y$ if $\hat{x} \le \hat{y}$.
+
+%We imagine this situation to occur rarely however. In general, two expressions entail each other to a \emph{degree} based on what proportion of their contexts are shared: 
+%\begin{assumption}If the strings have no contexts in common then the strings do not entail one another. If there is some intermediate situation, then there is a \emph{degree} of entailment.\end{assumption}\noindent
+%Like \cite{Glickman:05} we believe that entailment is closely connected to the nature of conditional probability. Our reason for this is a subscription to a Bayesian philosophy in which the mathematics of probability forms the natural calculus for reasoning about uncertainty. Unlike \citeauthor{Glickman:05} who view entailment as a black and white phenomenon whose existence is determined by examining conditional probability, we effectively equate entailment with conditional probability:
+%\begin{assumption}
+%The degree of entailment takes the form of a conditional probability.
+%\end{assumption}
+%\noindent
+%The vector space of contexts forms an abstract Lebesgue space under the $L^1$ norm and the lattice operations; since $\phi$ is proportional to this norm, mathematically we can view the context vectors of strings as a measure space with measure function $\phi$. This means that under these operations the context vectors carry all the properties of an (unnormalised) probability space. Given this, and our previous assumption about entailment, the obvious way to define the degree of entailment in terms of context vectors is the following:
+%\begin{defn}[Degree of Entailment]
+%The degree of entailment $\Ent(x,y)$ between two strings $x$ and $y$ is defined as
+%$$\Ent(x,y) = \frac{\phi(\hat{x}\land\hat{y})}{\phi(\hat{x})}.$$
+%\end{defn}
+%Entailment in the sense described above then, is specified by the above definition in that full entailment corresponds to a degree of entailment of value 1, no entailment corresponds to a value of 0, and there are degrees between these two extremes.
+
+
+
+\section{Context-Theoretic Probability}
+
+%In the previous chapter, we saw how vectors in practice are built according to frequencies of occurrence in different contexts; in the simplest methods, summing up the components of the vector gives us the total number of occurrences of the relevant term. This way of measuring the size of vectors is called the $l^1$ norm; more formally,
+%Thus we would expect the $l^1$ norm of context vectors to be connected in some way to our familiar notion of frequency of occurrence of strings with respect to the context model.
+
+Probability theory is central to modern techniques in computational linguistics, and it is thus important that our framework can inform us about the probabilistic aspect of language. In fact, we will show that in our model, the probability of a string is intimately connected to the ``size'' of its vector representation, as long as we choose a particular measure of size, the $l^1$ norm. We propose that this norm is the most appropriate way of measuring the size of vectors in computational linguistics.
+%We are interested in measuring the size of our context vectors. We propose that the $l^1$ norm is the most appropriate way of measuring the size of vectors in computational linguistics.
+The $l^1$ norm of a vector is simply the sum of the absolute value of its components:  if $u$ is a vector with components $u_i$ for $1 \le i \le n$, then the $l^1$ norm of $u$ is given by
+$$\|u\|_1 = |u_1| + |u_2| +\ldots + |u_n|.$$
+ There are many norms we could choose --- why should the $l^1$ norm be special? The answer is that it has properties that make it more suitable for computational linguistics, while other norms have properties making them the most suitable in other applications of vector spaces.
+ 
+\begin{figure}
+\begin{center}
+\subfigure{\input{rotation.pst}}
+\subfigure{\input{rotation2.pst}}
+\caption{The length of a vector under the $l^1$ norm is not invariant under rotation.}
+\end{center}
+\end{figure}
+
+For example, physical law in our three spatial dimensions has the special property that it is invariant with respect to rotation; this means that the $l^2$ norm occurs frequently in physical laws. The $l^2$ norm of a vector corresponds to the familiar Euclidean notion of its length: if $u$ is a vector with components $u_i$ for $1 \le i \le n$, then the $l^2$ norm of $u$ is given by
+$$\|u\|_2 = (u_1^2 + u_2^2 +\ldots + u_n^2)^{1/2}.$$
+It has the special property that lengths remain the same under rotation, which is something we expect to observe in our universe. 
+To see that the $l^1$ norm, for example, doesn't preserve lengths under rotation, consider a vector in the $x$-$y$ plane which has a zero $y$ component and an $x$ component of 1. This vector has length 1 under both the $l^1$ and $l^2$ norms. Rotating this by $45^\circ$, however we find the length under the $l^1$ norm is $2/\sqrt{2}$, whereas under the $l^2$ norm, the length remains 1.
+
+There is however no reason for us to expect the same properties for vectors in computational linguistics. We can consider other, more exotic norms, such as the generalisations of the $l^1$ and $l^2$ norms, the $l^p$ norms:
+$$\|u\|_p = (|u_1|^p + |u_2|^p +\ldots + |u_n|^p)^{1/p},$$
+where $1 \le p < \infty$, and the $l^\infty$ norm, where $\|u\|_\infty$ is the supremum over all components of $u$.
+
+The $l^1$ norm, though, has a special property with regards to vectors in computational linguistics. In the previous chapter, we saw  how, in practice, the vector representation of a term is built according to the frequencies of occurrence of that term in different contexts. Summing these frequencies is equivalent to summing the components of the vector representing the term; in the simplest methods of building vector representations we would expect this sum to be proportional to the frequency of occurrence of the term itself, or equivalently, proportional to its probability of occurrence.
+
+In fact, there is a deeper connection to probability theory. Under the $l^1$ norm, the vector space becomes an \emph{Abstract Lebesgue} or \emph{AL} space (see section \ref{ALspace}). As the name suggests, the space can be considered as an abstraction of Lebesque spaces which form the foundation of measure theory, and hence the theory of probability. The key property is additivity of disjoint elements: in an AL space, if $x$ and $y$ are positive elements with $x \land y = 0$ then $\|x + y\| = \|x\| + \|y\|$. This is precisely the property we expect from probability: if we have two areas $A$ and $B$ in a Venn diagram which don't overlap, then we know that $P(A\cup B) = P(A) + P(B)$. In a vector lattice, we have
+$$x \lor y = x + y - x \land y,$$
+so if $x\land y = 0$ the above condition is the same as requiring $\|x \lor y\| = \|x\| + \|y\|$, an exact match for the Venn diagram requirement. Thus using the $l^1$ norm allows us to think of the vector space as simultaneously being a probability space. Although the structure is not what we normally think of as being a probability space (i.e.~a set of elements which we can interpret as events) the mathematical properties are the same, and this is what is so attractive about using the $l^1$ norm in computational linguistics applications: we can treat the lattice with the $l^1$ norm \emph{as if it's a probability space}.
+
+There is a problem, however, when it comes to applying the $l^1$ norm to context vectors as we have just defined them: they are not guaranteed to be finite. For example, consider the corpus model $C$ on $A = \{a\}$ defined by
+$$C(a^{2^n}) = 1/2^{n+1}$$
+for integer $n \ge 0$, and zero otherwise, where by $a^n$ we mean $n$ repetitions of $a$, so for example, $C(a) = \frac{1}{2}$, $C(aa) = \frac{1}{4}$, $C(aaa) = 0$ and $C(aaaa) = \frac{1}{8}$. Then $\|\hat{a}\|_1$ is infinite, since each non-zero document contributes $1/2$ to the value of the norm, and there are an infinite number of non-zero documents.
+
+%We would like to be able to talk about the ``probability of a string'', meaning something similar to the idea we are familiar with in language modelling. To do this, we will define a real valued function $\phi$ on context vectors that will be important in relating context vectors to non-commutative probability. We call it the \emph{context-theoretic probability} of a vector or string. In non-commutative probability, it is necessary that the probability of the unity of the algebra is $1$. In our case, the context of the empty string $\epsilon$ will act as unity, so we will need to have $\phi(\hat{\epsilon}) = 1$; this provides a normalising condition on the other vectors. The function $\phi$ solves another problem: the value of $\|\hat{x}\|_1$ is not guaranteed to be finite for a string $x \in A^*$; normalising gets around this.
+
+
+To get around this, we resize the norm in such a way that the context of the empty string $\epsilon$ has a size of 1. This property will be important later, when we relate the construction to non-commutative probability. In order to get around the problem of infinities in the definition, we are forced to make a definition based on limits. Context vectors live in the infinite dimensional vector space $L^\infty(A^*\times A^*)$. To guarantee that the $l^1$ norm is finite, we define a projection $P_n$ for integer $n$ which projects context vectors to a finite dimensional vector subspace in which we only consider a finite subset of the contexts the string occurs in. If $u \in L^\infty(A^*\times A^*)$, that is $u$ is a bounded function on $A^*\times A^*$, then we define
+$$(P_n u)(x,y) = \begin{cases}
+	0 & \text{if $|x| + |y| > n$,}\\
+	u(x,y) & \text{otherwise,}
+\end{cases}$$
+where $|x|$ denotes the length of string $x\in A^*$. Given this definition $\|P_n u\|_1$ is always finite; it is the sum of the components of $u$ considering only those contexts $(x,y) \in A^*\times A^*$ for which the sum of the length of the strings $x$ and $y$ is less than or equal to $n$.
+
+We are now in a position to define the context theoretic probability in terms of the limit of $n\rightarrow \infty$ as we consider increasingly bigger vector spaces:
+\begin{defn}[Context-theoretic Probability]
+The (context-theoretic) probability $\phi$ is a function on $L^\infty(A^*\times A^*)$ defined by
+$$\phi(u) = \lim_{n\rightarrow\infty} \frac{\|P_n u\|_1}{\|P_n\hat{\epsilon}\|_1}$$
+where $u$ is a positive element of $L^\infty(A^*\times A^*)$, that is a positive bounded function on $A^*\times A^*$, as long as the limit exists and is finite, otherwise it is undefinted. We extend $\phi$ to all elements of $L^\infty(A^*\times A^*)$ by defining $\phi(v) = \phi(v^+) - \phi(v^-)$, where $v^+$ and $v^-$ are the positive and negative parts of $v$ respectively (see section \ref{vector-lattices}).
+\end{defn}
+
+The function $\phi$ is not guaranteed to be finite for all elements $u \in L^\infty(A^*\times A^*)$; however we are really interested in the value of $\phi$ on context vectors. The following proposition shows that placing a small requirement on corpus models guarantees that the value of $\phi$ on context vectors is finite; it also clarifies the relationship between the context-theoretic probability of the context vector of a string and what we normally think of as the ``probability of a string'':
+\begin{prop}
+Let $C$ be a corpus model such that for every sequence $x_n \in A^*$ with $|x_{n+1}| > |x_n|$, $\lim_{n \rightarrow\infty} C(x_n) = 0$. Then:
+\begin{enumerate}
+\item for $x \in A^*$, $\phi(\hat{x})$ is defined and satisfies $\phi(\hat{x}) \le 1$ with $\phi(\hat{x}) = 1$ if and only if $x = \epsilon$.
+\item $\sum_{a \in A} \phi(\hat{a}) < 1.$
+\item If $v$ is a vector in $L^\infty(A^*\times A^*)$ constructed from a finite number of context vectors using multiplication by a scalar, addition, meets and joins, then $\phi(v)$ is finite.
+\end{enumerate}
+\end{prop}
+%\begin{proof}
+%Consider a document $d\in A^*$ of length $l$. The empty string $\epsilon$ ``occurs'' $l+1$ times; i.e.~the contribution to $\|P_n \hat{\epsilon}\|_1$ is $(l+1)C(d)$ for $n \ge 2l$. A string $x \neq \epsilon$ occurs less than or equal to $l$ times in $d$ so contributes at most $lC(d)$ to $\|P_n\hat{x}\|_1$, so $\phi(\hat{x}) < 1$. That $\phi(\hat{\epsilon}) = 1$ is obvious. The sum of the contribution of all symbols in $A$ in document $d$ is $lC(d)$ since there are $l$ symbols in $d$, thus $\sum_{a \in A} \phi(\hat{a}) < 1$.
+%\end{proof}
+
+
+%We start off by considering only those strings in $A^*$ of a certain length, and take the limit as this goes to infinity. Given a corpus model $C$, we define the corpus model $C_n$ for integer $n \ge 1$ by:
+%$$C_n(x) = \begin{cases}
+%C(x) & \text{if $|x| \le n$}\\
+%0 & \text{otherwise,}
+%\end{cases}$$
+%where $x\in A^*$ and $|x|$ denotes the number of symbols in the string $x$. Let us denote the context of a string $x$ in corpus model $C_n$ by $\hat{x}_n$.
+
+%Instead of defining a new norm, we will define a \emph{linear functional} on the context vectors, that is, a linear function from context vectors to the real numbers, based on the $l^1$ norm; we call the functional the \emph{context-theoretic probability} and denote it by $\phi$.
+
+%\begin{defn}[Context-theoretic Probability]
+%The context-theoretic probability $\phi(\hat{x})$ of a context vector $\hat{x}$ is defined by 
+%$$\phi(\hat{x}) = \lim_{n\rightarrow\infty} \frac{\|\hat{x}_n\|_1}{\|\hat{\epsilon}_n\|_1}.$$ 
+%\end{defn}
+
+%By linearity of $\phi$ we mean that if $\hat{x} = \hat{y} + \hat{z}$ then $\phi(\hat{x}) = \phi(\hat{y}) + \phi(\hat{z})$; it is the disjoint additivity of the $l^1$ norm that ensures this property.
+
+%\begin{defn}[Probability]
+%The (context-theoretic) probability $\phi$ is a function from $L^\infty(A^*\times A^*)$ to $\R\cup\{\infty,-\infty\}$ defined by
+%$$\phi(\mathbf{u}) = \lim_{n\rightarrow\infty} \frac{\|P_n\mathbf{u}\|_1}{\|P_n\hat{\epsilon}\|_1}$$
+%where $\mathbf{u}$ is a positive element of $L^\infty(A^*\times A^*)$, $P_n$ is a projection onto the subspace $L^1(A^{*n}\times A^{*n})$ where $A^{*n}$ is the set of all strings of symbols in $A$ up to length $n$, and the function is extended to all elements of $L^\infty(A^*\times A^*)$ by $\phi(\mathbf{v}) = \phi(\mathbf{v}^+) - \phi(\mathbf{v}^-)$.
+%\end{defn}
+
+
+\begin{proof}
+\mbox{}
+\begin{enumerate}
+\item Consider a document $d \in A^*$ with $|d| \le n$. It contributes $(|d|+1)C(d)$ to $\|P_n\hat{\epsilon}\|_1$. The string $x \in A^* - \{\epsilon\}$ can occur at most $|d| - |x| + 1$ times in $d$, so $d$ can contribute at most $(|d|- |x| + 1)C(d)$ to $\|P_n\hat{x}\|_1$. Thus
+\begin{eqnarray*}
+\frac{\|P_n\hat{x}\|_1}{\|P_n\hat{\epsilon}\|_1} &\le& \frac{\sum_{|d| \le n + |x|}(|d| - |x| + 1)C(d)}{\sum_{|d| \le n}(|d|+1)C(d)}\\
+&=& \frac{\sum_{|d| \le n}(|d| - |x| + 1)C(d)}{\sum_{|d| \le n}(|d|+1)C(d)} +  \frac{\sum_{n < |d| \le n + |x|}(|d| - |x| + 1)C(d)}{\sum_{|d| \le n}(|d|+1)C(d)}
+\end{eqnarray*}
+The first term above is strictly less than 1 for $x \neq \epsilon$; the second term tends to zero as $n\rightarrow\infty$ because the number of documents $d$ with lengths $n < |d| \le n+|x|$ is fixed as $n$ increases, and because of the requirement we placed on $C$: we can view this fixed number $k$ of documents as $k$ sequences of increasingly long elements in $A^*$, thus $C(d) \rightarrow 0$ for each sequence as $n\rightarrow \infty$. Hence $\phi(\hat{x}) < 1$; we also have $\phi(\hat{\epsilon}) = 1$.
+
+\item Consider $s_n = \sum_{a \in A} \|P_n\hat{a}\|_1.$ The document $d$ with $|d| \le n + 1$ contributes exactly $|d|C(d)$ to $s_n$ since there are $|d|$ symbols in $d$. Thus
+$$\frac{s_n}{\|P_n\hat{\epsilon}\|_1} = \frac{\sum_{|d| \le n + 1} |d|C(d)}{\sum_{|d| \le n}(|d|+1)C(d)}.$$
+By a similar argument to the one above, this is strictly less than 1 as $n\rightarrow\infty$, hence $\sum_{a \in A} \phi(\hat{a}) < 1$.
+
+\item If $u$ and $v$ are positive elements of $L^\infty(A^*\times A^*)$ and $\phi(u)$ and $\phi(v)$ are defined then
+\begin{eqnarray*}
+\phi(u+v) &=&  \lim_{n\rightarrow\infty} \frac{\|P_n (u+v)\|_1}{\|P_n\hat{\epsilon}\|_1}\\
+&=&  \lim_{n\rightarrow\infty} \frac{\|P_n u\|_1}{\|P_n\hat{\epsilon}\|_1} +  \lim_{n\rightarrow\infty} \frac{\|P_n v\|_1}{\|P_n\hat{\epsilon}\|_1} = \phi(u) + \phi(v)
+\end{eqnarray*}
+is defined; similarly $\phi(\alpha u) = \alpha\phi(u)$ is defined for real $\alpha$. For the vector operations, $\phi(u \land v)$ is defined since $\|P_n(u\land v)\|_1 \le \|P_nu\|_1$. Hence $\phi(u\lor v) = \phi(u) + \phi(v) - \phi(u\land v)$ is defined. Using the definition of $\phi$ extended to all elements of $L^\infty(A^*\times A^*)$ it is clear by induction that $\phi$ will be defined for any vector formed using a finite number of vector and lattice operations from a set of vectors on which $\phi$ is defined. In general, for all elements of $L^\infty(A^*\times A^*)$, $\phi$ is clearly defined for the vector operations. For the lattice operations, we have
+$\phi(u\land v) = \phi((u\land v)^+) - \phi((u\land v)^-)$
+where $(u\land v)^+ = (u\land v)\lor 0$ and $(u\land v)^- = -(u\land v)\lor 0$. These are both defined since, in the first case $\|P_n(u\land v) \lor 0\|_1 \le \|P_nu^+\|_1$
+\end{enumerate}
+
+%By a similar argument to that above, we find $s_n/\|\hat{\epsilon}_n\|_1 < 1$, and hence $\sum_{a \in A} \phi(\hat{a}) < 1$.
+\end{proof}
+
+In contrast to our definition, when talking about the ``probability of a string'' in the context of language modelling, we would expect to find the property $\sum_{a \in A} \phi(\hat{a}) = 1$.
+%, so that probability is, in a sense conserved. We can explain this by saying that probability is ``lost'' in our definition because the definition of corpus models is in terms of \emph{documents} rather than strings. 
+We can explain this by interpreting the value $\phi(\hat{x})$ in the following way. Consider a machine that outputs strings according to the probability distribution $C$, and at the end of each string outputs an additional symbol to denote the end of the document. Then $\phi(\hat{x})$ is the probability that if you stop the machine at a random point, the next $|x|$ symbols output by the machine will form the string $x$.
+
+From an information-theoretic perspective, if we wished to encode the corpus model we would need an additional symbol to denote the end of a document; we can think of this additional symbol as absorbing the lost probability. While this property might seem inconvenient, it is essential that $\phi(\epsilon)$ has the value 1 in order for us to relate the definition to non-commutative probability, which we discuss later in the chapter.
+
+%\begin{proof}
+%Consider a document $d\in A^*$ of length $l$. The empty string $\epsilon$ ``occurs'' $l+1$ times; i.e.~the contribution to $\|P_n \hat{\epsilon}\|_1$ is $(l+1)C(d)$ for $n \ge 2l$. A string $x \neq \epsilon$ occurs less than or equal to $l$ times in $d$ so contributes at most $lC(d)$ to $\|P_n\hat{x}\|_1$, so $\phi(\hat{x}) < 1$. That $\phi(\hat{\epsilon}) = 1$ is obvious. The sum of the contribution of all symbols in $A$ in document $d$ is $lC(d)$ since there are $l$ symbols in $d$, thus $\sum_{a \in A} \phi(\hat{a}) < 1$.
+%\end{proof}
+
+\subsection{Degrees of Entailment}
+
+As we discussed previously, the performance of many tasks in computational linguistics rests on our ability to determine entailment between strings. Thus ultimately we are interested in being able to determine whether one string entails another based on their context vectors.
+We propose that rather than having a black and white measure of entailment there should be \emph{degrees} of entailment. We are now in a position to define such a measure based on the context-theoretic probability. Like \cite{Glickman:05} we believe that entailment is closely connected to the nature of conditional probability. This is what we would expect from a Bayesian perspective; according to the Bayesian philosophy the correct formalism for reasoning about uncertainty is the mathematics of probability; from this perspective conditional probability can be viewed as a Bayesian implication. Because the $l^1$ norm together with the lattice operations define a an AL-space, the following definition of entailment has all the properties of a conditional probability:
+\begin{defn}[Degree of Entailment]
+The degree of entailment $\Ent(x,y)$ between two strings $x$ and $y$ is defined as
+$$\Ent(x,y) = \frac{\phi(\hat{x}\land\hat{y})}{\phi(\hat{x})}.$$
+\end{defn}
+This value is a measure of the degree to which the contexts string $x$ occurs in are shared by the contexts string $y$ occurs in.  According to this definition, complete entailment exists between $x$ and $y$ when $\Ent(x,y) = 1$, which will be true when $x \le y$. There will be no degree of entailment when $\Ent(x,y) = 0$, which is true when $x \land y = 0$.
+
+As we will see in the following chapters, this definition provides us with a unified measure of the degree of entailment for any implementation of the framework we will define, based on the context-theoretic philosophy.
+
+%\section{Multiplication (New Definition)}
+
+%
+
+%Define an equivalence on $L^1(A^*\times A^*\times A^*)$ by $u\equiv v$ if and only if
+%$$\sum_{x\in A^*} C(axb)u(a,x,b) = \sum_{x'\in A^*} C(ax'b)v(a,x',b)$$
+%for all $a,b \in A^*$. Define multiplication on the basis elements of this space by
+%$$(a,x,yb)\cdot(ax,y,b) = (a,xy,b)$$
+%for $a,b,x,y \in A^*$, for all products that can be written in this form, or 0 otherwise.
+%\begin{prop}
+%If $u\equiv v$ then $uw \equiv vw$ for all $u,v,w \in L^1(A^*\times A^*\times A^*)$.
+%\end{prop}
+%\begin{proof}
+
+%\end{proof}
+
+\section{Multiplication on Contexts}
+
+So far we have not got any closer to determining how we should combine vector representations of words to get vector representations of phrases and sentences. In this section we compare the properties of the representation of strings of words to the representation of the individual words, and we are able to show that our model places strong restrictions between the two. These requirements form part of the  framework and informs us as to how the meaning of strings relates to the meanings of individual words in the context-theoretic philosophy.
+
+%We are interested in examining the mathematical consequences of this definition, in order to allow us to abstract the key properties to form our general framework of meaning as context. There is already an implied notion of multiplication of expressions by their concatenation, and because we can now associate context vectors with expressions an obvious thing to look for is whether these vectors can be considered as existing in an algebra in which multiplication agrees with the concatenation of expressions. Specifically, does there exist some algebra $\mathcal{A}$ containing the context vectors of strings in $A^*$ such that $\hat{x}\cdot \hat{y} = \widehat{xy}$ where $x,y\in A^*$ and $\cdot$ indicates multiplication in the algebra?
+
+A crucial feature of our definition is that it applies to strings as well as to individual symbols: strings of any size are attributed with a context vector. In particular, given two strings $x$ and $y$, not only do the strings have their own context vectors, but their concatenation $xy$ has a context vector $\widehat{xy}$ associated with it.  What we will show is that context vectors can be considered as elements of an \emph{algebra over the real numbers}, that is, a real vector space with multiplication defined on it such that the multiplication is \emph{bilinear} and \emph{associative} (see section \ref{algebras}).
+%This result has profound implications for systems built within our framework.
+
+Specifically, the question we are addressing is: does there exist some algebra $\mathcal{A}$ containing the context vectors of strings in $A^*$ such that $\hat{x}\cdot \hat{y} = \widehat{xy}$ where $x,y\in A^*$ and $\cdot$ indicates multiplication in the algebra? As a first try, consider the vector space $L^1(A^*\times A^*)$ in which the context vectors live. Is it possible to define multiplication on the whole vector space such that the condition just specified holds?
+
+Consider the corpus $C$ on the alphabet $A = \{a,b,c,d,e,f\}$ defined by $C(abcd) = C(aecd) = C(abfd) = 1$ and $C(x) = 0$ for all other $x \in A^*$. Now if we take the shorthand notation of writing the basis vector in $L^1(A^*\times A^*)$ corresponding to a pair of strings as the pair of strings itself then
+\begin{eqnarray*}
+\hat{b} &=& (a,cd) + (a,fd)\\
+\hat{c} &=& (ab,d) + (ae,d)\\
+\widehat{bc} &=& (a,d)
+\end{eqnarray*}
+%Given this, it would seem that a natural way to define multiplication on $L^1(A^*\times A^*)$ in terms of its basis vectors would be as follows:
+%$$(x_1,y_1)\cdot (x_2,y_2) = \begin{cases}
+%
+%(x_1,y_2)/C(x_2y_1) & \parbox{5cm}{if $x_1z_1 = x_2$ and $y_1 = z_2y_2$ for some $z_1,z_2 \in A^*$ and $C(x_2y_1)\neq 0$}
+%\medskip\\
+%0 & \text{otherwise.}
+%
+%\end{cases}$$
+%With this definition, $\hat{b}\cdot \hat{c} = \widehat{bc}$ as required. However when we look at the contexts of $e$ and $f$ we find
+It would thus seem sensible to define multiplication of contexts so that $(a,cd)\cdot (ab,d) = (a,d)$. However we then find
+$$\hat{e}\cdot \hat{f} = (a,cd)\cdot (ab,d) \neq \widehat{ef} = 0$$
+showing that this definition of multiplication doesn't provide us with what we are looking for. In fact, if there did exist a way to define multiplication on contexts in a satisfactory manner it would necessarily be far from intuitive, as, in this example, we would have to define $(a,cd)\cdot (ab,d) = 0$ meaning the product $\hat{b}\cdot\hat{c}$ would have to have a non-zero component derived from the products of context vectors $(a,fd)$ and $(ae,d)$ which don't relate at all to the contexts of $bc$.
+
+
+\subsection{Multiplication on the Generated Subspace}
+
+As an alternative to the approach of defining multiplication directly on contexts, we can consider instead defining multiplication on a \emph{subspace} of $L^\infty(A^*\times A^*)$, specifically the subspace generated by all context vectors. This is in fact the subspace we are interested in, since in general we are interested in the relationships between meanings of words, described in terms of their context vectors. Because we are interested in the context theoretic probability $\phi$ of strings, we will extend $\phi$ to all vectors in this subspace by requiring it to be linear: $\phi(\alpha_1 \hat{x}_1 + \alpha_2\hat{x}_2) = \alpha_1\phi(x_1) + \alpha_2\phi(x_2)$ for all $\alpha \in \R$ and $x_1, x_2 \in A^*$. Note that this doesn't contradict the earlier definition of $\phi$ because of the properties of the $l^1$ norm which $\phi$ is defined with respect to. We might want to consider infinite sums of context vectors, but we will not be interested in those which have infinite context theoretic probability, so we define the subspace $\mathcal{A}$ that we are interested in as follows:
+\begin{defn}[Generated Subspace $\mathcal{A}$]
+The subspace $\mathcal{A}$ of $L^\infty(A^*\times A^*)$ is the set defined by
+$$\mathcal{A} = \{a : a = \sum_{x\in A^*}\alpha_x \hat{x}\text{ for some }\alpha_x \in \R\text{ and }\phi(a) < \infty\}$$
+\end{defn}
+
+%Consider the vector subspace of $\R^{A^* \times A^*}$ generated by the context representations of strings in corpus $C$; that is the set of vectors that can be written in the form $\sum_i \alpha_i \hat{x}_i$ for some $\alpha_i \in \R$  and $x_i \in A^*$; we call this subspace $\mathcal{A}$.
+
+Because of the way we define the subspace, there will always exist some basis $\mathcal{B} = \{\hat{u} : u \in B\}$ where $B \subseteq A^*$, and we can define multiplication on this basis by $\hat{u}\cdot\hat{v} = \widehat{uv}$ where $u,v \in B$. Defining multiplication on the basis defines it for the whole vector subspace, since we define multiplication to be linear, making $\mathcal{A}$ an algebra.
+
+However there are potentially many different bases we could choose, each corresponding to a different subset of $A^*$, and each giving rise to a different definition of multiplication. Remarkably, this isn't a problem:
+
+%Suppose that three strings $x$, $y$ and $z$ satisfy                                                                                                                                                                                                                                                                                                                                                            
+%$$C(uxv) = C(uyv) + C(uzv)$$                                                                                                                                                                                                                                                                                                                                                                                     
+%for all strings $u$ and $v$. In this case, as vectors, $\hat{x} = \hat{y} + \hat{z}$. Now consider prefixing a string $w$ to each of these. Setting $u = u'w$ we have $C(u'wxv) = C(u'wyv) + C(u'wzv)$ for all $u',v$, so $\widehat{wx} = \widehat{wy} + \widehat{wz}$. Clearly this also applies to suffixes; in addition we can generalise this property to any sums of the representations of words, and it is this that allows us to form an algebra from a corpus.
+
+
+\begin{prop}[Context Algebra]
+Multiplication on $\mathcal{A}$ is the same irrespective of the choice of basis $B$.
+\end{prop}
+\begin{proof}
+%Given two bases given by $B, C \subseteq A^*$, an arbitrary vector $x$ in $\mathcal{A}(p)$ can be written as $$x = \sum_i \beta_i \hat{b}_i = \sum_j \xi_j \hat{c}_j$$
+%for some $b_i \in B$, $c_j \in C$ and $\beta_i, \xi_j \in \R$.
+%Given two bases $\mathcal{B}_1 , \mathcal{B}_2$ derived from subsets $B_1$ and $B_2$ of $A^*$, we need to show that multiplication in one basis is the same as in the other.
+
+We say $B \subseteq A^*$ defines a basis $\mathcal{B}$ for $\mathcal{A}$ when $\mathcal{B} = \{\hat{x}: x\in B\}$. Assume there are two sets $B_1, B_2 \subseteq A^*$ that define corresponding bases $\mathcal{B}_1$ and $\mathcal{B}_2$ for $\mathcal{A}$. We will show that multiplication in basis $\mathcal{B}_1$ is the same as in the basis $\mathcal{B}_2$.
+
+
+We represent two basis elements $\hat{u}_1$ and $\hat{u}_2$ of $\mathcal{B}_1$ in terms of basis elements of $\mathcal{B}_2$:
+$$\hat{u}_1 = \sum_i \alpha_i \hat{v}_i \quad\text{and}\quad
+\hat{u}_2 = \sum_j \beta_j \hat{v}_j,$$
+for some $u_i \in B_1$, $v_j \in B_2$ and $\alpha_i, \beta_j  \in \R$.
+ First consider multiplication in the basis $\mathcal{B}_1$. Note that $\hat{u}_1 = \sum_i \alpha_i \hat{v}_i$ means that $C(xu_1y) = \sum_i \alpha_i C(xv_iy)$ for all $x,y \in A^*$. This includes the special case where $y = u_2y'$ so $$C(xu_1u_2y') = \sum_i \alpha_i C(xv_iu_2y')$$ for all $x, y' \in A^*$.
+%, or $\widehat{b_1b_2} = \sum_i \alpha_i \widehat{c_ib_2}$.
+Similarly, we have $C(xu_2y) = \sum_j \beta_j C(xv_jy)$ for all $x,y \in A^*$ which includes the special case $x = x'v_i$, so $C(x'v_iu_2y) = \sum_j \beta_j C(x'v_iv_jy)$ for all $x',y \in A^*$. Inserting this into the above expression yields
+$$C(xu_1u_2y) = \sum_{i,j} \alpha_i\beta_j C(xv_iv_jy)$$
+for all $x,y \in A^*$ which we can rewrite as
+$$\hat{u}_1\cdot\hat{u}_2 = \widehat{u_1u_2} = \sum_{i,j}\alpha_i\beta_j (\hat{v}_i\cdot\hat{v}_j)
+= \sum_{i,j}\alpha_i\beta_j \widehat{v_iv_j}.$$
+Conversely, the product of $u_1$ and $u_2$ using the basis $\mathcal{B}_2$ is
+$$\hat{u}_1\cdot \hat{u}_2 = \sum_i \alpha_i \hat{v}_i \cdot \sum_j \beta_j \hat{v}_j =  \sum_{i,j}\alpha_i\beta_j (\hat{v}_i\cdot\hat{v}_j)$$
+thus showing that multiplication is defined independently of what we choose as the basis.
+\end{proof}
+
+%This is not enough, however, as we cannot yet use the lattice operations that form part of the definition of entailment; meets and joins of expressions are not guaranteed to be part of the algebra. We can get around this, however.
+%Since this algebra, viewed as a vector space, is a subspace of the vector lattice of contexts, the elements of the algebra are still partially ordered by the ordering that defines the lattice operations on contexts. We cannot guarantee, however, that meets and joins exist in this subspace, thus we are left with a partially ordered vector space rather than a vector lattice. Nevertheless, the partial ordering still means our structure is an partially ordered algebra, since if $x \ge 0$ and $y \ge 0$ then $xy \ge 0$.
+
+Returning to the previous example, we can see that in this case multiplication is in fact defined on $L^1(A^*\times A^*)$ since we can describe each basis vector in terms of context vectors:
+\begin{eqnarray*}
+(a,fd)\cdot(ae,d) &=& (\hat{b} - \hat{e})\cdot(\hat{c} - \hat{f}) = -(a,d)\\
+(a,cd)\cdot(ae,d) &=& \hat{e}\cdot(\hat{c} - \hat{f}) = (a,d)\\
+(a,fd)\cdot(ab,d) &=& (\hat{b} - \hat{e})\cdot\hat{f} = (a,d),
+\end{eqnarray*}
+thus confirming what we predicted about the product of $\hat{b}$ and $\hat{c}$.
+
+\subsection{Discussion}
+
+The fact that context vectors live in an algebra has profound implications for the nature of meaning according to the context-theoretic philosophy. The essential property is distributivity: the vector representations of two strings can be decomposed into components such that the vector representation of the concatenation of strings is sum of the distributed product of the components.
+
+This is in fact a strong requirement to place on the nature of meaning. It means that if two words share a component of meaning, that component will remain in common between them when they are concatenated with another string (unless the component becomes zero on concatenation).
+
+For example, we may assume the word \emph{square} has some component of meaning in common with the word \emph{shape}. Then we would expect this component to be preserved in the sentences \emph{He drew a square} and \emph{He drew a shape}. However, in the case of the two sentences \emph{The box is square} and \emph{*The box is shape} we would expect the second to be represented by the zero vector since it is not grammatical; \emph{square} can be a noun and an adjective, whereas \emph{shape} cannot. Distributivity of meaning means that the component of meaning that \emph{square} has in common with \emph{shape} must be disjoint with the adjectival component of the meaning of \emph{square}.
+
+As we will see however, this requirement does not prevent us from representing many important properties of meaning in natural language; rather it provides us with guidelines as to how best to represent meaning according to the context-theoretic philosophy.
+
+\section{Non-commutative Probability}
+
+We already stated that it is important for us that our framework is well grounded in probability theory. The context theoretic probability $\phi$ already defines a probability space with respect to the vector lattice, however the results of the previous section allow us to think about the algebra $\mathcal{A}$ as an entirely different probabilistic structure, a \emph{non-commutative probability space}.
+%We have shown that we can associate an algebra $\mathcal{A}$ with each corpus model $C$. This fact together with our definition of context theoretic probability places our theory within a very special area of mathematics: that of \emph{non-commutative probability}.
+\begin{defn}[Non-commutative Probability]
+A non-commutative probability space is a unital algebra (an algebra with unity 1) together with a linear functional $\psi$ such that $\psi(1) = 1$.
+\end{defn}
+In our definition, $\hat{\epsilon}$ is a unity of the algebra, and the linear functional $\phi$ which we called the context theoretic probability satisfies $\phi(\hat{\epsilon}) = 1$, and thus $\mathcal{A}$ together with $\phi$ defines a non-commutative probability space. This means that we can think of context vectors as forming a probability space in two ways: they have a measure theoretic probability structure in terms of their vector lattice properties, and a non-commutative probability structure in terms of their algebraic properties. Both of these probability spaces are defined with respect to the context theoretic probability $\phi$. It is these key properties that will use to form the basis of the definition of our framework for context-theoretic semantics; they form a strong set of requirements on the nature of a mathematical structure for representing meaning. As we will see in the second part of the thesis, they provide ample room for representing meaning as we are familiar with it in computational linguistics, while still providing strong guidelines as to how to construct representations of meaning based on the context-theoretic philosophy.
+
+
+%\begin{prop}
+%The context algebra $\mathcal{A}$ together with the linear functional $\phi$ defines a non-commutative probability space.
+%\end{prop}
+
+%This follows immediately from the previous proposition and the observation that $\hat{\epsilon}$ is a unity for the algebra $\mathcal{A}$.
+
+
+
+%\subsection{Lattice-Ordered Context Algebra}
+
+We have shown that lattice operations can be defined on the vector space of possible contexts, and we have also shown that multiplication can be defined on the subspace of this vector space generated by context vectors to form an algebra. We have not, however, so far been able to define multiplication on the vector space generated by the lattice operations. Ideally, we would have liked to be able to do this, however as far as we are aware, whether this is possible or not is an open question, and our attempts at solving it have not so far been successful.
+
+%\bibliographystyle{plainnat}
+%\bibliography{contexts}
+
+%\end{document} 

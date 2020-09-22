@@ -1,0 +1,17 @@
+ 
+ 
+\font\cmbig=cmr7 at 74pt
+ 
+ \newcommand{\dropcap}[1]{
+ \setbox1=\hbox{\cmbig #1}
+\dimen1=\wd1
+\dimen2=\ht1
+\box1\nointerlineskip
+\advance\dimen2 by 1.5pt
+\vskip-\dimen2
+\advance\dimen1 by -1pt
+\hangindent=\dimen1 \hangafter=-4\noindent
+}
+
+%\newcommand{\qu}[1]{{\fontfamily{cmr}\fontseries{s}\fontshape{it}\selectfont #1}}
+%\newcommand{\qu}[1]{{\cmbig #1}}

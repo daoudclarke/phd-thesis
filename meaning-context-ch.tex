@@ -1,0 +1,102 @@
+%Bismillahi-r-Rahmani-r-Rahim
+%\documentclass[]{report}
+
+ \newcommand{\Cont}{\mathrm{Cont}}
+%\input{head}
+
+%\begin{document}
+
+\chapter{Meaning as Context}
+
+%\abstract{We examine the consequences of treating meaning purely as context. Specifically, we assume some (possibly infinite) ``corpus'' and define the meaning of a string of words in terms of their occurrence in this corpus. We use this definition to define an entailment relation on strings, and show that the relevant properties of the resulting formalism can be incorporated into \emph{positive operators} on some vector space.}
+
+\section{Introduction}
+
+What is meaning? The idea that sentences can be translated into some ``logical form'' that somehow describes the meaning of the sentence does not square with modern methods in computational linguistics. Methods such as latent semantic analysis and distributional similarity treat words as though they can be represented as vectors; these have proven useful in many applications. Such methods rely on examining the context that words occur in in order to determine something about their meaning. However, confusion arises when we try and make use of these representations. If we wish to maintain a vector representation, there appears to be no standard way in which representations of words can be combined to build representations of phrases and sentences.
+
+Our approach to this problem is to formalise the notion of ``meaning as context''. The idea is that a string can be represented purely by \emph{the contexts in which it occurs in some large corpus}. The construction is theoretical, as we even allow the corpus to be infinite, but it gives us insight into how to combine vector representations of meanings of words.
+
+\section{Defining Meaning as Context}
+ 
+%We have considered two definitions of meaning as context. The first is non-probabilistic: it deals only with sets of strings. This definition is used extensively in the area of formal languages and automata, and is used to define the ``syntactic monoid''. However it is not flexible enough for our purposes as it does not give a probabilistic treatment, hence we arrived at the second definition.
+ 
+% \subsection{Non-probabilistic Definition}
+% 
+% In the non-probabilistic definition, meaning is considered to be defined by a language $L \subseteq A^*$ for some finite alphabet $A$. The language can be interpreted as the set of all sentences in a natural language, or an infinite set of documents in some (theoretical) corpus consisiting of all documents that could ever be written.
+% 
+%The meaning of a string $x \in A^*$ is then defined to be the set
+%$$\Cont_L(x) = \{(u,v) : uxv \in L\},$$
+%for $u,v \in A^*$. A string $x$ is said to entail a string $y$ if $\Cont_L(x) \subseteq \Cont_L(y)$. This definition is fine, but it does not easily extend to defining degrees of entailment. For that reason, we developed the probabilistic definition.
+
+%\subsection{Probabilistic Definition}
+
+We define meaning of a string in terms of where it occurs in some theoretical construct which we call a ``corpus''. This corpus is just a set of strings, with a probability attached to each string. The strings can be considered to represent documents in the corpus; in our definition we are not interested in the order in which documents occur in the corpus. The probability value attached to each document can be supposed to indicate the probability of observing a particular document.
+
+The corpus is thus represented by a discrete probability distribution $p$ over strings in $A^*$, for some set $A$, the ``alphabet''. The strings that actually occur in the corpus are those with a non-zero probability.
+
+Our definition of meaning of a string incorporates \emph{all surrounding context within the document}. A ``context'' of a string $s$ then is a pair of strings $(x,y)$ such that $xsy$ occurs in the corpus. The set of all contexts is the set $A^* \times A^*$.The ``meaning of a string'' then, according to this notion of context can then be formalised as a function on the set of contexts:
+$$\Cont_p(x)(u,v) = p(uxv).$$
+
+These functions can be considered to be elements of the vector lattice of all functions on contexts. They are thus partially ordered by
+$$x \le y \iff \Cont_p(x)(u,v) \le \Cont_p(y)(u,v),$$
+for all $u,v \in A^*$. Clearly, because of the nature of the probabilistic definition, these functions are all positive.
+
+In the subsequent sections, we examine the properties of this definition, aiming towards finding an abstract mathematical characterisation that captures its essential features.
+
+\subsection{Vector Properties}
+
+The meaning $\Cont_p(x)$ is a special case of a function on the set of contexts. The set of functions on a set form a vector space, thus meanings can be thought of as elements of a vector space, with a basis formed from the set of contexts. Since the meaning is formed from a probability distribution, in the vector space they are \emph{positive elements}; that is, each component is greater than or equal to zero with respect to the context basis.
+
+%\subsection{Continuity}
+
+%Suppose that three sequences $x$, $y$ and $z$ satisfy
+%$$p(uxv) = p(uyv) + p(uzv)$$
+%for all sequences $u$ and $v$. In this case, as vectors, $\Cont_p(x) = \Cont_p(y) + \Cont_p(z)$. Now consider prefixing a string $w$ to each of these. Clearly $p(uwxv) = p(uwyv) + p(uwzv)$ for all $u,v$, so
+%$$\Cont_p(wx) = \Cont_p(wy) + \Cont_p(wz).$$
+%This property is called \emph{continuity} and has far reaching implications for the nature of meaning as defined by context. Specifically, it means that we can represent any string as an operator on the vector space of real-valued functions on contexts.
+
+\section{Strings as operators}
+
+%A string $w$ can be considered to operate on the vector space of contexts as follows. Let $c$ be a vector in context space, i.e.
+%$c = \sum\alpha_{(x,y)} (x,y)$, where the sum ranges over all contexts $(x,y) \in A^* \times A^*$. Define an operator $\hat{w}$ on a basis context
+
+We can define an operator $\hat{w}$ on the vector space of contexts, corresponding to a string $w$ by specifying how it acts on basis elements $(x,y)$ of the context space. Specifically, we define
+$$\hat{w}(x,y) = \left\{ \begin{array}{ll}
+(u,y) & \textrm{if $x = uw$ for some $u$}\\
+0 & \textrm{otherwise.}
+\end{array} \right.$$
+This operator captures the properties of the string $w$ with respect to contexts occurring on the right, in the following way:
+\begin{prop}[Context Operators] If $x$ and $y$ are strings in some corpus described by $p$ then the following holds:
+\begin{enumerate}[1.]
+\item The context operator $\hat{x}$ is a lattice homomorphism.
+\item The context vector of $x$ is given in terms of its context operator $\hat{x}$ by:
+$$\Cont_p(x) = \hat{x}\Omega$$
+where $\Omega$ is a vector representing the contexts of the empty string:
+$\Omega(u,v) = p(uv).$
+\item It holds that $\widehat{xy} = \hat{x}\hat{y}$ under the normal composition of operators.
+\end{enumerate}
+\end{prop}
+
+\begin{proof}
+
+\end{proof}
+
+\section{Entailment}
+
+This section deals with the question of how to interpret the representations just discussed. What does it mean for meaning to be determined purely in terms of context? How do these relate to logical perceptions of meaning?
+
+The distributional hypothesis states that words with similar meanings occur in similar contexts. We extend that idea in two directions: firstly to strings of words of arbitrary length, and secondly with regards to the directionality of entailment. Specifically, we propose:
+\begin{quote}
+\emph{A string fully entails another string if the first occurs with lower probability in all the contexts that the second occurs in. If the strings have no contexts in common then the strings do not entail one another. If there is some intervening situation, then there is a \emph{degree} of entailment.}
+\end{quote}
+This is captured mathematically in the following definition of the \emph{degree of entailment}
+\begin{defn}[Degree of Entailment]
+The degree of entailment $\Ent(x,y)$ between two strings $x$ and $y$ in a corpus defined by $p$ is defined as
+$$\Ent(x,y) = \frac{\|\Cont_p(x)\land\Cont_p(y)\|_1}{\|\Cont_p(x)\|_1}.$$
+\end{defn}
+Entailment in the sense described above then, is specified by the above definition in that full entailment corresponds to a degree of entailment of value 1, no entailment corresponds to a value of 0, and there are degrees between these two extremes.
+
+\section{Compositionality}
+
+
+%\end{document} 

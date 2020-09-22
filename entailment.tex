@@ -1,0 +1,375 @@
+%%Bismillahi-r-Rahmani-r-Rahim
+%\documentclass[12pt]{report}
+
+%\include{head}
+%\usepackage{rotating}
+%\usepackage{graphicx}
+%\usepackage{portland}
+%\newcommand{\sw}[1]{\begin{sideways}#1\end{sideways}}
+%\newcommand{\swl}[1]{\begin{sideways}\parbox{4cm}{\begin{flushleft}\vspace{-0.1cm}#1\vspace{-0.1cm}\end{flushleft}}\end{sideways}}
+%\newcommand{\swb}[1]{\begin{sideways}\textbf{#1}\end{sideways}}
+%\newcommand{\swl}[1]{\rotatebox{90}{\parbox{4cm}{\begin{flushleft}\vspace{-0.1cm}{#1}\vspace{-0.1cm}\end{flushleft}}}}
+
+%\usepackage{fancyvrb}
+%\usepackage{pstricks}
+
+%\begin{document}
+\part{Context-theoretic Semantics for Natural Language}
+\chapter{Textual Entailment}
+\label{entailment-chapter}
+\index{entailment!textual}
+
+%In this chapter we analyse existing approaches to some of the most difficult problems in natural language processing with a view to how current techniques could benefit from context-theoretic ideas and methods.
+
+
+In this chapter we examine the task of recognising textual entailment from the context-theoretic perspective. Textual entailment recognition is the task of determining, given two sentences, whether the first sentence entails or implies the second. The task is particularly well suited to the application of the context-theoretic framework since it concerns detecting entailment between strings of words, which is what a context theory predicts. However, while the task requires determining the existence or non-existence of entailment, from the context-theoretic perspective it is more accurate to talk about a \emph{degree} of entailment\index{entailment!degree of} between strings. Nevertheless we will show later in the chapter how several existing approaches to the task relate to the framework.
+
+We first give an overview of the task and summarise existing approaches. In Section \ref{glickman-probabilistic-section} we examine the approach of \cite{Glickman:05} who define a probabilistic framework for textual entailment. Then in Section \ref{logical-approaches-section} we look at systems for recognising textual entailment that make use of logical representations of meaning. This is relevant for our discussion in Chapter \ref{model-theoretic-chapter} of how to represent statistical information about uncertainty with logical representations of meaning within the framework.
+
+In Section \ref{context-entailment} we relate the context-theoretic framework to existing approaches to textual entailment by defining some context theories. These not only serve to illustrate the application of the framework but also suggest new modifications to the existing approaches. 
+
+
+
+\section{The Recognising Textual Entailment Challenge}
+\index{entailment!textual!PASCAL Challenge|(}
+
+\begin{table}
+\begin{center}
+\begin{tabular}{|c|p{5cm}|p{5cm}|c|}
+\hline
+Task & Text & Hypothesis & Ent.\\
+\hline \hline
+IE &
+A bus collision with a truck in Uganda has resulted in at least 30 fatalities and has left a further 21 injured. &
+30 die in a bus collision in Uganda. &
+Yes\\
+\hline
+IR &
+Chirac needed a new mandate for his government from the electorate, or a new left government was needed that could count on the support of the trade union bureaucracy and among the working class and so would encounter less resistance.&
+Parliamentary elections create new government in France.&
+No\\
+\hline
+QA &
+Brazilian cardinal Dom Eusbio Oscar Scheid, Archbishop of Rio de Janeiro , harshly criticized Brazilian President Luiz In‡cio Lula da Silva after arriving in Rome on Tuesday.&
+The Brazilian President is Luiz In‡cio Lula da Silva. &
+Yes\\
+\hline
+SUM &
+The mine would operate nonstop seven days a week and use tons of cyanide each day to leach the gold from crushed ore. &
+A weak cyanide solution is poured over it to pull the gold from the rock.&
+No\\
+\hline
+\end{tabular}
+\caption{Sample text and hypothesis sentences from the Third Recognising Textual Entailment Challenge and whether entailment is judged to hold between them, with examples from the sub-tasks of information extraction (IE), information retrieval (IR), question answering (QA) and summarisation (SUM).}
+\end{center}
+\label{entailment-examples}
+\end{table}
+
+
+
+The task of recognising textual entailment has reached prominence recently with the launch of the Recognising Textual Entailment Challenge \citep{Dagan:05, Bar-Haim:06}, in which participants develop systems to analyse pairs of sentences to automatically determine whether entailment exists. An example from the development set of the third challenge is the pair
+\begin{enumerate}
+\item UK Foreign Secretary Jack Straw said Iraqis had ``shown again their determination to defy the terrorists and take part in the democratic process''.
+\item Jack Straw holds the position of UK Foreign Secretary.
+\end{enumerate}
+In this case entailment does hold, since we can deduce the content of the second sentence (called the \emph{hypothesis}) from the first (called the \emph{text}); see Table \ref{entailment-examples} for more examples.
+
+\begin{table}
+\begin{center}
+\begin{tabular}{|l||c|c|c|c|c|c|}
+\hline
+Challenge & \swl{Corpus / web-based statistics} & \swl{Lexical relation DB} & \swl{Syntactic matching} & \swl{World knowledge / Paraphrase templates} & \swl{Logical inference} & \swl{Total number of submissions}\\
+\hline \hline
+RTE-1 & 13 & 10 & 13 & 3 & 7 & 28\\
+\hline
+RTE-2 & 22 & 32 & 28 & 5 & 2 & 41\\
+\hline\hline
+Total (\%) & 51\% & 61\% & 59\% & 12\% & 13\% & 100\%\\
+\hline
+\end{tabular}
+\caption{Number of submitted runs using various techniques in Recognising Textual Entailment Challenges 1 and 2 (RTE-1 and RTE-2 respectively).}
+\label{RTE-techniques}
+\end{center}
+\end{table}
+
+It is immediately clear from the generality of this task that a wide range of language processing tools and resources are required to tackle this problem comprehensively; this is demonstrated in the approaches that have been attempted in the two Recognising Textual Entailment Challenges (see Table \ref{RTE-techniques}):
+\begin{itemize}
+\item \textbf{Morphological and syntactic analysis:} various levels of analysis have been performed in tackling this task, ranging from simple stemming of words to full dependency parsing of sentences. 59\% of runs submitted to both challenges used some kind of syntactic analysis.
+\item \textbf{Lexical semantic knowledge:} An even greater proportion of runs submitted, 61\% made use of a lexical relations database such as WordNet, while 51\% of runs used corpus or web-based statistics such as measures of distributional similarity. Indeed it seems that the major focus of approaches to the task to date has been on analysis at the lexical level, while deep semantic analysis has received far less attention.
+\item \textbf{Inference and world knowledge:} Only 13\% of submitted runs in both challenges, and only 2 runs in the second challenge used some kind of logical inference. This could be because of the complexity of implementing the task, with no choice but to deal with problems such as anaphora resolution and lexical ambiguity. However, we believe that deeper semantic analysis is necessary to achieve high accuracy in this task: accuracy is low in current approaches, with no team achieving greater than 75\%. Deep semantic analysis and use of world knowledge are areas that have not been explored fully; indeed, we will argue that current systems have not achieved their full potential because of failure to deal effectively with the ambiguity and uncertainty inherent in analysis of natural language.
+%\item \textbf{Analysis of word senses and anaphora resolution:} In order to perform logical inference, it is necessary to resolve anaphora and deal with lexical ambiguity; such analysis also formed part of other systems.
+\end{itemize}
+
+It does seem that in order to perform well at this task it is necessary to combine various tools and techniques: the two best performing entries to the second entailment challenge improved the accuracy of their systems in this way. One of these \citep{Hickl:06} achieved 75\% accuracy using a system that essentially treated the task as a classification problem; in doing so however, they made use of a part-of-speech tagger, parser, named entity recogniser, semantic parser for determining dependency relations, a lexical alignment system, and a method of acquiring paraphrases from the world-wide web. It is not clear however whether all these components are essential to achieving this level of accuracy in their system. \citeauthor{Tatu:06}'s (\citeyear{Tatu:06}) system achieves 74\% accuracy by combining a simple lexical alignment method with a deep semantic analysis using world knowledge and inference.
+
+Despite the benefits of combining several techniques, part of the attraction of the task is that very simple methods perform relatively well. For example, in the second Recognising Textual Entailment Challenge, \cite{Zanzotto:06} achieve 60\% accuracy (which is as good as the best entries in the first challenge) purely by measuring lexical overlap\index{lexical overlap} between the text and hypothesis sentences.
+
+
+
+%The attractive thing about the task, however, is that systems that do not make use of any such tools or resources, based on much simpler techniques (for example counting word overlap between the two sentences) can be evaluated within the framework of the task. 
+%Such techniques perform surprisingly well in a subset of cases, and indeed, one of the best performing entries in the Second Recognising Textual Entailment Challenge combined these simpler approaches with a more principled approach based on syntactic analysis and logical inference \citep{Tatu:06}.
+
+
+%\subsection{Probabilistic Approaches}
+
+\subsection{Discussion}
+
+We believe it is vital when implementing a system that it is based within a framework with a firm theoretical foundation. The framework provides guidance at each stage of construction of the system and ensures that decisions that are taken in implementing it are made in a consistent, logical manner.
+
+It is also important for us that the theoretical foundation of a textual entailment system be \emph{linguistic} in nature; that is, the framework provides guidance as to how to deal with language. Conversely, many approaches to the task of recognising textual entailment make use of a framework which requires abstraction of the task to a level where language is irrelevant --- an example of this is systems such as that of \citet{Hickl:06} which treat the problem as one of classification of pairs of sentences. Whilst their approach is successful, it provides no insight into the linguistic nature of textual entailment because of the framework in which it is based; instead it provides engineering insight about the task itself and approaches to the task.
+
+We also believe that such a framework should be grounded in the mathematics of probability. Statistical approaches to dealing with language have proved successful in dealing with syntax and, to a degree, lexical semantics because of the possibility of gaining wide coverage by using large amounts of data, and providing robustness, for example by allowing the representation of uncertainty of the correctness of a parse. Thus it is only natural that a framework for textual entailment should also allow for such representation of uncertainty, and the mathematics of probability is the most established and well-founded way of doing this.
+
+In the following sections, we will describe some of the approaches to this task, concentrating specifically on those that we believe can benefit most from the context-theoretic approach.
+
+\subsection{\citeauthor{Glickman:05}'s Probabilistic Setting}
+\label{glickman-probabilistic-section}
+
+The work of \citet{Glickman:05}\index{Glickman and Dagan!textual entailment framework} is of great interest to us because they describe a probabilistic framework which is also linguistic in nature, and deals specifically with the nature of textual entailment. As we will see however, in our opinion their framework is not ideal and leaves areas upon which our context-theoretic framework can improve.
+
+Their framework is defined as follows: let $T$ denote the set of possible texts and $H$ the set of possible hypotheses. The set $W$ denotes the set of all mappings from $H$ to $\{0,1\}$; it is called the set of \emph{possible worlds}, and each element of $W$ is interpreted as assigning truth values of true (1) or false (0) to elements of $H$.
+
+The authors describe their setting as follows:
+\begin{quote}
+We assume a probabilistic generative model for texts and possible worlds. In particular, we assume that texts are generated along with a concrete state of affairs represented by a possible world. Thus, whenever the source generates a text $t\in T$, it generates also corresponding hidden truth assignments that constitute a possible world $w\in W$.
+
+The probability distribution of the source, over all possible texts and truth assignments $T\times W$, is assumed to reflect inferences that are based on the generated texts. That is, we assume that the distribution of truth assignments is not bound to reflect the state of affairs in a particular ``real'' world, but only the inferences about the proposition's truth which are related to the text.
+\end{quote}
+
+The term ``possible world'' relates to assignments of truth values to elements of $H$. Thus the authors' setting states that for each text $t$, there is some conditional probability distribution $P(\text{Tr}_h = 1| t)$ over truth assignments to hypotheses; $P(\text{Tr}_h = 1| t)$ denotes the probability that hypothesis $h$ is true given that the text $t$ has been generated. The authors consider entailment to exist between $t$ and $h$ if this probability is greater than the prior probability of $h$ being true, $P(\text{Tr}_h = 1)$.
+
+\subsection{Lexical Entailment Model}
+
+\citeauthor{Glickman:05} apply their probabilistic setting using a simple model of entailment based on occurrences of words in web documents.\index{Glickman and Dagan!lexical entailment model} In order to do this, they allow individual words to be assigned truth values; they suggest a possible interpretation for this as the existence of a concept related to the word, so that $\text{Tr}_\text{book} = 1$ when text $t$ is generated if ``it can be inferred in $t$'s state of affairs that a book exists''. A hypothesis is considered to be true if all its component words are true; in addition it is assumed that the probabilities of individual terms being true in a hypothesis are independent of each other:
+\begin{gather*}
+P(\text{Tr}_h = 1) = \prod_{u\in h}P(\text{Tr}_u=1)\\
+P(\text{Tr}_h = 1|t) = \prod_{u\in h}P(\text{Tr}_u=1|t)
+\end{gather*}
+where the product is over all words $u$ in $h$, considered as a bag or multiset of words. In order to estimate $P(\text{Tr}_u=1|t)$ for a given word $u$ in the hypothesis, they assume that ``the majority of the probability mass comes from a specific entailing word in $t$:
+$$P(\text{Tr}_u = 1 | t) = \max_{v\in t} P(\text{Tr}_u = 1|T_v)$$
+where $T_v$ denotes the the event that a generated text contains the word $v$.'' Finally, they make the assumption that ``all hypotheses stated verbatim in a document are true and all others are false and hence $P(\text{Tr}_u=1|T_v) = P(T_u|T_v)$''. That is, the probability of a hypothesis (word) $u$ being true given that a document containing the word $v$ is generated is just the probability that a document contains word $u$ given that it contains word $v$. These values can easily be estimated based on frequency counts:
+$$P(T_u|T_v) \simeq \frac{n_{u,v}}{n_v}$$
+where $n_{u,v}$ is the number of documents containing both $u$ and $v$, and $n_v$ is the number of documents containing $v$.
+
+For the first Recognising Textual Entailment Challenge, the authors used estimates of these probabilities based on frequency counts from web search engines; their system achieved 59\% accuracy, one of the best scores achieved in the first challenge.
+
+%\subsection{Bigrams for entailment}
+
+%\citet{Nielson:06} describe a variation on \citeauthor{Glickman:05}'s lexical entailment model that formed one feature of their classifier-based system, based on bigram counts. 
+
+\subsection{Analysis of \citeauthor{Glickman:05}'s Approach}
+
+\citeauthor{Glickman:05}'s framework aims to achieve the same as we wish to achieve, namely, the incorporation of the representation of uncertainty into logical reasoning. This includes the representation of all kinds of uncertainty involved in recognising textual entailment, as they state:
+\begin{quote}
+An implemented model that corresponds to our probabilistic setting is expected to produce an estimate for $P(\text{Tr}_h=1|t)$. This estimate is expected to reflect all probabilistic aspects involved in the modelling, including inherent uncertainty of the entailment inference itself\ldots, possible uncertainty regarding the correct disambiguation of the text\ldots, as well as probabilistic estimates that stem from the particular model structure.
+\end{quote}
+
+Their framework requires combining knowledge about generation of text with reasoning about the probability of the \emph{truth} of propositions. An example they give that illustrates this is the sentence ``His father was born in Italy'', which (one would imagine) should entail with high probability the sentence ``He was born in Italy''. However, according to the authors, examining the texts containing the sentence ``His father was born in Italy'', we find that in these texts the son was more often \emph{not} born in Italy (presumably because the father of someone born in Italy is likely to also be born in Italy, meaning that the sentence is unlikely to be used when this is the case). Hence, in their framework, the probability of entailment would be low, since the probability of the second sentence being true, given the generation of the first sentence, is low.
+
+From our perspective, there are several problems with their framework:
+\begin{itemize}
+\item The framework requires the hypothesis to be interpretable as a logical proposition. Many textual entailment implementations do not make use of logical representations, however, including the authors' own implementation. This forces them to allow truth values to be assigned to words, which is not ideal since there is no satisfactory interpretation of what it means for a word to be ``true'' since words do not in general refer to propositions; in order to allow words to be interpreted as propositions we need further assumptions.
+\item Because of the limitation just mentioned, their framework does not make predictions about the entailment of phrases or words, only sentences.
+\item The combination of the probability of truth of propositions with generation of text is confusing. For someone implementing a textual entailment recognition system within their framework, it is unclear how these probabilities are to be obtained. In the authors' implementation, they assume that ``all hypotheses stated verbatim in a document are true and all others are false'', resulting in a system that is much closer in nature to our context-theoretic framework. %If this assumption were made from the start then the framework could refer solely to the probability of generation of text, a familiar concept with clear interpretation.
+\end{itemize}
+
+Glickman and Dagan seem to be the only entrants to the challenge that attempt to define a framework specifically for textual entailment. Also relevant to our framework however are those entries to the challenge that make use of logical representations of meaning, since we will do this within our framework in Chapter \ref{model-theoretic-chapter} with the purpose of handling statistical information about uncertainty and ambiguity; thus such systems are the subject of the next section.
+
+%In our opinion, the authors' framework is a step in the right direction, but the insistence on interpreting hypothesis in a logical fashion is a limitation in the context of textual entailment, which our framework overcomes.
+
+\subsection{Logical Approaches}
+\label{logical-approaches-section}
+\index{logical semantics!and textual entailment|(}
+
+\begin{table}
+\begin{tabular}{|p{2.4cm}|p{2.4cm}|p{4.3cm}|p{2.3cm}|p{2.1cm}|}%
+\hline%
+Author(s) & Parser & Inference technique & {\raggedright Inference\\ system(s)} & {\raggedright Accuracy\\(Coverage)}\\ %
+\hline\hline %
+{\raggedright \citet{Akhmatova:05}\\} & Link Parser & {\raggedright Theorem proving to detect entailment between atomic propositions\\} & OTTER & 52\%\\ %
+\hline
+{\raggedright \citet{Bayer:05}\\} & {\raggedright Link Parser, MITRE dependency analyser\\} & {\raggedright Probabilistic inference\\} &{\raggedright EPILOG} & 52\% (73\%)\\
+\hline %
+{\raggedright \citet{Delmonte:05}\\} & {\raggedright VENSES} & {\raggedright Score based comparison of semantic representations\\} &{\raggedright VENSES} & 61\% (62\%)\\ \hline
+{\raggedright \citet{Fowler:05}\\} & {\raggedright Unknown} & {\raggedright Theorem proving with scores for dropped predicates / relaxed arguments\\} & {\raggedright COGEX (based on OTTER)\\} & 55\%\\ \hline
+{\raggedright \citet{Raina:05}\\} & {\raggedright \citet{Klein:03}\\} &{\raggedright Abductive theorem proving with costs, classifier\\} &{\raggedright EPILOG} & 56\%\\ \hline \hline
+{\raggedright \citet{Bos:06}\\} & {\raggedright CCG-parser \citep{Bos:05}\\} &{\raggedright Theorem proving and model building, decision tree\\} &{\raggedright Vampire, Paradox, Mace} & 61\%\\ \hline
+{\raggedright \citet{Tatu:06}\\} & MINIPAR &{\raggedright Theorem proving with scores for dropped predicates / relaxed arguments, lexical alignment, classifier\\} &{\raggedright COGEX} & 74\%\\ \hline
+\end{tabular}
+\caption{Summary of logical approaches to textual entailment. Coverage indicates the proportion of pairs for which the system returned answers, if not 100\%.}
+\label{logical-approaches}
+\end{table}
+
+Textual entailment recognition systems that make use of logic rarely take the straightforward approach of translating a sentence into a logical form and seeing if the representation of the text logically entails the representation of the hypothesis; in fact no entry to either challenge took such an approach, while those that came closest to doing so \citep{Akhmatova:05, Delmonte:05} are not robust enough to perform well at the task. It seems logical representations are inherently brittle and on their own are not suited to the flexibility of reasoning that is required to deal with natural language. To get around this problem, several strategies have been employed (see also Table \ref{logical-approaches}):
+\begin{itemize}
+\item \textbf{Score / cost based systems:}\index{scoring} In logical representations a single proposition in the hypothesis that is not in the text will prevent entailment from holding; this is an example of the brittleness of logical representations. Score based systems \citep{Delmonte:05, Fowler:05, Raina:05, Tatu:06} address this, by relaxing the conditions on entailment holding, but adding a ``cost'' or score to such relaxations (for example the addition of an extra proposition to the hypothesis) to indicate a lack of certainty about entailment holding.
+
+This effectively allows ``degrees'' of entailment, where the degree is determined by the score (although this interpretation is not given by the authors). It is practically useful, since it allows more flexibility in determining the existence of entailment, however it is theoretically unfounded, and thus questions remain as to exactly how the scores are to be assigned, what values they are to take, and how they can be interpreted.
+
+\item \textbf{Classification based systems:}\index{classification task} Another approach \citep{Raina:05, Tatu:06} often used in combination with scoring is to treat detection of entailment between pairs of sentences as a classification problem: the task is to classify such pairs as either showing entailment or not. The results of logical inference would then be considered as one ``feature'' of the pair, which together with other features, (for example word overlap), would form the input to a classifying system. The parameters of the classifier are then determined by training on the development set of pairs.
+
+This approach is useful since it allows different techniques to be combined by describing them as features; the weaknesses of one technique can be compensated for by strengths of another. For example, measuring word overlap is a robust technique, but not terribly accurate, so in cases where logical analysis fails, word overlap provides a good back-up measure.
+
+The problem with the clasification approach is that it is not tackling the problem at its source, merely compensating for failures in each technique with other, also imperfect techniques. Instead of trying to understand the nature of entailment, this is a useful way of engineering systems to do the best with the techniques at hand.
+
+Ultimately, it seems hard to imagine such a system performing extremely well, if each of the component ``features'' involved are really flawed measures of entailment. It would always be possible to think of example pairs of sentences which fall outside the range of the development set and thus exploit flaws in each component system.
+
+In addition, it seems unlikely that such analyses will bring us closer to understanding the nature of language or textual entailment itself, instead it will merely provide us with insight as to how best to approach the \emph{task} of recognising textual entailment using existing techniques.
+\item \textbf{Model building:} Another interesting approach \citep{Bos:06} is to build models of $T$ and $T\land H$, where $T$ and $H$ are the logical representations of the text and hypothesis, if they are satisfiable, and compare the sizes of the models built. If $T\land H$ has a model that is not much larger than $T$ then it is reasonable to assume that a lot of the information in the hypothesis is also contained in the text, and thus that the text entails the hypothesis; the result is again a relaxing of the conditions for entailment allowing degrees of entailment based on the comparison of model sizes.
+
+However this approach lacks a firm theoretical foundation, and thus questions such as how to best measure model size are unanswered --- for example, a measure that one might use is domain size, which measures the number of entities in the model. In addition to this \citeauthor{Bos:06} use the product of the domain size and the number of all instances of relations in the model as a measure of model size.
+\item \textbf{Probabilistic reasoning:} The EPILOG system used by \cite{Bayer:05} allows reasoning about probabilistic statements such as ``If $x$ is a person, then with probability $\ge$ 0.95, $x$ lives in a building.'' \citep{Kaplan:00}. It is not clear however, if and how \citeauthor{Bayer:05}~incorporate this feature into their system; moreover their system performs poorly in terms of robustness and accuracy.
+\end{itemize}
+
+
+
+%		<t>The original owner, Henry Borski, opened his tavern in 1945. He later passed it on to his son Jake Borski, then it was owned by Phylis Roberts for approximately 23 years after that.</t>
+%		<h>Henry Borski and Jake Borski are relatives.</h>
+
+%\section{Summary}
+\index{logical semantics!and textual entailment|)}
+\index{entailment!textual!PASCAL Challenge|)}
+
+\section{Context Theories for Textual Entailment}
+\label{context-entailment}
+\index{context theory}
+
+The only existing framework for textual entailment that we are aware of is that of \citet{Glickman:05}.\index{Glickman and Dagan!textual entailment framework} However this framework does not seem to be general enough to deal satisfactorily with many techniques used to tackle the problem since it requires interpreting the hypothesis as a logical statement.
+
+Conversely, systems that use logical representations of language are often implemented without reference to any framework, and thus deal with the problems of representing the ambiguity and uncertainty that is inherent in handling natural language in an ad-hoc fashion.
+
+Thus it seems what is needed is a framework which is general enough to satisfactorily incorporate purely statistical techniques and logical representations, and in addition provide guidance as to how to deal with ambiguity and uncertainty in natural language. It is this that we hope our context-theoretic framework will provide.
+
+In this section we analyse approaches to the textual entailment problem, showing how they can be related to the context-theoretic framework, and discussing potential new approaches that are suggested by looking at them within the framework. We first discuss some simple approaches to textual entailment based on subsequence matching and measuring lexical overlap. We then look at how Glickman and Dagan's approach can be considered as a context theory in which words are represented as projections on the vector space of documents. This leads us to an implementation of our own in which we used latent Dirichlet allocation as an alternative approach to overcoming the problem of data sparseness.
+
+\subsection{Subsequence Matching and Lexical Overlap}
+\label{subsequence}
+\index{subsequence matching}
+
+We call a sequence $x \in A^*$ a ``subsequence'' of $y \in A^*$ if each element of $x$ occurs in $y$ in the same order, but with the possibility of other elements occurring in between, so for example $abba$ is a subsequence of $acabcba$ in $\{a,b,c\}^*$. We denote the set of subsequences of $x$ (including the empty string) by $\Sub(x)$. Subsequence matching compares the subsequences of two sequences: the more subsequences they have in common the more similar they are assumed to be. This idea has been used successfully in text classification \citep{Lodhi:02} and also formed the basis of the author's entry to the second Recognising Textual Entailment Challenge \citep{Clarke:06}.
+
+
+\begin{table*}
+\begin{center}
+\begin{tabular}{|l||c|c|c|c|c|c||c|}
+\hline
+Run & Acc. & Av. Prec. & IE & IR & QA & SUM & Dev. Acc\\
+\hline
+Word Matching  & 0.53 & 0.56 & 0.46 & 0.49 & 0.59 & 0.59 & 0.57 \\
+Subsequence Matching  & 0.55 & 0.53 & 0.49 & 0.56 & 0.54 & 0.60 & 0.57 \\
+Substr. + Corpus Occ. & 0.53 & 0.53 & 0.50 & 0.50 & 0.53 & 0.59 & 0.55\\
+\hline
+\end{tabular}
+\caption{Results for for the author's entry to the Second Recognising Textual Entailment Challenge using subsequence matching. Estimates of overall accuracy and average precision, and accuracy results for each of the subtasks (Information Extraction, Information Retrieval, Question Answering and Summarisation) are shown for the test set, together with accuracy for the development set. Results are reported for a baseline of simple word matching and the two entered runs: subsequence matching and subsequences combined with corpus occurrences. Error for accuracy values on the test and development sets is approximately 2\%, and on the subtasks, 4\%.}
+\label{table:subsequence}
+\end{center}
+\end{table*}
+
+
+If $S$ is a semigroup, $L^1(S)$ is a lattice ordered algebra under the multiplication of convolution:
+$$(f\cdot g)(x) = \sum_{yz = x} f(y)g(z)$$
+where $x,y,z \in S$, $f,g \in L^1(S)$. For a sequence $x\in A^*$, we define $\hat{x} \in L^1(A^*)$ by
+$$\hat{x} = (1/2^{|x|})\sum_{y\in Sub(x)} e_y,$$
+where $e_y$ is the unit basis element associated with $y$; that is, the function that is $1$ on $y$ and $0$ elsewhere. This is clearly a semigroup homomorphism and thus together with the linear functional $\phi$,
+$$\phi(u) = \|u^+\|_1 - \|u^-\|_1$$
+defines a context theory\index{context theory} for $A$. Under this context theory, a sequence $x$ completely entails $y$ if and only if it is a subsequence of $y$. In our experiments \citep{Clarke:06}, we have shown that this type of context theory can perform significantly better than straightforward lexical overlap (see Table \ref{table:subsequence}). Many variations on this idea are possible, for example using more complex mappings from $A^*$ to $L^1(A^*)$.
+
+
+%\subsection{Lexical Overlap}
+
+The simplest approach to textual entailment is to measure the degree of lexical overlap:\index{lexical overlap} the proportion of words in the hypothesis sentence that are contained in the text sentence. Though simple, variations on this approach can perform  comparably to much more complex techniques \citep{Dagan:05}.
+
+This approach can be described as a context theory in terms of a free commutative semigroup on a set $A$, defined by $A^*/\equiv$ where $x \equiv y$ in $A^*$ if the symbols making up $x$ can be reordered to make $y$. Following the reasoning of subsequence matching, for a sequence $x$ we can define $\hat{x} \in L^1(A^*/\equiv)$ by
+$$\hat{x} = (1/2^{|x|})\sum_{y\in Sub(x)} e_{[y]},$$
+where $[y]$ is the equivalence class of $y$ in $A^*/\equiv$. Defining a linear functional similarly gives us a context theory\index{context theory} in which entailment depends on the words in the sequences but not their order. Again, more complex definitions of $\hat{x}$ can be used, for example to weight different words by their probabilities.
+
+\subsection{Document Projections}
+\label{document-projections}
+\index{Glickman and Dagan!lexical entailment model|(}
+
+\cite{Glickman:05} give a probabilistic definition of entailment in terms of ``possible worlds'' which they use to justify their lexical entailment model based on occurrences of words in web documents. They estimate the lexical entailment probability $\text{\textsc{lep}}(u,v)$ to be
+$$\text{\textsc{lep}}(u,v) \simeq \frac{n_{u,v}}{n_v}$$
+where $n_v$ and $n_{u,v}$ denote the number of documents that the word $v$ occurs in and the words $u$ and $v$ both occur in respectively. From the context theoretic perspective, we view the set of documents the word occurs in as its context vector. To describe this situation in terms of a context theory, consider the vector space $L^\infty(D)$ where $D$ is the set of documents. With each word $u$ we associate an operator $P_u$ on this vector space by
+$$P_u e_d = \left\{\begin{array}{ll} e_d & \text{if $u$ occurs in document $d$} \\ 0 & \text{otherwise.} \end{array}\right.$$
+where $e_d$ is the basis element associated with document $d \in D$. $P_u$ is a projection, that is $P_uP_u = P_u$; it projects onto the space of documents that $u$ occurs in. These projections are clearly commutative: $P_uP_v = P_vP_u = P_u \land P_v$ projects onto the space of documents in which both $u$ and $v$ occur.
+
+In their paper, \citeauthor{Glickman:05} assume that probabilities can be attached to individual words, as we do, although they interpret these as the probability that a word is ``true'' in a possible world. In their interpretation, a document corresponds to a possible world, and a word is true in that world if it occurs in the document.
+
+They do not, however, determine these probabilities directly; instead they make assumptions about how the entailment probability of a sentence depends on lexical entailment probability. Although they do not state this, the reason for this is presumably data sparseness: they assume that a sentence is true if all its lexical components are true: this will only happen if all the words occur in the same document. For any sizeable sentence this is extremely unlikely, hence their alternative approach.
+
+It is nevertheless useful to consider this idea from a context theoretic perspective. The probability of a term being true can be estimated as the proportion of documents it occurs in. This is the same as the context theoretic probability defined by the linear functional $\phi$, which we may think of as determined by a vector $p$ in $L^\infty(D)$ given by $p(d) = 1/|D|$ for all $d \in D$. In general, for an operator $U$ on $L^\infty(D)$ the context theoretic probability of $U$ is defined as
+$$\phi(U) = \|U^+p\|_1 - \|U^-p\|_1,$$
+where by $U^+$ and $U^-$ we mean the positive and negative parts of $U$ in the vector lattice of operators (see Section \ref{positive-operators}). 
+The probability of a term is then $\phi(P_u) = n_u /|D|$. More generally, the context theoretic representation of an expression $x = u_1u_2\ldots u_m$ is $P_x = P_{u_1}P_{u_2}\ldots P_{u_m}$. This is clearly a semigroup homomorphism (the representation of $xy$ is the product of the representations of $x$ and $y$), and thus together with the linear functional $\phi$ defines a context theory\index{context theory} for the set of words.
+
+The degree to which $x$ entails $y$ is then given by $\phi(P_x\land P_y) / \phi(P_x)$. This corresponds directly to \citeauthor{Glickman:05}'s entailment ``confidence'' without the additional assumptions they make; it is simply the proportion of documents that contain all the terms of $x$ which also contain all the terms of $y$.
+
+\index{Glickman and Dagan!lexical entailment model|)}
+
+\subsection{Latent Dirichlet Projections}
+
+This formulation suggests an alternative approach to that of \citeauthor{Glickman:05} to cope with the data sparseness problem. We consider the finite data available $D$ as a sample from a corpus model $D'$; the vector $p$ then becomes a probability distribution over the documents in $D'$. In our own experiments, we used Latent Dirichlet Allocation (see Section \ref{lda-section}) to build a corpus model based on a subset of around 380,000 documents from the Gigaword corpus. Having the corpus model allows us to consider an infinite array of possible documents, and thus we can use our context-theoretic definition of entailment since there is no problem of data sparseness.
+
+Consider the vector space $L^\infty(A^*)$ for some alphabet $A$, the space of all bounded functions on possible documents. In this approach, we define the representation of a string $x$ to be a projection $P_x$ on the subspace representing the (infinite) set of documents in which all the words in string $x$ occur. Again we define a vector $q(d)$ for $d\in A^*$ where $q(d)$ is the probability of document $d$ in the corpus model, we then define a linear functional $\phi$ for an operator $U$ on $L^\infty(A^*)$ as before by $\phi(U) = \|U^+q\|_1 - \|U^-q\|_1$. $\phi(P_x)$ is thus the probability that a document chosen at random contains all the words that occur in string $x$. In order to estimate $\phi(P_x)$ we have to integrate over the Dirichlet parameter $\theta$:
+$$\phi(P_x) = \int_\theta\left(\prod_{a\in x}p_\theta(a)\right)p(\theta)d\theta,$$
+where by $a\in x$ we mean that the word $a$ occurs in string $x$, and $p_\theta(a)$ is the probability of observing word $a$ in a document generated by the parameter $\theta$. We estimate this by
+$$p_\theta(a) \simeq 1 - \left(1 - \sum_z p(a|z)p(z|\theta)\right)^N,$$
+where $z$ is the topic variable described in Section \ref{lda-section} and we have assumed a fixed document length $N$. The above formula is an estimate of the probability of a word occurring at least once in a document of length $N$, i.e.~$1 -$ the probability that the word does not occur $N$ times. The sum over the topic variable $z$ is the probability that the word $a$ occurs at any one point in a document given the parameter $\theta$. We approximated the integral using Monte-Carlo sampling to generate values of $\theta$ according to the Dirichlet distribution.
+
+\begin{table}
+\begin{center}
+\begin{tabular}{|l||l|l|}
+\hline
+\textbf{Model} & \textbf{Accuracy} & \textbf{CWS}\\
+\hline\hline
+Dirichlet ($10^6$) & 0.584 & 0.630\\
+Dirichlet ($10^7$) & 0.576 & 0.642\\
+\hline
+Bayer (MITRE) & 0.586 & 0.617 \\
+Glickman (Bar Ilan) & 0.586 & 0.572\\
+Jijkoun (Amsterdam) & 0.552 & 0.559\\
+Newman (Dublin) & 0.565 & 0.6\\
+\hline
+\end{tabular}
+\caption{Results obtained with our Latent Dirichlet projection model on the data from the first Recognising Textual Entailment Challenge for two document lengths $N = 10^6$ and $N = 10^7$ using a cut-off for the degree of entailment of $0.5$ at which entailment was regarded as holding. CWS is the confidence weighted score --- see \citep{Dagan:05} for the definition.}
+\label{table:lda-results}
+\end{center}
+\end{table}
+
+
+The results we obtained using this method on the data from the first Recognising Textual Entailment Challenge were comparable to the best results in the first challenge (see Table \ref{table:lda-results}).
+
+
+
+\subsection{Discussion}
+
+We have shown how some existing approaches to the task of recognising textual entailment can be described in terms of context theories. The potential for extending these ideas is great:
+\begin{itemize}
+\item Context theories based on substring matching can be extended
+\begin{itemize}
+\item by using different weighting schemes for strings based on the length of the string or the probability of its occurrence in large corpora;
+\item by replacing words with vectors representing their context; instead of using concatenation of words to form representations of the substring use the tensor product of the vectors;
+\item by allowing partial commutativity --- a hybrid of lexical and substring matching could be made by allowing some words to commute and not others; this could be based on an analysis of the relative frequency of pairs of words in a corpus.
+\end{itemize}
+\item Glickman and Dagan's approach can be extended by considering other corpus models --- there are many possible alternatives to latent Dirichlet allocation, for example using $n$-grams or other models in which words do not commute.
+\item The evidence from entries to the challenge suggest that to perform well at the task a number of different approaches need to be combined. The context theoretic framework makes it easy to do this while remaining true to the framework. For example, given two context theories that map a string $x$ to vectors $\hat{x}_1$ and $\hat{x}_2$ with linear functionals $\phi_1$ and $\phi_2$, a new context theory can be defined in terms of the direct sum of the vectors so that $x$ maps to $\hat{x}_1 \oplus \hat{x}_2$, with linear functional $\phi(\hat{x}_1 \oplus \hat{x}_2) = \alpha\phi_1(\hat{x}_1) + \beta\phi_2(\hat{x}_2)$, with $\alpha$ and $\beta$ positive real numbers such that $\alpha + \beta = 1$. This ``weighted sum'' could be used to combine any number of context theories possibly describing quite different approaches.
+\end{itemize}
+
+While the simple techniques of this chapter are useful, to perform well at the task of textual entailment some form of in-depth reasoning seems essential because of the semantic nature of the task. Earlier we discussed approaches to the challenge that make use of logical representations of language. Because such representations on their own lack robustness it is clear that ways need to be found to extend them. One way of doing this would be to use a weighted sum to combine a context theory that describes the logical interpretation of a sentence with a context theory describing a more robust technique such as lexical matching. Such an approach would help increase robustness, however it would not get to the root of the problem, which we believe to lie in the lack of flexibility of the logical representations themselves.
+
+ In the next chapter we will show how logical approaches can be described in terms of context theories. The context-theoretic approach suggests ways in which statistical information about uncertainty can be incorporated into such representations, allowing us to represent a sentence as a weighted sum over many possible logical interpretations of a sentence to take into account statistical information from a parser, word sense disambiguation systems, anaphora resolution and so on. We hope that this will ultimately lead to entailment systems that are able to reason with logic in a robust and principled manner.
+
+
+
+%Let $S$ be the free commutative semigroup on $A$. $S$ is a semilattice onder the partial ordering defined by $x \le y$ if and only if $x$ and $y$ can be rewritten in terms of elements of $A$ such that $y$ forms a substring of $x$.
+
+
+
+%\bibliographystyle{plainnat}
+%\bibliography{contexts}
+
+
+
+
+
+%\end{document}

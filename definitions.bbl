@@ -1,0 +1,31 @@
+\begin{thebibliography}{4}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Abramovich and Aliprantis(2002)]{Abramovich:02}
+Y.~A. Abramovich and Charalambos~D. Aliprantis.
+\newblock \emph{An Invitation to Operator Theory}.
+\newblock American Mathematical Society, 2002.
+
+\bibitem[Aliprantis and Burkinshaw(1985)]{Aliprantis:85}
+Charalambos~D. Aliprantis and Owen Burkinshaw.
+\newblock \emph{Positive Operators}.
+\newblock Academic Press, 1985.
+
+\bibitem[Birkhoff(1948)]{Birkhoff:48}
+Garrett Birkhoff.
+\newblock \emph{Lattice Theory}.
+\newblock Amer. Math. Soc. Colloquium Publications, New York, 1948.
+
+\bibitem[Deerwester et~al.(1990)Deerwester, Dumais, Furnas, Landauer, and
+  Harshman]{Deerwester:90}
+Scott Deerwester, Susan Dumais, George Furnas, Thomas Landauer, and Richard
+  Harshman.
+\newblock Indexing by latent semantic analysis.
+\newblock \emph{Journal of the American Society for Information Science},
+  41\penalty0 (6):\penalty0 391--407, 1990.
+
+\end{thebibliography}

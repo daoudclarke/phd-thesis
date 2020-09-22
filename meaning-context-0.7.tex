@@ -1,0 +1,184 @@
+%Bismillahi-r-Rahmani-r-Rahim
+\documentclass[11pt]{report}
+
+ \newcommand{\Cont}{\mathrm{Cont}}
+\input{head}
+
+\begin{document}
+
+\chapter{Meaning as Context}
+
+
+In this chapter we will propose a mathematical model of meaning as context, and show that this results in a rich mathematical structure which will later form the basis for our abstract formalism.
+
+\section{Introduction}
+
+%\begin{assumption}
+We intend a limited interpretation of the word ``meaning'': knowing the meaning of an expression, for our purposes, means knowing the relationship between that expression and all other expressions.
+%\end{assumption} \noindent
+Thus for example, if we know the meaning of two expressions, we should know if one entails the other or if they are contradictory, but we do not assume that we are able to connect them to objects or events in the real world. We argue that this relative interpretation of meaning is entirely sufficient for computational applications, since if further information is required this can be supplied, for example by attaching an image of a dog to the word ``dog'', and so on.
+
+%\begin{assumption}
+Extending the reasoning outlined in previous chapters, we will assume that everything that is of interest to us about a language can be deduced from a set of documents written in that language.
+%\end{assumption} \noindent
+We call such a set of documents a \emph{corpus}. Thus for example, we assume that all aspects of the meanings of expressions, rules of syntax and morphology can be determined by examining the corpus without prior knowledge of the language. Such a corpus may consist of an infinite set of documents, indeed this is likely to be the case if it describes everything about the language.
+
+We can think about this infinite corpus as an infinite extension of a finite corpus, so that the finite (real-world) corpus can be viewed as a random sample of the infinite (hypothetical) one. For example, an infinite corpus could be estimated from a finite one by means of language modelling techniques. Then under the particular assumptions of the technique, the real-world corpus can be viewed as a random sample from the infinite corpus predicted by the technique. We nevertheless assume that the infinite corpus is much richer in structure than those that would be predicted by current language modelling techniques.
+
+We are not interested here in particular techniques of estimating such infinite corpora; we merely make the assumption that such a corpus exists, and deducing the consequences of certain other assumptions given its existence.
+
+
+\section{Definition of Corpus}
+
+
+In order to arrive at our definition, we will make a sequence of statements explaining our assumptions and reasoning in arriving at the definition.
+
+
+\begin{assumption}The language in question can be written using a finite number of symbols. These symbols can be concatenated to eventually form \emph{documents}.\end{assumption}\noindent
+That is, there is some finite set $A$ of symbols, and documents are sequences of symbols, or elements of $A^*$.
+
+\begin{assumption} The order of documents in a corpus is unimportant.\end{assumption} \noindent
+While the documents in a real world corpus may be ordered by date, subject or even lexicographically, we assume that the nature of the hypothetical corpus is unaffected by a reordering of the documents. Essentially, we assume that the corpus is a \emph{set} of documents rather than a sequence of documents.
+
+
+
+\begin{assumption}There is an inherent bias towards certain documents in the corpus over others that may be described by a probability distribution over documents.\end{assumption} \noindent
+The idea that real world corpora are random samples of the infinite corpus implies that there is a probability distribution over the hypothetical corpus from which the real world corpus was sampled. We argue that this bias should be incorporated into the representation of the hypothetical corpus.
+
+The bias towards particular documents is expressed in our definition by assigning a positive real value to each document in the corpus. We also ensure that these values are reasonable in that we can construct a probability distribution over documents from them:
+\begin{defn}[Corpus]
+A corpus $C$ over $A$ is an element of $L^1(A^*)^+$, that is a function from $A^*$ to $\R^+$ for which $\|C\|_1$ is finite. 
+\end{defn}\noindent
+The sequences $x$ of $A^*$ for which $C(x)$ is non-zero form the documents of the corpus, thus the notion of a corpus as a set of documents is retained. We can obtain a probability distribution over $A^*$ from a corpus $C$ as $C/\|C\|_1$.
+
+\section{Meaning as Context}
+
+
+ Because of the problem of data sparseness, all techniques that build vectors from contexts that expressions occur make limited use of context as we mean it, for example using a limited window and ignoring the order of words in this window. Instead, we assume that data sparseness is not a problem in our hypothetical situation, and we make use of the whole document surrounding the string except the string itself. 
+
+%This is an assumption since it is possible to imagine infinite corpora in which data sparseness is still a problem: merely being infinite doesn't guarantee enough data.
+
+\begin{assumption} The context of an expression in a document is the entire document except the expression.\end{assumption} \noindent
+Mathematically then, the context vector of a sequence $x$ will be a vector over pairs of sequences $(u,v)$ with $u,v \in A^*$ such that $uxv$ is a document. More formally:
+\begin{defn}
+The context vector of a sequence $x \in A^*$ in a corpus defined by $p$ is a real-valued function $\hat{x}\in L^\infty(A^*\times A^*)$  on the set of contexts $A^* \times A^*$, defined by
+$$\hat{x}(u,v) = p(uxv).$$
+\end{defn}
+
+%\section{The Context Algebra}
+
+%We now show how, given any corpus defined by $p$, we can construct an algebra which retains all the vector and lattice properties of the contexts of words as they are defined in the original corpus. This is crucial for what follows, since we the formalism that we will develop in the next chapter is an abstraction of the mathematical properties of the algebra that we present here.
+
+We will show how, given any corpus $C$ we can construct an algebra of context vectors; this construction will allow us to associate the idea of meaning as context with the theory of non-commutative probability.
+
+Suppose that three sequences $x$, $y$ and $z$ satisfy
+$$C(uxv) = C(uyv) + C(uzv)$$
+for all sequences $u$ and $v$. In this case, as vectors, $\hat{x} = \hat{y} + \hat{z}$. Now consider prefixing a string $w$ to each of these. Setting $u = u'w$ we have $C(u'wxv) = C(u'wyv) + C(u'wzv)$ for all $u',v$, so $\widehat{wx} = \widehat{wy} + \widehat{wz}$. Clearly this also applies to suffixes; in addition we can generalise this property to any sums of the representations of words, and it is this that allows us to form an algebra from a corpus.
+
+Consider the vector subspace of $\R^{A^* \times A^*}$ generated by the context representations of sequences in corpus $C$; that is the set of vectors that can be written in the form $\sum_i \alpha_i \hat{x}_i$ for some $\alpha_i \in \R$  and $x_i \in A^*$; we call this subspace $\mathcal{A}(C)$. Because of the way we define the subspace, there will always exist some basis $\mathcal{B} = \{\hat{u} : u \in B\}$ where $B \subseteq A^*$, and we can define multiplication on this basis by $\hat{u}\cdot\hat{v} = \widehat{uv}$ where $u,v \in B$. Defining multiplication on the basis defines it for the whole vector subspace, where we define multiplication to be linear, making $\mathcal{A}$ an algebra.
+Then we have
+\begin{prop}[Context Algebra]
+Multiplication on $\mathcal{A}$ is independent of the choice of basis $B$.
+\end{prop}
+\begin{proof}
+%Given two bases given by $B, C \subseteq A^*$, an arbitrary vector $x$ in $\mathcal{A}(p)$ can be written as $$x = \sum_i \beta_i \hat{b}_i = \sum_j \xi_j \hat{c}_j$$
+%for some $b_i \in B$, $c_j \in C$ and $\beta_i, \xi_j \in \R$.
+Given two bases $\mathcal{B}_1 , \mathcal{B}_2$ derived from subsets $B_1$ and $B_2$ of $A^*$, we need to show that multiplication in one basis is the same as in the other. We represent two basis elements $\hat{u}_1$ and $\hat{u}_2$ of $\mathcal{B}_1$ in terms of basis elements of $\mathcal{B}_2$:
+$$\hat{u}_1 = \sum_i \alpha_i \hat{v}_i \quad\text{and}\quad
+\hat{u}_2 = \sum_j \beta_j \hat{v}_j,$$
+for some $u_i \in B_1$, $v_j \in B_2$ and $\alpha_i, \beta_j  \in \R$.
+We will show that multiplication in basis $\mathcal{B}_1$ is the same as in the basis $\mathcal{B}_2$. First consider multiplication in the basis $\mathcal{B}_1$. Note that $\hat{u}_1 = \sum_i \alpha_i \hat{v}_i$ means that $C(xu_1y) = \sum_i \alpha_i C(xv_iy)$ for all $x,y \in A^*$. This includes the special case where $y = u_2y'$ so $$C(xu_1u_2y') = \sum_i \alpha_i C(xv_iu_2y')$$ for all $x, y' \in A^*$.
+%, or $\widehat{b_1b_2} = \sum_i \alpha_i \widehat{c_ib_2}$.
+Similarly, we have $C(xu_2y) = \sum_j \beta_j C(xv_jy)$ for all $x,y \in A^*$ which includes the special case $x = x'v_i$, so $C(x'v_iu_2y) = \sum_j \beta_j C(x'v_iv_jy)$ for all $x',y \in A^*$. Inserting this into the above expression yields
+$$C(xu_1u_2y) = \sum_{i,j} \alpha_i\beta_j C(xv_iv_jy)$$
+for all $x,y \in A^*$ which we can rewrite as
+$$\hat{u}_1\cdot\hat{u}_2 = \widehat{u_1u_2} = \sum_{i,j}\alpha_i\beta_j (\hat{v}_i\cdot\hat{v}_j)
+= \sum_{i,j}\alpha_i\beta_j \widehat{v_iv_j}.$$
+Conversely, the product of $u_1$ and $u_2$ using the basis $\mathcal{B}_2$ is
+$$\hat{u}_1\cdot \hat{u}_2 = \sum_i \alpha_i \hat{v}_i \cdot \sum_j \beta_j \hat{v}_j =  \sum_{i,j}\alpha_i\beta_j (\hat{v}_i\cdot\hat{v}_j)$$
+thus showing that multiplication is defined independently of what we choose as the basis.
+\end{proof}
+
+This theorem means that given any corpus we can associate an algebra with that corpus such that natural language expressions are represented as elements of that algebra. %This is not enough, however, as we cannot yet use the lattice operations that form part of the definition of entailment; meets and joins of expressions are not guaranteed to be part of the algebra. We can get around this, however.
+%Since this algebra, viewed as a vector space, is a subspace of the vector lattice of contexts, the elements of the algebra are still partially ordered by the ordering that defines the lattice operations on contexts. We cannot guarantee, however, that meets and joins exist in this subspace, thus we are left with a partially ordered vector space rather than a vector lattice. Nevertheless, the partial ordering still means our structure is an partially ordered algebra, since if $x \ge 0$ and $y \ge 0$ then $xy \ge 0$.
+
+\section{Context-Theoretic Probability}
+
+In addition, we define a real valued function $\phi$ on context vectors that will be important in relating context vectors to non-commutative probability. We call it the \emph{context-theoretic probability} of a vector or sequence. In non-commutative probability, it is necessary that the probability of the unity of the algebra is $1$. In our case, the context of the empty string $\epsilon$ will act as unity, so we will need to have $\phi(\hat{\epsilon}) = 1$; this provides a normalising condition on the other vectors. The function $\phi$ solves another problem: the $\|\hat{x}\|_1$ is not guaranteed to be finite for a sequence $x \in A^*$; normalising gets around this.
+\begin{defn}[Probability]
+The (context-theoretic) probability $\phi$ is a function from $L^\infty(A^*\times A^*)$ to $\R\cup\{\infty,-\infty\}$ defined by
+\begin{eqnarray*}\phi(\mathbf{u}) &=& \lim_{n\rightarrow\infty} \frac{\|P_n\mathbf{u}\|_1}{\|P_n\hat{\epsilon}\|_1}\\
+\phi(-\mathbf{u}) &=& -\phi(\mathbf{u})
+\end{eqnarray*}
+where $\mathbf{u}$ is a positive element of $L^\infty(A^*\times A^*)$, $P_n$ is a projection onto the subspace $L^1(A^{*n}\times A^{*n})$ where $A^{*n}$ is the set of all sequences of symbols in $A$ up to length $n$, and the function is extended to all elements of $L^\infty(A^*\times A^*)$ by linearity; thus defining a positive linear functional.
+\end{defn}
+
+\begin{prop}
+For $x \in A^*$, $\phi(\hat{x})$ satisfies $\phi(\hat{x}) \le 1$ with $\phi(\hat{x}) = 1$ if and only if $x = \epsilon$. Moreover, we have
+$$\sum_{a \in A} \phi(\hat{a}) < 1$$.
+\end{prop}
+
+\begin{proof}
+Consider a document $d\in A^*$ of length $l$. The empty string $\epsilon$ ``occurs'' $l+1$ times; i.e.~the contribution to $\|P_n \hat{\epsilon}\|_1$ is $(l+1)C(d)$ for $n \ge 2l$. A string $x \neq \epsilon$ occurs less than or equal to $l$ times in $d$ so contributes at most $lC(d)$ to $\|P_n\hat{x}\|_1$, so $\phi(\hat{x}) < 1$. That $\phi(\hat{\epsilon}) = 1$ is obvious. The sum of the contribution of all symbols in $A$ in document $d$ is $lC(d)$ since there are $l$ symbols in $d$, thus $\sum_{a \in A} \phi(\hat{a}) < 1$.
+\end{proof}
+
+\begin{prop}
+The context algebra $\mathcal{A}_0$ together with the linear functional $\phi$ defines a non-commutative probability space.
+\end{prop}
+
+This follows immediately from the previous proposition and the observation that $\hat{\epsilon}$ is a unity for the algebra $\mathcal{A}_0$.
+
+\section{Entailment}
+
+
+Our next assumption is based on the ideas of distributional generality in \citep{Weeds:04} and the distributional inclusion hypotheses of \cite{Geffet:05} discussed previously:
+\begin{assumption} A string fully entails another string if the first occurs with lower probability in all the contexts that the second occurs in.
+\end{assumption}\noindent
+The lattice ordering of the vector space generated by context vectors is a partial ordering on the context vectors of expressions; it is this partial ordering that we should interpret as entailment according to the last assumption. That is, an expression $x$ entails an expression $y$ if $\hat{x} \le \hat{y}$.
+
+We imagine this situation to occur rarely however. In general, two expressions entail each other to a \emph{degree} based on what proportion of their contexts are shared: 
+\begin{assumption}If the strings have no contexts in common then the strings do not entail one another. If there is some intermediate situation, then there is a \emph{degree} of entailment.\end{assumption}\noindent
+Like \cite{Glickman:05} we believe that entailment is closely connected to the nature of conditional probability. Our reason for this is a subscription to a Bayesian philosophy in which the mathematics of probability forms the natural calculus for reasoning about uncertainty. Unlike \citeauthor{Glickman:05} who view entailment as a black and white phenomenon whose existence is determined by examining conditional probability, we effectively equate entailment with conditional probability:
+\begin{assumption}
+The degree of entailment takes the form of a conditional probability.
+\end{assumption}
+\noindent
+The vector space of contexts forms an abstract Lebesgue space under the $L^1$ norm and the lattice operations; since $\phi$ is proportional to this norm, mathematically we can view the context vectors of strings as a measure space with measure function $\phi$. This means that under these operations the context vectors carry all the properties of an (unnormalised) probability space. Given this, and our previous assumption about entailment, the obvious way to define the degree of entailment in terms of context vectors is the following:
+\begin{defn}[Degree of Entailment]
+The degree of entailment $\Ent(x,y)$ between two strings $x$ and $y$ is defined as
+$$\Ent(x,y) = \frac{\phi(\hat{x}\land\hat{y})}{\phi(\hat{x})}.$$
+\end{defn}
+Entailment in the sense described above then, is specified by the above definition in that full entailment corresponds to a degree of entailment of value 1, no entailment corresponds to a value of 0, and there are degrees between these two extremes.
+
+\subsection{Lattice-Ordered Context Algebra}
+
+There is still one remaining problem to be cleared up. While the meet $\hat{x} \land \hat{y}$ is well defined, it is not necessarily a member of the algebra $\mathcal{A}_0$ since this is defined in terms of vector operations and not lattice ones. Meets and joins, in general, are elements of a larger space $\mathcal{A}$ consisting of all elements of $L^\infty(A^*\times A^*)$ which can be generated from a countable number of context vectors $\hat{x}_1, \hat{x}_2, \ldots$ by any combination of vector and lattice operations --- the vector lattice subspace generated by the context vectors of sequences. As noted in \ref{Aliprantis:85}, this may be described as follows: If $S$ is a subset of a vector lattice $V$, let $S^\land$ denote the set of all elements $v$ in $V$ such that there exists a subset $S'$ of $S$ such that $v = \bigwedge S'$; that is, the set of all elements formed from meets of elements of $S$. Similarly $S^\lor$ denotes the set of all elements formed from joins of elements of $S$. If $S$ is a vector subspace of $V$, then $(S^\lor)^\land = (S^\land)^\lor$ is the smallest vector lattice containing $S$, i.e.~the vector lattice subspace generated by $S$. 
+%We denote such an operation $f(\hat{x}_1,\hat{x}_2,\ldots)$.
+
+%We would like to be able to consider $\mathcal{A}$ as an algebra. To do this we need to be able to define products for elements such as $\hat{x} \land \hat{y}$ in a unique way. We define
+%\begin{eqnarray*}
+%(\hat{x} \land \hat{y})\cdot \hat{z} &=& \widehat{xz} \land \widehat{yz}\\
+%\hat{z}\cdot (\hat{x} \land \hat{y}) &=& \widehat{zx} \land \widehat{zy}
+%\end{eqnarray*}
+%This defines multiplication for joins via the standard formula
+%$$\mathbf{u} \lor \mathbf{v} = \mathbf{u} + \mathbf{v} - \mathbf{u} \land \mathbf{v}$$
+%for any elements $\mathbf{u}$ and $\mathbf{v}$ of a vector lattice, and via linearity of multiplication. It also defines multiplication for any element of $\mathcal{A}$ by recursively applying this definition and the definition of multiplication in $\mathcal{A}_0$: we have
+%$$f(\hat{x}_1,\hat{x}_2,\ldots)\cdot \hat{z} = f(\widehat{xz}_1,\widehat{xz}_2,\ldots),$$
+%and similarly for multiplication by $\hat{z}$ on the left.
+
+%It remains to show that this definition \emph{uniquely} defines multiplication for any element of $\mathcal{A}$. Consider an element of $\mathcal{A}$ that may be written in two ways as functions of contexts:
+%$$f(\hat{x}_1, \hat{x}_2,\ldots) = g(\hat{y}_1,\hat{y}_2,\ldots).$$
+%This means
+%$$f(C(ux_1v),C(ux_2v),\ldots) = g(C(uy_1v),C(uy_2v),\ldots)$$
+%for all $u,v \in A^*$.
+
+We show how this is possible in two stages: first we define multiplication on $\mathcal{A}_0^\land$ and show that this multiplication defines an algebra, and then extend it to $(\mathcal{A}_0^\land)^\lor$, which we shall call $\mathcal{A}$.
+
+\begin{defn}
+For $x \in \mathcal{A}_0^\land$, we define $\upa(x) := \{u \in \mathcal{A}_0 : x \le u\}$; multiplication is defined for $x,y\in\mathcal{A}_0^\land$ by $x\cdot y = \bigwedge (\upa(x)\upa(y))$.
+\end{defn}
+
+\bibliographystyle{plainnat}
+\bibliography{contexts}
+
+\end{document} 

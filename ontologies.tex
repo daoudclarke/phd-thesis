@@ -1,0 +1,454 @@
+ %Bismillahi-r-Rahmani-r-Rahim
+% \documentclass{report}
+ 
+% \input{head.tex}
+ %\usepackage{algorithmic}
+ %\usepackage[plain]{algorithm}
+ 
+% \begin{document}
+ 
+ \chapter{Taxonomies and Vector Lattices}
+ \label{ontologies}
+ \index{taxonomy|(}
+ 
+A crucial feature that we require of the context-theoretic framework\index{context-theoretic!framework} is that we are able to make use of logical representations of meaning within the framework. Ontologies\index{ontologies} form an important part of many systems that deal with logical representations of natural language, thus it is important to examine the relationship between ontological representations of meaning and vector based ones. In this chapter we show how an important part of an ontology, a taxonomy, can be represented in terms of vectors in a vector lattice, by means of \emph{vector lattice completions}\index{vector lattice completion}, a concept that we define. The ideas presented in this chapter marry the vector-based representations of meaning with the ontological ones by considering both from the unifying perspective of vector lattice theory.
+
+The constructions presented here may have several practical benefits:
+\begin{itemize}
+\item  They provide a link with statistical representations of meaning such as latent semantic analysis\index{latent semantic analysis} and distributional similarity\index{distributional similarity} measures by showing that taxonomic properties of meaning can be represented within the vector space structures of these techniques. Through this, the ideas presented here in combination with such techniques may lead to new methods of automatic ontology construction. For example, by relating semantic analysis vectors to the taxonomy vectors it may be possible to place a new concept in the vector space of the taxonomy based on its latent semantic analysis vector.
+\item The vector-based representation of a taxonomy can be used to build context theories that make use of the taxonomy whilst remaining entirely vector-based, allowing the use of techniques to combine vectors such as tensor or free products, discussed in the next chapter. These could lead to new approaches to natural language semantics that would potentially be more robust than logical approaches since they would be more amenable to incorporating statistical features of language, being entirely vector based.
+\item Vector spaces give us a lot of flexibility: vectors can be scaled, rotated, translated, and the dimensionality of the vector space can be reduced. These properties may lead to new techniques for the efficient representation of meaning. For example, it may be possible to use a dimensionality reduction to efficiently represent a taxonomy in terms of vectors.
+\end{itemize}
+Perhaps more importantly though, the subject of this chapter is the nature of meaning itself, and the techniques we present here show that the vector lattice representations of meaning can be viewed as a generalisation of ontological ones. In addition to the lattice structure of ontologies, however, vector lattices allow a more subtle description of meaning that allows the quantification of nearness of meaning that cannot be described fully in the lattice structure of ontologies; part of the success of techniques such as latent semantic analysis is due to their ability to quantify nearness of meaning in this way. 
+%Part of the success of techniques such as latent semantic analysis is due to the ability to quantify nearness of meaning in this way; it thus seems only natural that vector lattices will eventually become the structure of choice for representing meaning in natural language.
+
+The contributions of this chapter are as follows:
+\begin{itemize}
+\item We give a definition for a vector lattice completion\index{vector lattice completion} as a way of representing a taxonomy in terms of a vector lattice.
+\item We describe several vector lattice completions with different properties:
+\begin{itemize}
+\item A \emph{probabilistic completion}\index{vector lattice completion!probabilistic} (see Section \ref{probabilistic-completion-section}) allows the incorporation of the ``probability of a concept'' into the vector-based description.
+\item We describe a \emph{distance preserving completion}\index{vector lattice completion!distance preserving} (see Section \ref{distance-section}) in which the distance between vectors in the vector lattice representation is the same as the distance in the ontology using a measure of \cite{Jiang:97}.
+\item The vector space representation typically uses a large number of dimensions. In Section \ref{efficient-completions-section} we describe a vector lattice completion that in many cases uses a smaller number of dimensions than the probabilistic completion, and discuss its application to two real world ontologies.
+\end{itemize}
+\item The constructions we present allow the description of taxonomic concepts in terms of vectors; in Section \ref{representing-words-section} we discuss the representation of terms which may be ambiguous\index{ambiguity}, requiring the representations of the individual senses of a term to be combined.
+\item In Section \ref{dist-sim-projections-section} we analyse certain measures of distributional similarity and show how they can be thought of in terms of projections on a vector space. This leads us to a representation of ambiguous terms in terms of sums of projections, described in Section \ref{ideal-projection}. In this representation, in addition to the vector lattice properties of previous vector lattice completions, multiplication is defined, meaning that we can define a context theory. This construction may be useful in situations where ontological representations are needed as part of a larger context theory.
+\end{itemize}
+
+\section{Taxonomies}
+\label{taxonomy}
+% \section{Representing Concepts}
+
+Ontologies describe relationships between concepts. They are considered to be of importance in a wide range of areas within artificial intelligence and computational linguistics. For example, WordNet\index{WordNet} \citep{Fellbaum:98} is an ontology that describes relations between word senses, or more accurately, senses of \emph{terms}, since WordNet also describes the meanings of collocations.
+
+Arguably the most important relation described in an ontology is the \textbf{is-a} relation (also called subsumption), which describes inclusion between classes of objects.  When applied to meanings of terms, the relation is called \emph{hypernymy}\index{hypernymy}. For example, a \emph{tree} is a type of \emph{plant} (the concept \emph{plant} subsumes \emph{tree}), thus the word ``plant'' is a hypernym of ``tree''. The converse relationship between terms is called hyponymy, so ``tree'' is a hyponym of ``plant''. A system of classification that only deals with the \textbf{is-a} relation is referred to as a \emph{taxonomy}. An example taxonomy is shown in figure \ref{plant-taxonomy}, with the most general concept at the top, and the most specific concepts at the bottom.
+
+The \textbf{is-a} relation is in general a partial ordering, since
+\begin{itemize}
+\item it is always the case that an $a$ is an $a$ (reflexivity);
+\item if an $a$ is a $b$ and a $b$ is an $a$ then $a$ and $b$ are the same (anti-symmetry).
+\item if an $a$ is a $b$ and a $b$ is a $c$ then an $a$ is necessarily a $c$ (transitivity).
+\end{itemize}
+%The second of these will in general be true, however we mak\footnote{if this is not the case then making the two concepts equivalent results in an ontology for which this does hold.}
+
+The taxonomy described by figure \ref{plant-taxonomy} has a special property: it is a tree\index{tree}, i.e.~no concept directly subsumed by one concept is directly subsumed by any other concept. This type of taxonomy will be studied in section \ref{distance-section}.
+
+Later we will discuss ``distance measures'' on ontologies. These can be as simple as measuring the shortest number of links between two concepts \citep{Rada:89} or be information theoretic measures based on the ``probability of a concept'' \citep{Resnik:95,Jiang:97}.
+
+\begin{figure}
+\begin{center}
+\begin{graph}(7,6)(0,-5.6)
+%\graphnodesize{0.15}
+%Nodes:
+\textnode{entity}(3.5,0){entity}[\graphlinecolour{1}]
+\textnode{organism}(3.5,-1){organism}[\graphlinecolour{1}]
+\textnode{plant}(3.5,-2){plant}[\graphlinecolour{1}]
+	\textnode{grass}(2,-3){grass}[\graphlinecolour{1}]
+	\textnode{cereal}(1,-4){cereal}[\graphlinecolour{1}]
+		\textnode{oat}(0,-5){\rule[-0.5ex]{0pt}{2.1ex}oat}[\graphlinecolour{1}]
+		\textnode{rice}(1,-5){\rule[-0.5ex]{0pt}{2.1ex}rice}[\graphlinecolour{1}]
+		\textnode{barley}(2,-5){\rule[-0.5ex]{0pt}{2.1ex}barley}[\graphlinecolour{1}]
+	\textnode{tree}(5,-3){tree}[\graphlinecolour{1}]
+		\textnode{beech}(3.5,-4){\rule{0pt}{2ex}beech}[\graphlinecolour{1}]
+		\textnode{chestnut}(5,-4){\rule{0pt}{2ex}chestnut}[\graphlinecolour{1}]
+		\textnode{oak}(6.5,-4){\rule{0pt}{2ex}oak}[\graphlinecolour{1}]
+%\textnode{non}(3.5,-6.5){non-existent}[\graphlinecolour{1}]
+
+%Edges:
+\edge{entity}{organism}
+\edge{organism}{plant}
+\edge{plant}{grass}
+\edge{grass}{cereal}
+	\edge{cereal}{oat}
+	\edge{cereal}{barley}
+	\edge{cereal}{rice}
+\edge{plant}{tree}
+	\edge{tree}{beech}
+	\edge{tree}{chestnut}
+	\edge{tree}{oak}
+
+%\edge{oat}{non}[\graphlinedash{3 1}]
+%\edge{barley}{non}[\graphlinedash{3 1}]
+%\edge{rice}{non}[\graphlinedash{3 1}]
+%\edge{beech}{non}[\graphlinedash{3 1}]
+%\edge{chestnut}{non}[\graphlinedash{3 1}]
+%\edge{oak}{non}[\graphlinedash{3 1}]
+
+\end{graph}
+\end{center}
+\caption{A small example taxonomy extracted from WordNet \citep{Fellbaum:98}.}
+\label{plant-taxonomy}
+\end{figure}
+
+\index{ontologies}
+
+%
+%In fact, we can say more than this: since most taxonomies contain a top-most node representing the most general concept (in the case of figure \ref{plant-taxonomy}, \emph{entity}), the partial ordering defines a \emph{join semilattice} (see chapter \ref{definitions}). For example, the join of the concepts \emph{rice} and \emph{beech} in figure \ref{plant-taxonomy} is \emph{plant}, the least general concept that subsumes both these concepts.\footnote{Having a top-most node is not enough to guarantee that every the structure is a semilattice, although this appears to be the case in real world taxonomies.}
+
+%Note that this definition of join does not match with the normal idea of logical disjunction of a concept. For example, if we say that something is a \emph{beech} or an \emph{oak}, it is definitely a \emph{tree}, but conversely something being a \emph{tree} does not imply that that thing is a \emph{beech} or an \emph{oak}---since it could also be a \emph{chestnut}. Thus the logical disjunction of the concepts \emph{beech} and \emph{oak} should sit somewhere between these two concepts and \emph{tree}.
+
+%We can even make the taxonomy into a lattice, by adding a new concept at the bottom, and joining this to all concepts which don't subsume any other concept (the dashed lines in figure \ref{plant-taxonomy}). The new concept can be interpreted as a ``non-existent'' or ``nonsense'' concept. The meet of any two concepts will then be given by the most general concept subsumed by the two. Interestingly, this meet does seem to correspond with logical conjunction of concepts: knowing that something is simultaneously a \emph{plant} and a \emph{grass} does not yield any new information, but claiming that something is simultaneously \emph{oak} and \emph{barley} yields the ``non-existent'' concept.
+
+
+\subsection{Vector Lattice Embeddings of Taxonomies}
+
+%We would like to be able to represent meanings as vectors. This type of representation gives us a lot of flexibility: vectors can be scaled, rotated, translated, and the dimensionality of the vector space can be reduced. It also provides our link with statistical representations of meaning such as latent semantic analysis \citep{Deerwester:90} and distributional similarity measures \citep{Lee:99}.
+
+Vector representations of meaning do not seem to sit nicely with ontological representations of meaning --- the former make use of vector spaces and the latter make use of lattices. In fact, what we will show in this chapter is that the two types of representation can be combined within the structure of a vector lattice\index{vector lattice}, a space that is simultaneously a vector space and a lattice. Taxonomies can be embedded in a vector lattice in such a way that the lattice structure is preserved, and existing vector representations of meaning can be considered as implicitly carrying a lattice structure.
+
+%It is our hope that the ability to represent meanings of words as elements of a vector lattice will open up many areas for research in computational linguistics, particularly when it comes to combinining traditional, ontological methods with the newer statistical ones. For example, since the statistical techniques mentioned earlier represent words within a vector space, it may be possible to find an approximate mapping from the vector space of these techniques to the vector space of the taxonomy.
+
+The relationship between concepts in a taxonomy is expressed by means of a partial order\index{partial ordering}, and we wish to embed the partial ordering representation in a vector lattice; we call such an embedding a \emph{vector lattice completion}. The partial ordering of the vector lattice representation must still therefore contain the partial ordering of the taxonomy, but in addition, we provide each meaning with a concrete position in some $n$-dimensional space. We define this formally as follows:
+\begin{defn}[Vector Lattice Completion]\index{vector lattice completion|textbf}
+Let $S$ be a partially ordered set. A \emph{vector lattice completion} of $S$ is a vector lattice $V$ and a function $\psi$ from $S$ to $V$ that is a partial ordering homomorphism, i.e.~$\psi(s_1) \le \psi(s_2)$ if and only if $s_1 \le s_2$, for all $s_1, s_2 \in S$.
+\end{defn}
+
+Because the embedding will necessarily be a \emph{lattice completion}, it will introduce new operations of meet and join on elements (see section \ref{lattices}). Many taxonomies may already have some of the properties of a lattice, for example, most taxonomies are join semilattices. However the existing join operation is not usually directly useful since it does not correspond with our usual idea of logical disjunction. For example, in figure \ref{plant-taxonomy}, the join of the concepts \emph{beech} and \emph{oak} is \emph{tree}. If something is a \emph{beech} or an \emph{oak}, it is definitely a \emph{tree}, however the converse provides problems: if something is a \emph{tree} it does not follow that the thing is necessarily a \emph{beech} or an \emph{oak}---since it could also be a \emph{chestnut}. Thus the logical disjunction of the concepts \emph{beech} and \emph{oak} should sit somewhere between these two concepts and \emph{tree}.
+
+\subsection{Probabilistic Completion}
+\label{probabilistic-completion-section}
+\index{vector lattice completion!probabilistic|(}
+
+We are also concerned with the probability of concepts. This is an idea that has come about through the introduction of ``distance measures''\index{distance measures!on taxonomies} on taxonomies \citep{Resnik:95}. Since terms can be ascribed probabilities based on their frequencies of occurrence in corpora, the concepts they refer to can similarly be assigned probabilities. The probability of a concept is the probability of encountering an instance of that concept in the corpus, that is, the probability that a term selected at random from the corpus has a meaning that is subsumed by that particular concept. This ensures that more general concepts are given higher probabilities, for example if there is a most general concept (a top-most node in the taxonomy, which may correspond for example to ``entity'') its probability will be one, since every term can be considered an instance of that concept.
+
+We give a general definition based on this idea which does not require probabilities to be assigned based on corpus counts:
+\begin{defn}[Real Valued Taxonomy]
+A real valued taxonomy\index{taxonomy!real valued|textbf} is a finite set $S$ of \emph{concepts} with a partial ordering $\le$ and a positive real function $p$ over $S$. The \emph{measure} of a concept is then defined in terms of $p$ as
+$$\hat{p}(x) = \sum_{y \in \down{x}} p(y).$$
+
+The taxonomy is called \emph{probabilistic}\index{taxonomy!probabilistic|textbf} if $\sum_{x \in S} p(s) = 1$. In this case $\hat{p}$ refers to the \emph{probability of a concept}.
+\end{defn}
+Thus in a probabilistic taxonomy, the function $p$ corresponds to the probability that a term is observed whose meaning corresponds (in that context) to that concept. The function $\hat{p}$ denotes the probability that a term is observed whose meaning in that context is subsumed by the concept.
+
+Note that if $S$ has a top element $I$ then in the probabilistic case, clearly $\hat{p}(I) = 1$. In studies of distance measures on ontologies, the concepts in $S$ often correspond to senses of terms, in this case the function $p$ represents the (normalised) probability that a given term will occur with the sense indicated by the concept. The top-most concept often exists, and may be something with the meaning ``entity''---intended to include the meaning of all concepts below it.
+
+The most simple completion we consider is into the vector lattice $L^\infty(S)$, the real vector space of dimensionality $|S|$, with basis elements $\{e_x : x\in S\}$.
+\begin{prop}[Ideal Vector Completion]\index{ideal vector completion}
+Let $S$ be a probabilistic taxonomy with probability distribution function $p$ that is non-zero everywhere on $S$. The function $\psi$ from $S$ to $L^\infty(S)$ defined by
+$$\psi(x) = \sum_{y \in \down{x}} p(y)e_y$$
+is a completion of the partial ordering of $S$ under the vector lattice order of $L^\infty(S)$, satisfying $\|\psi(x)\|_1 = \hat{p}(x)$.
+\end{prop}
+\begin{proof}
+The function $\psi$ is clearly order-preserving: if $x \le y$ in $S$ then since $\down{x} \subseteq \down{y}$, necessarily $\psi(x) \le \psi(y)$. Conversely, the only way that $\psi(x) \le \psi(y)$ can be true is if $\down{x} \subseteq \down{y}$ since $p$ is non-zero everywhere. If this is the case, then $x \le y$ by the nature of the ideal completion. Thus $\psi$ is an order-embedding, and since $L^\infty(S)$ is a complete lattice, it is also a completion. Finally, note that $\|\psi(x)\|_1 = \sum_{y\in\down{x}} p(y) = \hat{p}(x)$.
+\end{proof}
+This close connection with the ideal completion is what leads us to call it the \emph{ideal vector completion}. The completion allows us to represent concepts as elements within a vector lattice so that not only the partial ordering of the taxonomy is preserved, but the probability of concepts is also preserved as the size of the vector under the $L^1$ norm.
+
+\index{vector lattice completion!probabilistic|)}
+
+\subsection{Distance Preserving Completion}
+\label{distance-section}
+\index{vector lattice completion!distance preserving|(}
+
+Some attempts have been made to link ontological representations with statistical techniques. These centre around measures of semantic distance which attempt to put a value on semantic relatedness between concepts.
+
+\cite{Jiang:97}\index{Jiang and Conrath|(} defined a distance measure 
+%that has been shown to perform best out of five different measures in a spelling correction task \citep{Budanitsky:06}. The measure is 
+based on the information content of concepts \citep{Resnik:95}, which can be derived from their probabilities. We will show that this measure has the following property: concepts can be embedded in a vector lattice in such a way that the distance between concepts in the vector lattice is equal to the Jiang-Conrath distance measure.\footnote{Further investigation is required to determine whether other distance measures possess this property.}
+
+%This is an important result because of the success of this measure in applications: it is arguably experimental evidence in favour of the vector lattice nature of the meaning of words.
+
+We are able to show that the distances are preserved in certain types of taxonomy: the concepts must form a \emph{tree}:
+\begin{defn}[Trees]\index{tree|textbf}
+A partially ordered set $S$ is called a \emph{tree} if every element $x$ in $S$ has at most one element $y\in S$ such that $x \prec y$ and there is an element $I$ such that $z \le I$ for all $z \in S$. The unique element preceding $x$ is called the \emph{parent} of $x$, it is denoted $\Par(x)$ if it exists.
+\end{defn}\noindent
+Note that in a tree only the topmost element $I$ has no parent.
+
+The Jiang-Conrath measure makes use of a particular property of trees. It is easy to see that a tree forms a \emph{semilattice}: for each pair of elements $x$ and $y$ there is an element $x \lor y$ that is the \emph{least common subsumer} of $x$ and $y$. For example, in figure \ref{plant-taxonomy}, the least common subsumer of \emph{oat} and \emph{barley} is \emph{cereal}; the least common subsumer of \emph{oat} and \emph{beech} is \emph{plant}.
+
+The measure also makes use of the information content\index{information content} of a concept; this is simply the negative logarithm of its probability. In our formulation, the information content $\mathit{IC}(x)$ of a concept $x$ is defined by
+$$\mathit{IC}(x) = -\log \hat{p}(x).$$
+The information content thus decreases as we move up the taxonomy; if there is a most general element $I$, it will have an information content of zero.
+
+The Jiang-Conrath distance measure $d(x,y)$ between two concepts $x$ and $y$ is then defined as
+$$d(x,y) = \mathit{IC}(x) + \mathit{IC}(y) - 2\mathit{IC}(x\lor y).$$
+There is a notable similarity between this expression and a relation that holds in vector lattices:
+\begin{equation*}\tag{$*$}\label{vlid}|u - v| = u + v - 2(u\land v),\end{equation*}
+for all $u$ and $v$ in the vector lattice. This formula provides the starting point for preserving distances in the vector lattice completion.
+
+In its current form, in building a vector lattice we cannot simply replace the function $\hat{p}$ with the information content, since $\hat{p}$ must increase as we move up the taxonomy; instead we must invert the direction of the lattice. This allows us to embed concepts in the lattice while retaining the information content as the norm, and changes joins into meets, so that distances correspond to the Jiang-Conrath\index{Jiang and Conrath|)} measure.
+\begin{prop}[Distance Preserving Completion]
+Let $S$ be a probabilistic taxonomy which forms a tree with partial ordering $\le$. The function $\mathit{IC}$ defines a positive real-valued function $f_\mathit{IC}$ by
+$$f_\IC(x) = \IC(x) - \IC(\Par(x)).$$
+for $x \in S - \{I\}$, and $f_\IC(I) = 0$. We define a new partial ordering $\le'$ on $S$ by $x \le' y$ iff $y \le x$ (thus $\le'$ is the \emph{dual} of $\le$). Then $f_\IC$ together with the new partial ordering defines a real-valued taxonomy on $S$. Call the function that maps an element of $S$ to its completion in the new taxonomy $\psi'$. The vector lattice completion of the new taxonomy satisfies $\|\psi'(x)\|_1 = \IC(x)$ and $\|\psi'(x) - \psi'(y)\|_1 = d(x,y)$. 
+\end{prop}
+
+\begin{proof}
+For the results about vector lattices used here see section \ref{vector-lattices}. Because the taxonomy is a tree, $f_\IC$ is clearly a positive function satisfying $\|\psi'(x)\|_1 = \IC(x)$. To see the second part, we need to know that the vector lattice $L^\infty(S)$ with the $L_1$ norm is an \emph{AL-space}; this means that $\|s + t\| = \|s\| + \|t\|$ whenever $s \land t = 0$. We have here
+$$(u - u\land v)\land (v - u\land v)  = \tfrac{1}{2}(u + v - 2(u\land v) - |u - v|) = 0,$$
+where we have used the above identity twice. Thus, using the same identity, we have
+\begin{eqnarray*}
+ \|u - v\|_1 = \| |u - v| \|_1&=& \|u + v - 2(u \land v)\|_1\\
+		&=& \|(u - u\land v) + (v - u \land v)\|_1\\
+		&=& \|u - u\land v \|_1 + \|v - u \land v \|_1\\
+		&=& \|u\|_1 + \|v\|_1 -2\|u\land v\|_1
+\end{eqnarray*}
+For the last step, we used the fact that we are dealing with positive elements, with $u - u\land v \ge 0$ and thus, using the additive property of the $L_1$ norm, $\|u\| = \|u - u\land v + u\land v\| = \|u - u\land v\| + \|u\land v\|$.
+
+Finally, note that the lattice completion is built from the dual of a tree, which is a join semilattice. Joins are preserved as meets in the completion since $\down{x} \cap \down{y} = \down{x \land y}$, and thus we have $\psi'(x) \land \psi'(y) = \psi'(x\lor y)$. This completes the proof.
+\end{proof}
+
+Thus we have shown that it is possible to simultaneously preserve the partial ordering of an ontology and the distance between concepts (as measured by Jiang and Conrath) within a vector lattice representation. We believe this particular result opens up the potential for a wide range of techniques combining statistical methods of determining meaning with ontological representations. For example, we might expect that distributional similarity measures can be used as a predictor of semantic similarity --- i.e.~that the distributional similarity of two terms is correlated to the semantic distance between the concepts\footnote{This assumes the terms are unambiguous; ambiguity would make the detection of correlation more difficult.} the terms represent; this idea would be compatible with Harris' distributional hypothesis \citep{Harris:68}.
+%There has not yet to our knowledge been a thorough analysis of the degree to which distributional similarity can be used to predict semantic distance, however our own preliminary investigations reveal that there is definitely some correlation between the two. If this correlation is strong enough then distributional similarity could in theory be used to place concepts in the vector lattice of meanings by looking at the distributional similarity of the corresponding terms, opening up possibilities for determining meaning automatically,
+Indeed measures of distributional similarity have been used to place terms within a semantic hierarchy such as WordNet \citep{Alfonseca:02, Pekar:03}. In addition to providing new avenues for research in this task, our results may allow terms to be automatically placed within the fine-grained structure allowed by the vector lattice representations. Measures of distributional similarity could also be used to refine vector lattice representations of existing taxonomies by moving concepts so that their position in the vector lattice matches what we would expect based on measuring the distributional similarity of the corresponding terms.
+
+\index{vector lattice completion!distance preserving|)}
+
+\subsection{Efficient Completions}
+\label{efficient-completions-section}
+\index{vector lattice completion!efficient|(}
+
+\begin{figure}
+\begin{center}
+\begin{graph}(7,7.5)(0,-7)
+%\graphnodesize{0.15}
+%Nodes:
+\textnode{entity}(6.5,0){entity}[\graphlinecolour{1}]
+\textnode{organism}(5.5,-1){organism}[\graphlinecolour{1}]
+\textnode{plant}(4.5,-2){plant}[\graphlinecolour{1}]
+	\textnode{grass}(2,-2.5){grass}[\graphlinecolour{1}]
+	\textnode{cereal}(1,-3.5){cereal}[\graphlinecolour{1}]
+		\textnode{oat}(-1,-4){\rule[-0.5ex]{0pt}{2.1ex}oat}[\graphlinecolour{1}]
+		\textnode{rice}(-0.5,-4.5){\rule[-0.5ex]{0pt}{2.1ex}rice}[\graphlinecolour{1}]
+		\textnode{barley}(0,-5){\rule[-0.5ex]{0pt}{2.1ex}barley}[\graphlinecolour{1}]
+	\textnode{tree}(3.5,-5){tree}[\graphlinecolour{1}]
+		\textnode{beech}(1.7,-6){\rule{0pt}{2ex}beech}[\graphlinecolour{1}]
+		\textnode{chestnut}(2.3,-6.5){\rule{0pt}{2ex}chestnut}[\graphlinecolour{1}]
+		\textnode{oak}(3,-7){\rule{0pt}{2ex}oak}[\graphlinecolour{1}]
+%\textnode{non}(3.5,-6.5){non-existent}[\graphlinecolour{1}]
+
+%Edges:
+\edge{entity}{organism}
+\edge{organism}{plant}
+\edge{plant}{grass}
+\edge{grass}{cereal}
+	\edge{cereal}{oat}
+	\edge{cereal}{barley}
+	\edge{cereal}{rice}
+\edge{plant}{tree}
+	\edge{tree}{beech}
+	\edge{tree}{chestnut}
+	\edge{tree}{oak}
+
+%\edge{oat}{non}[\graphlinedash{3 1}]
+%\edge{barley}{non}[\graphlinedash{3 1}]
+%\edge{rice}{non}[\graphlinedash{3 1}]
+%\edge{beech}{non}[\graphlinedash{3 1}]
+%\edge{chestnut}{non}[\graphlinedash{3 1}]
+%\edge{oak}{non}[\graphlinedash{3 1}]
+
+\end{graph}
+\end{center}
+\caption{It is possible to embed a tree into a two dimensional vector lattice in such a way that the partial ordering is preserved. Two concepts $s_1$ and $s_2$ satisfy $s_1 \le s_2$ if $s_1$ is to the left or level with and below or level with $s_2$.}
+\label{plant-taxonomy-rot}
+\end{figure}
+
+
+In this section we discuss the question of how many dimensions are necessary to maintain the lattice structure in the vector lattice completion. The representations discussed previously use a very large number of dimensions: one for each node in the ontology. To see that this is more than is generally needed, consider an ontology whose Hasse diagram\index{Hasse diagram!planar} is planar: that is it can be rearranged so that no lines cross (see figure \ref{plant-taxonomy-rot}). If we then position the nodes in the diagram such the lines between nodes are at an angle of less than $45^\circ$ to the vertical (this can always be done by stretching the diagram out vertically), and we rotate the diagram by $45^\circ$ to the right, and set an origin, the position of each node in the two dimensional diagram can be considered as a representation of the concept in the vector lattice $\R^2$. It is easy to see that the partial ordering is preserved --- if $x\le y$ in the partial ordering, then this will also hold in the two-dimensional vector lattice, although care has to be taken in the positioning of concepts to ensure that other unwanted relations can't be derived in the new space.
+
+One problem with this simplistic vector lattice representation is that there is no obvious way to interpret the two dimensions. Another, more serious problem is that it is not unique: in general there are many ways we can draw the Hasse diagram, and each will correspond to a different representation. Concepts will necessarily be positioned arbitrarily according to which way the diagram is drawn, leaving us in doubt as to whether the vector aspect of the representation is meaningful. This arbitrary positioning means that distances between nodes are dependent on how we draw the Hasse diagram: in one representation a pair of nodes may be close together, while in another they may be far apart. For example, in the Hasse diagram of a tree, we can swap leaf nodes any way we wish to make a pair of nodes arbitrarily close or far apart.
+
+We call representations that don't have this property \emph{symmetric}: a representation is symmetric if the distances $\|x - y\|$ between the representation of a pair of nodes is only dependent on the lattice properties of the nodes represented by $x$ and $y$. Clearly symmetry comes with uniqueness: if there is only one representation of a given lattice, the vector properties must be determined by the lattice.
+
+Instead of this two dimensional representation then, we propose an efficient symmetric representation suitable for any partial ordering, in which dimensions correspond to \emph{chains} or \emph{totally ordered subsets} of the partial order. For taxonomies which are trees this representation is unique up to isomorphism; this more efficient representation can then be used in place of the vector ideal completion.
+
+\begin{defn}[Chains]\index{chain|textbf}
+Let $S$ be a partially ordered set. A \emph{chain} $C$ of $S$ is a totally ordered subset of $S$, that is, a subset of $S$ which is a partially ordered set under the partial ordering of $S$ such that $x \le y$ or $y \le x$ for all $x,y \in C$.
+
+A collection of chains $\mathcal{C}$ is called \emph{covering} if $\bigcup_{C\in \mathcal{C}} C = S$. Clearly every partially ordered set has at least one covering collection of chains: that collection consisting of all chains containing just one node of $S$.
+\end{defn}
+
+\begin{defn}[Chain completion]\index{vector lattice completion!chain completion}
+\newcommand{\Ch}{\mathrm{Ch}_\mathcal{C}}
+Let $S$ be a real valued taxonomy and $\mathcal{C} = \{C_1, C_2, \ldots C_n\}$ be a covering collection of chains for $S$. Let $\Ch(x) = \{i : x \in C_i\}.$ Then define the function $\xi_0$ from $S$ to $\R^n$ by
+$$\xi_0(x) =  \sum_{i \in \Ch(x)} \frac{p(x)}{|\Ch(x)|}e_i,$$
+where $e_i$ are the basis elements of $\R^n$. Then the chain completion $\xi$ is defined by:
+$$\xi(x) = \sum_{y \le x} \xi_0(y).$$
+\end{defn}
+\begin{prop}
+The function $\xi$ defines a vector lattice completion of $S$ satisfying $\|\xi(x)\|_1 = \hat{p}(x)$.
+\end{prop}
+
+\begin{proof}
+By the definition of $\xi$ it is clear that $u \le v$ in $S$ implies $\xi(u) \le \xi (v)$ in $\R^n$. Conversely, if it is not true that $u \le v$ then there will be some chain in $\mathcal{C}$ containing $v$ but not $u$, so it will never be true that $\xi(u) \le \xi(v)$, showing that $\xi$ defines an embedding of the partial ordering of $S$, and since $\R^n$ is a vector lattice, it also defines a vector lattice completion. Finally, note that
+$$\|\xi(x)\|_1 = \sum_{y\le x} \|\xi_0(x)\|_1 = \sum_{y \le x} p(x) = \hat{p}(x)$$
+since all the vectors are positive, which completes the proof.
+\end{proof}
+
+Providing we can find a covering with a low number of chains $n$, the previous proposition gives us an efficient vector lattice representation using $n$ dimensions. The representation as it stands is not unique, since there are in general many ways we can cover a partially ordered set with chains. The task then, is to find an efficient, unique way of determining a covering collection of chains. We achieve this by considering \emph{maximal chains}, chains containing as many elements of $S$ as possible whilst remaining a totally ordered set:
+\begin{defn}[Maximal chains]
+A maximal chain $C$ for $S$ is a chain such that there is no element $x$ of $S - C$ such that if $x$ were added to $C$ then $C$ would remain a chain. Let $\mathcal{C}$ be the covering collection of chains consisting of all maximal chains of $S$. $S$ is said to be \emph{uniquely minimally covered} by $\mathcal{C}$ if for each $C \in \mathcal{C}$ there is at least one element $x \in C$ such that $x$ is not in any other chain of $\mathcal{C}$; in this case, $S$ is said to possess a \emph{unique minimal covering} $\mathcal{C}$.
+\end{defn}
+
+\begin{prop}
+If $S$ has a unique minimal covering $\mathcal{C}$, then $\mathcal{C}$ is a covering for $S$ with the least possible number of chains.
+\end{prop}
+\begin{proof}
+We will assume there is a covering $\mathcal{C}'$ with less chains than $\mathcal{C}$ and show a contradiction. We can convert every chain $C$ in $\mathcal{C}'$ into a maximal chain by adding elements to $C$ until we can no longer add any more. The resulting collection cannot contain all maximal chains (since $\mathcal{C}'$ was assumed to have less chains than $\mathcal{C}$). Each missing maximal chain must contain some element not in any other maximal chain, which must also have been missing from $\mathcal{C}'$. Thus $\mathcal{C}'$ cannot have been a covering collection, which shows a contradiction and completes the proof.
+%For every pair of maximal chains $C_a, C_b \in \mathcal{C}$ we can identify $a\in C_a$ and $b\in C_b$ such that these elements are not in any other maximal chain. For there to be a covering with less chains than $\mathcal{C}$ there would have to be a chain $C$ containing both $a$ and $b$. However then there would have to be some maximal chain $C'$ containing both $a$ and $b$ since each chain must be the sub-chain of some maximal chain (just keep adding elements of $S$ to $C$ until we can no longer add any more), but this contradicts what we have already said.
+%By definition $\mathcal{C}$ is unique, since it consists of all maximal chains. To see that $\mathcal{C}$ has the least possible number of chains, note that each chain contains as many elements of $S$ as possible, while removing any of these chains and maintaining a covering collection is impossible, since each chain contains an element not in any other chain.
+\end{proof}
+
+Thus if $S$ has a unique minimal covering, we can represent it uniquely and efficiently using the number of dimensions corresponding to the number of chains in this covering. Any taxonomy that is a tree\index{tree} has a unique minimal covering: each maximal chain will have a leaf node that is not in any chain; in fact there will be a chain corresponding to each leaf node. Thus the chain completion gives a unique efficient representation for any taxonomy that is a tree, and we would expect taxonomies that are very tree-like to also have efficient representations.
+
+%\begin{algorithm}
+%\begin{center}
+%\begin{algorithmic}
+%\vspace{0.1cm}
+%\STATE $X_0 \leftarrow \{x \in S : \text{there is no $y$ such that } y \le x\}$
+%\end{algorithmic}
+%\end{center}
+%\caption{Algorithm to generate an efficient chain completion.}
+%\end{algorithm}
+
+\subsection{Analysis of Application to Ontologies}
+
+While we know that the chain completion is a relatively efficient for trees, we don't know how useful it is likely to be in real-world applications. To find out, we analysed two real world ontologies. The first is the Semantic Network\index{Semantic Network} used in the Unified Medical Language System\index{Unified Medical Language System} \citep{National:98}, whose taxonomy consists of just 135 nodes representing broad categories of meanings related to medical concepts. In this case, the taxonomy has a simple tree structure, so each dimension corresponds to a leaf node. There are 90 leaf nodes, thus we can represent the 135 nodes using only 90 dimensions, a saving of a third.
+
+It is also instructive here to consider a simple theoretical situation: a regular tree\index{tree!regular} of depth $n$ with each node having $r$ branches. In this case, the total number of nodes is
+$$\sum_{i=1\ldots n} r^i = \frac{r^{n+1} - 1}{r - 1} - r \simeq \frac{r^{n+1}}{r - 1}$$
+where the approximation is for large $n$ and $r > 1$. The number of leaf nodes is $r^n$, thus in this approximation the ratio of leaf nodes to the total number of nodes will be $r^n (r-1)/r^{n+1} = (r-1)/r$. Thus the saving in the chain completion is greatest for low $r$: in a binary tree, half the nodes will be concentrated in the leaf nodes. The semantic network we considered above has a saving corresponding to $r = 3$.
+
+The second taxonomy we considered was that of WordNet\index{WordNet} \citep{Fellbaum:98}. This is a very different situation to that just considered, having a much greater number of nodes, and no tree structure --- quite a large number of nodes have more than one parent. We looked at a subset of around 43,000 nodes using the hypernymy relation of nouns only; each node corresponds to a ``synset'' or concept corresponding to senses of terms in WordNet. We found a covering collection of chains using around 35,000 chains: a saving in terms of dimensionality of around 20\%. This does not give a unique representation however, and thus potentially suffers from some of the same problems as the two dimensional representations. The total number of maximal chains was around 60,000, meaning the unique chain-based representation would be less efficient than the straightforward vector lattice completion in which each dimension corresponds to a node.
+
+It seems that chain-based representations are able to provide modest improvements in the efficiency of vector lattice representations, especially in the case of taxonomies with a tree structure. It is our hope, however, that techniques such as dimensionality reduction will eventually provide a means to find much more efficient representations, as long as it is possible to find good quality approximations which retain as much structure as possible of the original vector lattice.
+
+\index{vector lattice completion!efficient|)}
+
+%\subsection{Context-theoretic Taxonomies}
+%\index{context-theoretic!taxonomies}
+
+%The unifying mathematics of vector lattices allows us to view ontological representations and vector based representations based on the analysis of contexts from the same perspective. Just as we have endowed the partial ordering of taxonomies with a vector structure, we can view the vectors of context-based methods as having a lattice structure. We can view such a structure as a ``context-theoretic taxonomy''. It satisfies the mathematical requirements of a taxonomy, yet it is not considered as representing concepts that are necessarily related to the real world: it merely represents contexts that terms appear in. Thus the representations discussed in the first chapter --- the vectors of latent semantic analysis and the feature vectors of distributional similarity --- can be considered as describing context-theoretic taxonomies.
+
+%It is this unifying perspective that we hope will lead the way to new methods combining ontological (model-theoretic) and context-theoretic representations and techniques.
+
+\section{Representing Ambiguous Terms}
+\label{representing-words-section}
+
+So far we have only really considered representing concepts, or \emph{senses} of terms; we have not been concerned yet with how to represent terms themselves, which may be ambiguous with meanings covering many senses. For example, we view the structure of WordNet\index{WordNet}, which describes senses of terms, as a partial ordering, or as elements of a vector lattice. If we want to combine the vector lattice representations of the senses of a term to form something representing the ambiguous meaning, what is the correct way to do this?
+
+Context-theoretic techniques provide an answer: if we look at the most straightforward model of context, the representation of a term is given by the vector sum of the representations of its contexts. This can easily be seen by considering the model of context discussed in the first chapter: if we add sense tags to the terms occurring in a corpus, then look at the vector representations of the individual senses of a term, since the vector representation is formed linearly, summing these representations will give us the same vector as that arrived at by looking at occurrences of the term without sense tags. This also makes sense from a probabilistic perspective; the probability of the occurrence of a term in a corpus is the sum of the probability of the occurrences of its senses, and this property is carried over in the $L^1$ norm of the corresponding vector representations. Looking at the lattice structure, this construction behaves as we would expect: each sense of a term entails the term itself. Thus if a term $w$ has $n$ senses $s_1, s_2, \ldots s_n \in S$, then the context vector of $w$ would be
+$$\hat{w} = \sum_{i=1}^n \hat{s}_i$$
+where $\hat{s}_i$ is the context vector of sense $s_i$.
+
+When it comes to making use of vector representations of taxonomies, however, we run into a problem. We have constructed our vectors so that the $L^1$ norm corresponds to the probability of the \emph{concept}, which depends on the taxonomic structure. According to the context-theoretic philosophy, the representation of a term should be constructed linearly from the representations of its senses, however the probability of the occurrence of a \emph{sense} does not coincide with the probability of a concept. For example, the meaning of the word ``entity'' corresponds to the most general concept in some taxonomies, and thus the probability of the concept \emph{entity} is 1. However the word itself occurs fairly rarely in corpora, and we would expect it to have a fairly low probability even with respect to terms representing much more general concepts.
+
+Looking at the situation from a context-theoretic perspective helps us to find an answer. We can view each node in the taxonomy as a context that terms can occur in. In the ideal vector completion a concept $s$ is represented as a sum over basis vectors corresponding to the nodes representing concepts at least as general as $s$. When $s$ is the sense of a term, we view the term as occurring in sense $s$ in contexts corresponding to the concepts at least as general as $s$. We may know the probability of the sense, but we have no way to distribute this probability over the hypothetical contexts.
+
+One way of getting around this problem is to renormalise the vectors representing the individual senses $s_i$ and scale them according to the probability $\pi_i$ that the term $w$ occurs in sense $s_i$ (so that $\sum_i \pi_i$ is equal to the probability of term $w$ occurring):
+$$\bar{w} = \sum_{i=1}^n \frac{\pi_i}{\|\bar{s}_i\|_1}\bar{s}_i$$
+%However there is a subtle distinction between distributional \emph{generality} of meaning and probability of occurrence that this representation doesn't capture: it doesn't distinguish between senses of words that occur fairly rarely but in a broad range of contexts, and senses of words that occur frequently in similar contexts.
+
+%This distinction is recognised by vector based techniques, which place emphasis on determining distributional generality. These techniques point towards a view of meanings as \emph{projections} on a vector space, corresponding to subspaces that space, rather than elements of a vector space.
+
+Thus we have a plausible way of representing terms as vectors. If we are to make use of these representations as part of a context theory, however, we have to be able to consider them as elements of an algebra. We have already seen the use of projections to represent lattice structures in the previous chapter, and again it is an algebra formed from projections that we will use to represent meanings of words within the setting of a context theory. In fact, as we will show, work in measures of distributional similarity supports the idea of representing meanings as projections.
+
+\subsection{Distributional Similarity and Projections}
+\label{dist-sim-projections-section}
+\index{distributional similarity|(}
+
+The work of \cite{Lee:99} analyses distributional similarity measures with respect to the \emph{support} of the underlying distribution. Let $f_t(c)$ denote the observed frequency of term $t$ occurring in context $c$. The support $S(t)$ of $f_t$ is the set of contexts $c$ for which $f_t(c)$ is non-zero;
+$$S(t) = \{c \in C : f_t(c) > 0\}$$
+where $C$ denotes the set of possible contexts that terms may occur in, or the feature space. According to our previous analysis, we consider the function $f_t$ as a vector in the space $L^\infty(C)$.
+
+Lee considers measures of the degree of similarity between two terms $u$ and $v$. She shows that the three best performing measures (which include the $L^1$ norm, $\|f_u - f_v\|_1$) all depend only on the behaviour of the functions $f_u$ and $f_v$ on the intersection of the supports of the two terms, $S(u,v) = S(u) \cap S(v)$. Those measures which placed emphasis on the behaviour of the functions outside of this set, such as the $L^2$ norm, generally performed poorly in comparison.
+
+\cite{Weeds:03}\index{Weeds, Julie} takes this analysis further, considering different functions $D(t,c)$ measuring the degree of association between a term $t$ and context $c$. The support with respect to $D$ is defined as $S_D(t) = \{c \in C : D(t,c) > 0\}$. She then considers the \emph{precision} according to an ``additive model'' defined in terms of $D$:
+$$\mathcal{P}^\textrm{add}(u,v) = \frac{\sum_{c \in S_D(u,v)} D(u,c)}{\sum_{c\in S_D(u)} D(u,c)};$$
+\emph{recall} can then be defined as the dual of precision, $\mathcal{R}^\textrm{add}(u,v) = \mathcal{P}^\textrm{add}(v,u)$. Weeds goes on to show how a general framework to describe distributional similarity measures can be described in terms of measures of precision and recall, and evaluates a range of measures within her framework. The best performing measure made use of the additive model of precision and recall together with a mutual information based function for $D$.
+
+The details of Weeds' analysis are not so relevant for us; what is important to note is that in Weeds' additive model there is a move away from considering terms merely as vectors, and that this move is experimentally successful. What we will show is that we can view the additive model as representing terms as \emph{projections}, special kinds of operators on a vector space.
+
+The vector space we are considering is given by the set $C$ of contexts that terms may occur in; we denote it $L^\infty(C)$; each element $c$ of $C$ has a corresponding basis element $e_c \in L^\infty(C)$. Given a subset of contexts $X$, $X\subseteq C$, we can view the vector space $L^\infty(X)$ as a subspace of $L^\infty(C)$. This subspace defines a projection $P_X$ on $L^\infty(C)$.
+
+To specify this in more detail, consider a vector $f$ defined on $L^\infty(C)$ in terms of its components $\alpha_c$, where $f = \sum_{c\in C} \alpha_c e_c.$
+The effect of the projection $P_X$ is then defined as follows:
+$$P_Xf = \sum_{c \in X} \alpha_c e_c.$$
+Given two subsets $X$ and $Y$ of $C$, it is easy to see that $P_XP_Y = P_{X \cap Y}$, thus the projection encodes set-theoretic behaviour. Since the definitions of precision and recall depend on the intersection of supports, we can translate these definitions into ones based on projections:
+$$\mathcal{P^\textrm{add}}(u,v) = \|P_uP_v\Omega_D(u)\|_1,$$
+where $P_t = P_{S_D(t)}$ and $\Omega_D(u)$ is a vector in $L^\infty(C)$ given in terms of its components by
+$$\Omega_D(u) = \frac{1}{\sum_{c\in C} D(u,c)}\sum_{c \in C}D(u,c)e_c.$$
+
+This representation comes close to providing us with a context theory; words can be represented as operators on a vector lattice and thus are elements of an algebra; the difference is that there is not a unique linear functional under consideration, the linear functional (which depends on $\Omega_D(u)$) is different depending on what element we are considering precision with respect to. The preceding analysis does however, point to the representation of meanings as projections on a vector lattice; we will show how such representations allow us to combine representations of concepts to form representations of the meanings of words.
+
+\index{distributional similarity|)}
+
+\subsection{Combining Concept Projections}
+\label{ideal-projection}
+
+So far we have not discussed the relationship between vector lattice completions and the context-theoretic framework itself. The previous completions we have discussed cannot be considered as context theories since they deal only with the vector lattice structure: there is no definition of multiplication on this space. In general, when discussing taxonomies the concept of multiplication on the vector space is not relevant, however there may be situations where it is useful to be able to define multiplication. For example, we may wish to make use of ontological representations as part of a larger context theory, in which case it helps to have a description of ontologies within the context-theoretic framework.
+
+In this section we will show how terms can be represented within the context-theoretic framework as projections on a vector space. First we show how concepts in a taxonomy can be represented in terms of projections together with a linear functional.
+
+\begin{defn}[Ideal Projection Completion]\index{vector lattice completion!ideal projection completion} If $S$ is a probabilistic taxonomy with probability distribution function $p \in L^\infty(S)$, then the \emph{ideal projection} $P_x$ associated with $x\in S$ is the projection $P_{\down{x}}$ on the space $L^\infty(S)$. We define a linear functional $\phi$ on the space of operators on $L^\infty(S)$ by
+$$\phi(A) = \|(Ap)^+\|_1 - \|(Ap)^-\|_1,$$
+\end{defn}
+\begin{prop}
+The ideal projection completion defines a vector lattice completion for $S$, such that $\phi(P_x) = \hat{p}(x)$.
+\end{prop}
+
+\begin{proof} There is clearly a lattice isomorphism between the ideal completion representation $\down{x}$ of $x\in S$ and the projection $P_x$; for example
+$$P_xP_y = P_{\down{x}\cap\down{y}}.$$
+Then note that
+$\phi(P_x) = \|P_xp\|_1 = \sum_{y \in \down{x}}p(y) = \hat{p}(x).$
+\end{proof}
+
+%Note that the new representation encodes probabilities in the linear functional rather than directly in the representation of individual concepts, in contrast to the ideal vector completion introduced earlier. %This gives us additional flexibility to combine concept representations in a way which preserves the partial ordering relation as we would expect from a context-theoretic perspective.
+
+The ideal projection completion can in fact be used to define a context theory for an alphabet $A$ if we have a way of associating elements of $A$ with concepts in $S$; for example $A$ may be a set of terms and $S$ a taxonomy of their meanings. If the words are unambiguous they will be associated with just one concept in $S$. Thus we can associate with each term a projection on $L^\infty(S)$.
+
+%The new flexibility comes in being able to add these projections to create representations of words.
+Following the reasoning of previous sections, we can sum these projections to obtain representations of ambiguous terms. If a term $w$ has $n$ senses $s_1, s_2, \ldots s_n \in S$, and the term $w$ occurs in the sense $s_i$ with probability $\pi_i$, then we can represent $w$ as a probabilistic sum of the projection representation of its senses:
+$$\bar{w} = \sum_{i = 1}^n \frac{\pi_i}{\phi(P_{s_i})} P_{s_i},$$
+where $\bar{w}$ is the representation of $w$ as an operator on $L^\infty(S)$. The factor $\pi_i/\phi(P_{s_i})$ ensures that $\phi(\bar{w})$ is equal to the probability of term $w$; it can be interpreted as the conditional probability that $w$ occurs in sense $s_i$ given that some term has occurred in some sense $t$ at least as general as $s_i$, that is $s_i \le t$.
+
+Because we represent terms as operators, in addition to the usual lattice operations, which work in a similar way to the ideal vector completion, multiplication is also defined on the representations. We can think of the probabilistic sum of senses as representing our uncertainty about the meaning of a term. The product of two terms then, would represent our uncertainty about the conjunction of their meanings. For example, if we approximate the meaning\footnote{Meanings are based on Wordnet definitions \citep{Fellbaum:98}; probabilities are invented.} of the word \emph{line} by
+$$\bar{w}_l = \tfrac{3}{10}P_{l_1} + \tfrac{1}{10}P_{l_2}$$
+where $l_1$ represents the sense ``a formation of people or things one beside another'' and $l_2$ represents the sense ``a mark that is long relative to its width'', and the word \emph{mark} by
+$$\bar{w}_m = \tfrac{1}{5}P_{m_1} + \tfrac{1}{10}P_{m_2}$$
+where $m_1$ represents the sense ``grade or score'' and $m_2$ represents the sense ``a visible indication made on a surface'', then the product is given by
+$$\hat{w}_l\hat{w}_m = \tfrac{3}{50}P_{l_1}P_{m_1} + \tfrac{3}{100}P_{l_1}P_{m_2} + \tfrac{1}{50}P_{l_2}P_{m_1} + \tfrac{1}{100}P_{l_2}P_{m_2} .$$
+If we further assume that the meanings of senses are disjoint, except for those referring to the sense ``a mark that is long relative to its width'' and the sense ``a visible indication made on a surface''; that is we assume $P_xP_y = 0$ unless $x = l_2$ and $y = m_2$ or vice versa, in which case $P_{l_2}P_{m_2} = P_{l_2}$ since a line is a type of mark. Then $\hat{w}_l\hat{w}_m = \tfrac{1}{100}P_{l_2}$; the product has disambiguated the meaning of both words.
+
+\section{Conclusions and Future Work}
+
+In this chapter we have discussed ways to represent taxonomic structure in terms of vector lattices. We have given several constructions with various properties, enabling probabilistic information to be incorporated into the vector lattice, allowing distances between concepts to be preserved, and reducing the number of dimensions needed for a representation. We also discussed ways in which ambiguous terms may be represented in terms of the vectors representing concepts, and gave a construction for which multiplication is defined, giving us a context theory.
+
+The ideas of this chapter give plenty of potential for future work. The constructions suggest new measures of semantic distance: for example, the $l^p$ norm could be used together with such representations as a distance measure. The representation also gives us a way to measure semantic distance between ambiguous terms, something that may prove useful in applications.
+
+There may also be ways that the techniques of this chapter can be used to help build taxonomies automatically, by looking for correlation between semantic distance and measures of distributional similarity and using this to place concepts in the vector lattice, and hence in the taxonomies.
+
+ \index{taxonomy|)}
+
+%This ability to calculate products by representing words as operators will be important in Chapter 8 when we combine the techniques described in this chapter with algebraic descriptions of syntax to begin to build more complete natural language representations in terms of algebra.
+
+%It is interesting to note that it is always the case that $w_1w_2 \le w_1 \land w_2$
+
+%For example, given two words $w_1$ and $w_2$ with meanings represented by $\hat{w}_1 = \tfrac{1}{10}P_q + \tfrac{3}{10}P_r$ and $\hat{w}_2 = \tfrac{1}{10}P_s + \tfrac{1}{5}P_t$ then the representation of their product would be
+%$$\hat{w}_1\hat{w}_2 = \tfrac{1}{100}P_qP_s + \tfrac{1}{50}P_qP_t + \tfrac{3}{100}P_rP_s + \tfrac{3}{50}P_rP_t.$$
+
+
+
+% \bibliographystyle{plainnat}
+% \bibliography{contexts}
+ 
+% \end{document}

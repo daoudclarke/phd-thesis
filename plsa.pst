@@ -1,0 +1,18 @@
+%Created by jPicEdt 1.x
+%PsTricks format (pstricks.sty needed)
+%Wed Jun 21 07:33:01 BST 2006
+\psset{xunit=1mm,yunit=1mm,runit=1mm}
+\begin{pspicture}(0,0)(75.00,30.00)
+\pscircle[linewidth=0.15,linecolor=black](37.50,7.50){7.50}
+\pscircle[linewidth=0.15,linecolor=black](67.50,7.50){7.50}
+\pscircle[linewidth=0.15,linecolor=black](7.50,7.50){7.50}
+\psline[linewidth=0.15,linecolor=black]{->}(45.00,7.50)(60.00,7.50)
+\psline[linewidth=0.15,linecolor=black]{->}(30.00,7.50)(15.00,7.50)
+\psline[linewidth=0.15,linecolor=black]{->}(37.50,30.00)(37.50,15.00)
+\rput(67.50,7.50){$d$}
+\rput(7.50,7.50){$w$}
+\rput(37.50,7.50){$z$}
+\rput(43.25,22.50){$P(z)$}
+\rput(52.50,11.25){$P(d|z)$}
+\rput(22.50,11.25){$P(w|z)$}
+\end{pspicture}

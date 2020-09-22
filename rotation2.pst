@@ -1,0 +1,15 @@
+%Created by jPicEdt 1.x
+%PsTricks format (pstricks.sty needed)
+%Wed Jan 24 15:59:28 GMT 2007
+\psset{xunit=1mm,yunit=1mm,runit=1mm}
+\begin{pspicture}(0,0)(30.00,30.00)
+\psline[linewidth=0.15,linecolor=black]{->}(5.00,5.00)(5.00,30.00)
+\psline[linewidth=0.15,linecolor=black]{->}(5.00,5.00)(30.00,5.00)
+\psline[linewidth=0.50,linecolor=black]{->}(5.00,5.00)(19.14,19.14)
+\rput(25.00,0.00){$x$}
+\rput(0.00,25.00){$y$}
+\psline[linewidth=0.15,linecolor=black,linestyle=dashed,dash=1.00 1.00]{-}(19.14,19.14)(19.14,5.00)
+\psline[linewidth=0.15,linecolor=black,linestyle=dashed,dash=1.00 1.00]{-}(19.14,19.14)(5.00,19.14)
+\rput(24.00,12.00){${\scriptstyle 1/\sqrt{2}}$}
+\rput(12.00,22.00){${\scriptstyle 1/\sqrt{2}}$}
+\end{pspicture}

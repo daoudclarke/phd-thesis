@@ -1,0 +1,133 @@
+%Bismillahi-r-Rahmani-r-Rahim
+\documentclass[a4paper,oneside,12pt]{report}
+
+%\includeonly{model-theoretic,ontologies,syntax}
+
+%Commands:
+\usepackage{makeidx}
+
+%\usepackage{natbib}
+
+%\usepackage{anysize}
+\usepackage[left=4cm,right=2cm,top=2.5cm,bottom=2.5cm]{geometry}
+
+\usepackage{setspace}
+\onehalfspacing
+
+\makeindex
+
+\usepackage{thesis}
+
+\input{head}
+
+%\linespread{1.3}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhead{}
+\chead{\thepage}
+\fancyfoot{}
+\setlength{\headheight}{14.5pt}
+\renewcommand{\headrulewidth}{0pt}
+
+\title{Context-theoretic Semantics for Natural Language: an Algebraic Framework}
+\author{Daoud Clarke}
+\date{September 2007}
+
+\begin{document}
+
+\begin{titlepage}
+\vspace*{2.5cm}\noindent
+%\LARGE{\textbf{Context-theoretic Semantics for Natural Language}}\\
+%\Large{\textbf{an Algebraic Framework}}
+{\cmtitle Context-theoretic Semantics for Natural Language}\\
+{\cmsection an Algebraic Framework}
+\vspace{0.5cm}\\
+\large{Daoud Clarke}
+\vspace{0.5cm}\\
+\large{Submitted for the degree of D.Phil.}\\
+\large{University of Sussex}\\
+\large{September 2007}
+\end{titlepage}
+
+\begin{titlepage}
+\vspace*{2.5cm}\noindent
+{\cmsection Declaration}
+\vspace{0.5cm}\\
+\noindent
+I hereby declare that this thesis has not been and will not be, submitted in whole or in part to another University for the award of any other degree.
+\vspace{2cm}\\
+\noindent Signature:
+\end{titlepage}
+
+\begin{titlepage}
+\vspace*{2.5cm}\noindent
+%\LARGE{\textbf{Context-theoretic Semantics for Natural Language}}\\
+%\Large{\textbf{an Algebraic Framework}}
+{\cmtitle Context-theoretic Semantics for Natural Language}\\
+{\cmsection an Algebraic Framework}
+\vspace{0.5cm}\\
+\large{Daoud Clarke}
+\vspace{0.5cm}\\
+\large{Submitted for the degree of D.Phil.}\\
+\large{University of Sussex}\\
+\large{September 2007}
+\vspace{1cm}\\
+{\cmsection Summary}
+
+\singlespacing
+\noindent\normalsize{Techniques in which words are represented as vectors have proved useful in many applications in computational linguistics, however there is currently no general semantic formalism for representing meaning in terms of vectors. We present a framework for natural language semantics in which words, phrases and sentences are all represented as vectors, based on a theoretical analysis which assumes that meaning is determined by context.
+
+In the theoretical analysis, we define a \emph{corpus model} as a mathematical abstraction of a text corpus. The meaning of a string of words is assumed to be a vector representing the contexts it occurs in in the corpus model. Based on this assumption, we can show that the vector representations of words can be considered as elements of an algebra over a field. We note that in applications of vector spaces to representing meanings of words there is an underlying lattice structure; we interpret the partial ordering of the lattice as describing entailment between meanings. We also define the \emph{context-theoretic probability} of a string, and, based on this and the lattice structure, a \emph{degree of entailment} between strings. 
+
+Together these properties form guidelines as to how to construct semantic representations within the framework. A \emph{context theory} is an implementation of the framework; in an implementation strings are represented as vectors with the properties deduced from the theoretical analysis.
+
+We show how to incorporate logical semantics into context theories; this enables us to represent statistical information about uncertainty by taking weighted sums of individual representations. We also use the framework to analyse approaches to the task of recognising textual entailment, to ontological representations of meaning and to representing syntactic structure. For the latter, we give new algebraic descriptions of link grammar.}
+\end{titlepage}
+
+\onehalfspacing
+
+\chapter*{Acknowledgements}
+
+\textit{In the name of God, the Merciful the Compassionate. All praise is due to God, Lord of the worlds. He knows what is in the heavens and earth, and none can encompass any of His knowledge except as He wills. Oh God, teach us that which benefits us and benefit us by that which you teach us. Increase us in knowledge, and make us of benefit to mankind. Send Your prayers and deep peace upon our master Muhammad, the unlettered prophet and final messenger, until the end of time.}
+\vspace{0.5cm}\\
+I am indebted to many people for their help during my time at Sussex: firstly and most importantly to my supervisor David Weir for his support and encouragement, for many in-depth discussions and for his detailed criticism of the thesis.
+
+I am grateful to many people for helpful discussions and suggestions: to Bill Keller, John Carroll, Peter Williams and all my friends and colleagues at the University of Sussex. I am also grateful to Mark Hopkins for discussions via e-mail and for alerting me to the possibility of using Fock space to represent syntax. 
+
+Finally, I wish to thank my parents for supporting me in so many ways throughout my studies, including helping to proof-read the final text, and my wife for moral support in the final stages of writing up.
+%\maketitle
+\include{preface.tex}
+\include{contents}
+
+%Part 1
+\include{introduction}
+\include{background}
+\include{meaning-context}
+
+%Part 2
+%\include{context-theories}
+\include{entailment}
+\include{model-theoretic}
+\include{ontologies}
+\include{syntax}
+\include{conclusion}
+\appendix
+\include{definitions}
+
+
+
+\bibliographystyle{plainnat}
+
+\addcontentsline{toc}{chapter}{Bibliography}
+\bibliography{contexts}
+
+\addcontentsline{toc}{chapter}{Index}
+\printindex
+
+\end{document}
+
+
+
+
+

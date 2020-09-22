@@ -1,0 +1,251 @@
+\begin{theindex}
+
+  \item Abrusci, V.~M., 108
+  \item abstract Lebesgue space, 36, 46, 48, \textbf{147}
+  \item algebra, 78
+    \subitem formed from semigroup, 148
+    \subitem lattice-ordered, 45, 47
+    \subitem over a field, 30, 40--43, 46, \textbf{147}
+  \item ambiguity, 67, 87
+    \subitem lexical, 79--81
+
+  \indexspace
+
+  \item Banach space, 45, \textbf{141}
+  \item Bar-Hillel categorial grammar, 106
+  \item basis, 33, 42, \textbf{140}
+    \subitem orthonormal, \textbf{140}
+  \item Bayesianism, 72--74, 85
+  \item bilinear logic, 108, 110
+  \item birooted word-trees, 121
+  \item Boolean algebra, 70, 82, \textbf{145}
+    \subitem canonical form, 83
+  \item bounded function, 32, \textbf{141}
+  \item bracket semigroup, \textbf{119}, 124
+
+  \indexspace
+
+  \item categorial grammar, 106--111
+    \subitem and context theories, 109--111
+    \subitem and link grammar, 126
+  \item chain, \textbf{95}
+  \item classification task, 57
+  \item completeness, 45, \textbf{141}
+  \item congruence, \textbf{137}
+  \item context algebra, \textbf{42}
+  \item context theory, \textbf{47}, 60--63, 74, 134
+    \subitem strong, \textbf{47}
+  \item context vector, \textbf{32}
+  \item context-theoretic
+    \subitem framework, 8--11, 45, \textbf{47}, 86
+    \subitem probability, 30, \textbf{37}, 46
+  \item corpus model, \textbf{31}
+    \subitem general, \textbf{77}
+    \subitem semantic, 78--79
+  \item creation and annihilation operators, 113--116
+
+  \indexspace
+
+  \item data sparseness, 32
+  \item dimensionality reduction, 118
+  \item direct sum, \textbf{141}
+  \item distance measures
+    \subitem on taxonomies, 90
+  \item distributional
+    \subitem generality, 17
+    \subitem hypothesis, 7, 15--17
+    \subitem inclusion hypotheses, 17
+    \subitem similarity, 17, 18, 26--28
+  \item distributional similarity, 86, 99--101
+  \item distributivity, 43
+  \item dot product, 140
+
+  \indexspace
+
+  \item entailment, 30
+    \subitem and lattice structure, 35
+    \subitem degree of, 9, 39--40, \textbf{48}, 50, 83, 110
+    \subitem lexical, 17
+    \subitem textual, 50
+      \subsubitem PASCAL Challenge, 8, 50--60
+
+  \indexspace
+
+  \item field, \textbf{136}
+  \item filter, 145
+  \item Firth, J.~R., 7, 14--15, 18
+  \item Fock space, 113, \textbf{113}, 118, 119
+  \item free probability, 113, \textbf{127}, 134
+  \item free semigroup, 110, \textbf{136}
+    \subitem and Lambek calculus, 107
+  \item fuzzy logic, 82
+
+  \indexspace
+
+  \item Girard, J.~Y., 108
+  \item Glickman and Dagan
+    \subitem lexical entailment model, 55, 62--63
+    \subitem textual entailment framework, 54, 60
+  \item group, \textbf{136}
+
+  \indexspace
+
+  \item Harris, Zellig, 7, 15--18
+  \item Hasse diagram, 143
+    \subitem planar, 94
+  \item Hilbert space, 113--116, \textbf{141}
+  \item hypernymy, 17, 88
+
+  \indexspace
+
+  \item ideal (lattice), 145
+    \subitem completion, \textbf{146}
+  \item ideal completion, 69
+  \item ideal vector completion, 90
+  \item idempotents, 120
+  \item information content, 92
+  \item inner product, \textbf{139}
+  \item inverse semigroup
+    \subitem free, 124
+  \item inverse semigroups, \textbf{120}
+    \subitem free, 121
+
+  \indexspace
+
+  \item Jaccard's coefficient, 28
+  \item Jiang and Conrath, 91--92
+
+  \indexspace
+
+  \item Kullback-Leibler divergence, 28
+
+  \indexspace
+
+  \item $L^1$ norm, 28, 36
+  \item $L^\infty$, 32
+  \item Lafferty et al., 116
+  \item Lambek calculus, 106--108
+  \item Lambek,  Joachim, 106, 108
+  \item latent Dirichlet allocation, 24--26, 32
+  \item latent semantic analysis, 18--22, 86, 113
+    \subitem probabilistic, 22--24
+  \item lattice, 30, \textbf{143}
+    \subitem and logic, 70
+    \subitem distributive, \textbf{144}
+    \subitem modular, \textbf{144}
+  \item lattice homomorphism, \textbf{145}
+  \item lattice homomorphism (operator), \textbf{149}
+  \item lattice ordered algebra, 109
+  \item lexical overlap, 53, 61
+  \item limit, 140
+  \item Lin, Dekang, 28
+  \item linear functional, 149
+  \item link grammar, 111--126
+    \subitem stochastic, 116
+  \item logical language
+    \subitem probabilistic, \textbf{73}
+  \item logical semantics, 7, 9, 67--85, 131
+    \subitem and textual entailment, 57--60
+  \item $l^p$ norm, \textbf{139}
+  \item $L^p$ space, \textbf{141}
+  \item $l^p$ space, \textbf{141}, 146
+  \item \L ukasiewicz logic, 82
+
+  \indexspace
+
+  \item matrices, 113, 127
+    \subitem and link grammar, 117--118
+  \item meaning
+    \subitem and lattice structure, 30, 33
+    \subitem as context, 7, 14, 30, 32
+    \subitem as use, 7, 14
+  \item metric, \textbf{138}
+  \item Munn, W.~D., 121
+
+  \indexspace
+
+  \item non-commutative probability, \textbf{44}, 147
+
+  \indexspace
+
+  \item ontologies, 86, 88
+  \item operator (linear), \textbf{148}
+    \subitem positive, \textbf{149}
+  \item order embedding, \textbf{145}
+
+  \indexspace
+
+  \item parsers, 67, 112, 126
+    \subitem and operators, 118
+  \item partial ordering, 30, 89, \textbf{142}, 145
+  \item parts of speech, disambiguating, 81
+  \item philosophy of meaning, 13--18
+  \item positive vector, \textbf{146}
+  \item pregroup, 109, \textbf{109}
+  \item principle ideal, 146
+  \item probabilistic logical translation, \textbf{76}
+  \item probability
+    \subitem of a string, 78
+  \item propositional calculus, 70--71, 82
+
+  \indexspace
+
+  \item quantum mechanics, 113
+
+  \indexspace
+
+  \item random projections, 118
+  \item residuated lattice, \textbf{107}, 109, 110
+  \item retrieval, 113
+
+  \indexspace
+
+  \item scoring, 57
+  \item semantic disambiguation, 81
+  \item Semantic Network, 97
+  \item semigroup, \textbf{136}
+    \subitem lattice ordered, \textbf{107}
+    \subitem partially ordered, \textbf{107}
+  \item semilattice, \textbf{143}
+  \item Sleator and Temperly, 111
+  \item statistical disambiguation, 81
+  \item sub-vector lattice, 47
+  \item subsequence matching, 60
+
+  \indexspace
+
+  \item taxonomy, 86--103
+    \subitem probabilistic, \textbf{90}
+    \subitem real valued, \textbf{90}
+  \item tensor product, \textbf{142}
+  \item tree, 88, \textbf{91}, 96
+    \subitem Munn, 121, 124, 127
+    \subitem regular, 97
+  \item trigrams, 116
+
+  \indexspace
+
+  \item uncertainty, representing, 9, 67, 71--81
+  \item Unified Medical Language System, 97
+
+  \indexspace
+
+  \item vector lattice, 30, 34, 88, \textbf{146}
+  \item vector lattice completion, 86, 87, \textbf{89}
+    \subitem chain completion, 95
+    \subitem distance preserving, 87, 91--94
+    \subitem efficient, 94--98
+    \subitem ideal projection completion, 101
+    \subitem probabilistic, 87, 90--91
+  \item vector space, \textbf{137}
+    \subitem finite dimensional, \textbf{137}
+    \subitem partially ordered, \textbf{146}
+
+  \indexspace
+
+  \item Weeds, Julie, 99
+  \item Wittgenstein, Ludwig, 7, 13--14, 18
+  \item word sense disambiguation, 67, 81
+  \item WordNet, 88, 97, 98
+
+\end{theindex}

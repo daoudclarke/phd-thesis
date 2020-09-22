@@ -1,0 +1,90 @@
+\ifx\thesishead\undefined
+\newcommand*{\thesishead}{}
+
+%Packages:
+ \usepackage[round]{natbib}
+ \usepackage{amsthm}
+ \usepackage{amssymb}
+ \usepackage[leqno]{amsmath}
+ \usepackage{eufrak}
+ \usepackage{graphs}
+ %\usepackage{linguex}
+ \usepackage{enumerate}
+ \usepackage{algorithmic}
+ \usepackage[plain]{algorithm}
+ \usepackage{fancyvrb}
+\usepackage{pstricks}
+ \usepackage{subfigure}
+\usepackage{enumerate}
+\usepackage{bm}
+\usepackage{graphicx}
+%\usepackage{setspace}
+
+
+ \newenvironment{itemizes}{\vspace{0.1cm}}{\\}
+ \newcommand{\items}{\\ \vspace{0.1cm}\indent}
+
+%For entailment
+\newcommand{\swl}[1]{\rotatebox{90}{\parbox{4cm}{\begin{flushleft}\vspace{-0.1cm}{#1}\vspace{-0.1cm}\end{flushleft}}}}
+
+
+%For meanings section
+\DeclareMathOperator{\Ent}{Ent} 
+\DeclareMathOperator{\Occ}{Occ}
+ 
+\newcommand{\upa}{\Uparrow\!}
+ 
+ %Commands for ontology section:
+ %\newcommand{1}{\mathbf{1}}
+%\newcommand{0}{\mathbf{0}}
+\newcommand{\bv}{\mathbf{v}}
+\newcommand{\bu}{\mathbf{u}}
+\newcommand{\down}[1]{\left\downarrow(#1)\right.}
+\newcommand{\downnb}[1]{\left\downarrow#1\right.}
+\newcommand{\downe}[1]{\left\downarrow_\vdash(#1)\right.}
+\newcommand{\up}[1]{\left\uparrow(#1)\right.}
+%\newcommand{\com}{\mathrm{com}}
+\DeclareMathOperator{\com}{com}
+\DeclareMathOperator{\pre}{pre}
+\DeclareMathOperator{\inc}{inc}
+\DeclareMathOperator{\Cont}{Cont}
+\DeclareMathOperator{\syn}{Syn}
+\DeclareMathOperator{\Sub}{Sub}
+\DeclareMathOperator{\FIS}{FIS}
+%\DeclareMathSymbol{\Z}{\mathbin}{AMSb}{"5A}
+%\DeclareMathSymbol{\R}{\mathbin}{AMSb}{"52}
+\newcommand{\Par}{\mathrm{Par}}
+\newcommand{\IC}{\mathit{IC}}
+
+%Commands for definitions section:
+ \newcommand{\R}{\mathbb{R}}
+ \newcommand{\bra}[1]{\langle #1|}
+\newcommand{\ket}[1]{|#1 \rangle}
+\newcommand{\bracket}[2]{\langle #1| #2\rangle}
+\newcommand{\inprod}[2]{\langle #1, #2 \rangle}
+\newcommand{\Tr}[0]{\mathrm{Tr}}
+
+\newcommand{\sbra}[1]{\langle #1\|}
+\newcommand{\sket}[1]{\|#1 \rangle}
+\newcommand{\sbracket}[2]{\langle #1\| #2\rangle}
+
+%Theorems etc:
+\newtheorem{prop}{Proposition}[chapter]
+\newtheorem{assumption}{Assumption}
+ \theoremstyle{definition}
+ \newtheorem{defn}[prop]{Definition}
+  \newtheorem{conj}[prop]{Conjecture}
+% \theoremstyle{remark}
+% \newtheorem*{remark}{Remark}
+ \newtheorem{example}[prop]{Example}
+\theoremstyle{remark}
+
+
+
+\newcommand{\formulise}[1]{\begin{center}#1\\[6pt]\end{center}}
+
+
+\fi
+
+
+

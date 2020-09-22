@@ -1,0 +1,112 @@
+%%Created by jPicEdt 1.4pre4: mixed JPIC-XML/LaTeX format
+%%Mon Nov 07 19:37:20 GMT 2005
+%%Begin JPIC-XML
+%<?xml version="1.0" standalone="yes"?>
+%<jpic x-min="-0" x-max="135" y-min="0" y-max="65" auto-bounding="true">
+%<ellipse p1="(-0,30.71)" p2="(17.33,30.71)" p3="(17.33,13.57)" angle-start="0" angle-end="360" closure="open"
+%	
+%	 fill-style="none"
+%	 />
+%<ellipse p1="(34.67,30.71)" p2="(52,30.71)" p3="(52,13.57)" angle-start="0" angle-end="360" closure="open"
+%	
+%	 fill-style="none"
+%	 />
+%<ellipse p1="(69.33,30.71)" p2="(86.67,30.71)" p3="(86.67,13.57)" angle-start="0" angle-end="360" closure="open"
+%	
+%	 fill-style="none"
+%	 />
+%<ellipse p1="(104,30.71)" p2="(121.33,30.71)" p3="(121.33,13.57)" angle-start="0" angle-end="360" closure="open"
+%	
+%	 fill-style="none"
+%	 />
+%<ellipse p1="(86.67,65)" p2="(104,65)" p3="(104,47.86)" angle-start="0" angle-end="360" closure="open"
+%	
+%	 fill-style="none"
+%	 />
+%<multicurve points="(52,22.14);(52,22.14);(69.33,22.14);(69.33,22.14)"
+%	
+%	 fill-style="none"
+%	 right-arrow="head" arrow-head-width-minimum="3" />
+%<multicurve points="(17.33,22.14);(17.33,22.14);(34.67,22.14);(34.67,22.14)"
+%	
+%	 fill-style="none"
+%	 right-arrow="head" arrow-head-width-minimum="3" />
+%<multicurve points="(86.67,22.14);(86.67,22.14);(104,22.14);(104,22.14)"
+%	
+%	 fill-style="none"
+%	 right-arrow="head" arrow-head-width-minimum="3" />
+%<multicurve points="(95.33,47.86);(95.33,47.86);(112.67,30.71);(112.67,30.71)"
+%	
+%	 fill-style="none"
+%	 right-arrow="head" arrow-head-width-minimum="3" />
+%<text text-vert-align="center-v" text-hor-align="center-h" anchor-point="(8.67,9.29)" text-frame="noframe"
+%	
+%	 fill-style="none"
+%	 right-arrow="head" arrow-global-scale-width="2" arrow-global-scale-length="2" >
+%$\alpha$
+%</text>
+%<text text-vert-align="center-v" text-hor-align="center-h" anchor-point="(43.33,9.29)" text-frame="noframe"
+%	
+%	 fill-style="none"
+%	 right-arrow="head" arrow-global-scale-width="2" arrow-global-scale-length="2" >
+%$\theta$
+%</text>
+%<text text-vert-align="center-v" text-hor-align="center-h" anchor-point="(78,9.29)" text-frame="noframe"
+%	
+%	 fill-style="none"
+%	 right-arrow="head" arrow-global-scale-width="2" arrow-global-scale-length="2" >
+%$z$
+%</text>
+%<text text-vert-align="center-v" text-hor-align="center-h" anchor-point="(112.67,9.29)" text-frame="noframe"
+%	
+%	 fill-style="none"
+%	 right-arrow="head" arrow-global-scale-width="2" arrow-global-scale-length="2" >
+%$w$
+%</text>
+%<text text-vert-align="center-v" text-hor-align="center-h" anchor-point="(82.33,56.43)" text-frame="noframe"
+%	
+%	 fill-style="none"
+%	 right-arrow="head" arrow-global-scale-width="2" arrow-global-scale-length="2" >
+%$\beta$
+%</text>
+%<parallelogram p1="(60.67,39.29)" p2="(130,39.29)" p3="(130,5)"
+%	
+%	 fill-style="none"
+%	 right-arrow="head" arrow-global-scale-width="2" arrow-global-scale-length="2" />
+%<text text-vert-align="center-v" text-hor-align="center-h" anchor-point="(65,35)" text-frame="noframe"
+%	
+%	 fill-style="none"
+%	 right-arrow="head" arrow-global-scale-width="2" arrow-global-scale-length="2" >
+%$N$
+%</text>
+%<parallelogram p1="(25,45)" p2="(135,45)" p3="(135,0)"
+%	
+%	 fill-style="none"
+%	 right-arrow="head" arrow-global-scale-width="2" arrow-global-scale-length="2" />
+%</jpic>
+%%End JPIC-XML
+%PsTricks content-type (pstricks.sty package needed)
+%Add \usepackage{pstricks} in the preamble of your LaTeX file
+\psset{xunit=1mm,yunit=1mm,runit=1mm}
+\psset{linewidth=0.3,dotsep=1,hatchwidth=0.3,hatchsep=1.5,shadowsize=1}
+\psset{dotsize=0.7 2.5,dotscale=1 1,fillcolor=black}
+\psset{arrowsize=1 2,arrowlength=1,arrowinset=0.25,tbarsize=0.7 5,bracketlength=0.15,rbracketlength=0.15}
+\begin{pspicture}(0,0)(135,65)
+\rput{0}(8.67,22.14){\psellipse[](0,0)(8.67,-8.57)}
+\rput{0}(43.33,22.14){\psellipse[](0,0)(8.67,-8.57)}
+\rput{0}(78,22.14){\psellipse[](0,0)(8.67,-8.57)}
+\rput{0}(112.67,22.14){\psellipse[](0,0)(8.67,-8.57)}
+\rput{0}(95.33,56.43){\psellipse[](0,0)(8.67,-8.57)}
+\psline[arrowsize=3 2]{->}(52,22.14)(69.33,22.14)
+\psline[arrowsize=3 2]{->}(17.33,22.14)(34.67,22.14)
+\psline[arrowsize=3 2]{->}(86.67,22.14)(104,22.14)
+\psline[arrowsize=3 2]{->}(95.33,47.86)(112.67,30.71)
+\rput(8.67,9.29){$\alpha$}
+\rput(43.33,9.29){$\theta$}
+\rput(78,9.29){$z$}
+\rput(112.67,9.29){$w$}
+\rput(82.33,56.43){$\beta$}
+\pspolygon[arrowscale=2 2](60.67,39.29)(130,39.29)(130,5)(60.67,5)
+\rput(65,35){$N$}
+\pspolygon[arrowscale=2 2](25,45)(135,45)(135,0)(25,0)
+\end{pspicture}

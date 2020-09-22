@@ -1,0 +1,211 @@
+ %Bismillahi-r-Rahmani-r-Rahim
+ %\documentclass{report}
+ 
+% \input{head.tex}
+
+% \begin{document}
+ 
+ \chapter{Taxonomies and Vector Lattices}
+ 
+
+ \section{Introduction}
+
+Ontologies describe relationships between concepts. They are considered to be of importance in a wide range of areas within artificial intelligence and computational linguistics. For example, WordNet \citep{Fellbaum:98} is an ontology that describes relations between word senses.
+
+Arguably the most important relation described in an ontology is the \textbf{is-a} relation (also called subsumption), which describes inclusion between classes of objects.  When applied to meanings of words, the relation is called \emph{hypernymy}. For example, a \emph{tree} is a type of \emph{plant} (the concept \emph{plant} subsumes \emph{tree}), thus the word ``plant'' is a hypernym of ``tree''. The converse relationship between words is called hyponymy, so ``tree'' is a hyponym of ``plant''. A system of classification that only deals with the \textbf{is-a} relation is referred to as a \emph{taxonomy}. An example taxonomy is shown in figure \ref{plant-taxonomy}, with the most general concept at the top, and the most specific concepts at the bottom.
+
+The \textbf{is-a} relation is in general a partial ordering, since
+\begin{itemize}
+\item it is always the case that an $a$ is an $a$ (reflexivity);
+\item if an $a$ is a $b$ and a $b$ is an $a$ then $a$ and $b$ are the same (anti-symmetry).
+\item if an $a$ is a $b$ and a $b$ is a $c$ then an $a$ is necessarily a $c$ (transitivity).
+\end{itemize}
+It may be argued that the second of these is not justified, however, real life taxonomies rarely conflict with this requirement.
+
+The taxonomy described by figure \ref{plant-taxonomy} has a special property: it is a tree, i.e.~no concept subsumed by one concept is subsumed by any other concept. This type of taxonomy will be studied in section \ref{distance}.
+
+\begin{figure}
+\begin{center}
+\begin{graph}(7,6)(0,-5.6)
+%\graphnodesize{0.15}
+%Nodes:
+\textnode{entity}(3.5,0){entity}[\graphlinecolour{1}]
+\textnode{organism}(3.5,-1){organism}[\graphlinecolour{1}]
+\textnode{plant}(3.5,-2){plant}[\graphlinecolour{1}]
+	\textnode{grass}(2,-3){grass}[\graphlinecolour{1}]
+	\textnode{cereal}(1,-4){cereal}[\graphlinecolour{1}]
+		\textnode{oat}(0,-5){\rule[-0.5ex]{0pt}{2.1ex}oat}[\graphlinecolour{1}]
+		\textnode{rice}(1,-5){\rule[-0.5ex]{0pt}{2.1ex}rice}[\graphlinecolour{1}]
+		\textnode{barley}(2,-5){\rule[-0.5ex]{0pt}{2.1ex}barley}[\graphlinecolour{1}]
+	\textnode{tree}(5,-3){tree}[\graphlinecolour{1}]
+		\textnode{beech}(3.5,-4){\rule{0pt}{2ex}beech}[\graphlinecolour{1}]
+		\textnode{chestnut}(5,-4){\rule{0pt}{2ex}chestnut}[\graphlinecolour{1}]
+		\textnode{oak}(6.5,-4){\rule{0pt}{2ex}oak}[\graphlinecolour{1}]
+%\textnode{non}(3.5,-6.5){non-existent}[\graphlinecolour{1}]
+
+%Edges:
+\edge{entity}{organism}
+\edge{organism}{plant}
+\edge{plant}{grass}
+\edge{grass}{cereal}
+	\edge{cereal}{oat}
+	\edge{cereal}{barley}
+	\edge{cereal}{rice}
+\edge{plant}{tree}
+	\edge{tree}{beech}
+	\edge{tree}{chestnut}
+	\edge{tree}{oak}
+
+%\edge{oat}{non}[\graphlinedash{3 1}]
+%\edge{barley}{non}[\graphlinedash{3 1}]
+%\edge{rice}{non}[\graphlinedash{3 1}]
+%\edge{beech}{non}[\graphlinedash{3 1}]
+%\edge{chestnut}{non}[\graphlinedash{3 1}]
+%\edge{oak}{non}[\graphlinedash{3 1}]
+
+\end{graph}
+\end{center}
+\caption{A small example taxonomy extracted from WordNet \citep{Fellbaum:98}.}
+\label{plant-taxonomy}
+\end{figure}
+
+%
+%In fact, we can say more than this: since most taxonomies contain a top-most node representing the most general concept (in the case of figure \ref{plant-taxonomy}, \emph{entity}), the partial ordering defines a \emph{join semilattice} (see chapter \ref{definitions}). For example, the join of the concepts \emph{rice} and \emph{beech} in figure \ref{plant-taxonomy} is \emph{plant}, the least general concept that subsumes both these concepts.\footnote{Having a top-most node is not enough to guarantee that every the structure is a semilattice, although this appears to be the case in real world taxonomies.}
+
+%Note that this definition of join does not match with the normal idea of logical disjunction of a concept. For example, if we say that something is a \emph{beech} or an \emph{oak}, it is definitely a \emph{tree}, but conversely something being a \emph{tree} does not imply that that thing is a \emph{beech} or an \emph{oak}---since it could also be a \emph{chestnut}. Thus the logical disjunction of the concepts \emph{beech} and \emph{oak} should sit somewhere between these two concepts and \emph{tree}.
+
+%We can even make the taxonomy into a lattice, by adding a new concept at the bottom, and joining this to all concepts which don't subsume any other concept (the dashed lines in figure \ref{plant-taxonomy}). The new concept can be interpreted as a ``non-existent'' or ``nonsense'' concept. The meet of any two concepts will then be given by the most general concept subsumed by the two. Interestingly, this meet does seem to correspond with logical conjunction of concepts: knowing that something is simultaneously a \emph{plant} and a \emph{grass} does not yield any new information, but claiming that something is simultaneously \emph{oak} and \emph{barley} yields the ``non-existent'' concept.
+
+
+\section{Vector Lattice Embeddings of Taxonomies}
+
+We would like meanings to look like vectors. This type of representation gives us a lot of flexibility: vectors can be scaled, rotated, translated, and the dimensionality of the vector space can be reduced. It also provides our link with statistical representations of meaning such as latent semantic analysis \citep{Deerwester:90} and distributional similarity measures \citep{Lee:99}.
+
+Thus we would like to be able to represent meanings (as represented in a taxonomy) as elements in a vector lattice. It is our hope that the ability to do this will open up many areas for research in computational linguistics, particularly when it comes to combinining traditional, ontological methods with the newer statistical ones. For example, since the statistical techniques mentioned earlier represent words within a vector space, it may be possible to find an approximate mapping from the vector space of these techniques to the vector space of the taxonomy.
+
+Our meanings (in the form of a taxonomy) are represented as a partial order, and we wish to embed them in a vector lattice, we call this process a ``vector lattice completion''. The partial ordering of the vector lattice representation must still therefore contain the partial ordering of the taxonomy, but in addition, we provide each meaning with a concrete position in some $n$-dimensional space.
+
+Because the embedding will necessarily be a \emph{lattice completion}, it will introduce new operations of \emph{meet} and \emph{join} on elements (see section \ref{lattice}). Many ontologies may already have some of the properties of a lattice, for example, most ontologies are \emph{join semilattices}. However the existing join operation is not usually directly useful since it does not correspond with our usual idea of logical disjunction. For example, in figure \ref{plant-taxonomy}, the join of the concepts \emph{beech} and \emph{oak} is \emph{tree}. If we say that something is a \emph{beech} or an \emph{oak}, it is definitely a \emph{tree}, however the converse provides problems: something being a \emph{tree} does not imply that that thing is a \emph{beech} or an \emph{oak}---since it could also be a \emph{chestnut}. Thus the logical disjunction of the concepts \emph{beech} and \emph{oak} should sit somewhere between these two concepts and \emph{tree}.
+
+\section{Probabilistic Completion}
+
+We are also concerned with the \emph{probability} of concepts. This is an idea that has come about through the introduction of ``distance measures'' on taxonomies. Since words can be ascribed probabilities according to their occurrences in corpora, the concepts they refer to can similarly be assigned probabilities. By the \emph{probability of a concept} we mean the probability of encountering an \emph{instance} of that concept in the ontology, that is, a word whose meaning in that context is subsumed by that particular concept. The following definition clarifies this idea:
+\begin{defn}[Real Valued Taxonomy]
+A real valued taxonomy is a finite set $S$ of \emph{concepts} with a partial ordering $\le$ and a positive real function $p$ over $S$. The \emph{measure} of a concept is then defined in terms of $p$ as
+$$\hat{p}(x) = \sum_{y \in \down{x}} p(y).$$
+
+The taxonomy is called \emph{probabilistic} if $\sum_{x \in S} p(s) = 1$. In this case $\hat{p}$ refers to the \emph{probability of a concept}.
+\end{defn}
+Thus in a probabilistic taxonomy, the function $p$ corresponds to the probability that a term is observed whose meaning corresponds (in that context) to that concept. The function $\hat{p}$ denotes the probability that a term is observed whose meaning in is subsumed by the concept.
+
+Note that if $S$ has a top element $I$ then in the probabilistic case, clearly $\hat{p}(I) = 1$. In studies of distance measures on ontologies, the concepts in $S$ often correspond to senses of words, in this case the function $p$ represents the (normalised) probability that a given word will occur with the sense indicated by the concept. The top-most concept often exists, and may be something with the meaning ``entity''---intended to include the meaning of all concepts below it.
+
+The most simple completion we consider is into the vector lattice $\R^S$, the real vector space of dimensionality $|S|$, with basis elements $\{e_x : x\in S\}$.
+\begin{prop}[Ideal Vector Completion]
+Let $S$ be a probabilistic taxonomy with probability distribution function $p$ satisfying $p(x) \neq 0$ for all $x \in S$. The function $\phi$ from $S$ to $\R^S$ defined by
+$$\phi(x) = \sum_{y \in \down{x}} p(y)e_y$$
+is a completion of the partial ordering of $S$ under the vector lattice order of $\R^S$, satisfying $\|\phi(x)\|_1 = \hat{p}(x)$.
+\end{prop}
+\begin{proof}
+The function $\phi$ is clearly order-preserving: if $x \le y$ in $S$ then since $\down{x} \subseteq \down{y}$, necessarily $\phi(x) \le \phi(y)$. Conversely, the only way that $\phi(x) \le \phi(y)$ can be true is if $\down{x} \subseteq \down{y}$ since $p$ is non-zero everywhere. If this is the case, then $x \le y$ by the nature of the ideal completion. Thus $\phi$ is an order-embedding, and since $\R^S$ is a complete lattice, it is also a completion. Finally, note that $\|\phi(x)\|_1 = \sum_{y\in\down{x}} p(y) = \hat{p}(x)$.
+\end{proof}
+This close connection with the ideal completion is what leads us to call it the \emph{vector ideal completion}.
+
+
+\section{Distance Preserving Completion}
+\label{distance}
+
+Some attempts have been made to link ontological representations with statistical techniques. These centre around measures of \emph{semantic distance} which attempt to put a value on semantic relatedness between concepts.
+
+\cite{Jiang:97} defined a distance measure that has been shown to perform best out of five different measures in a spelling correction task \citep{Budanitsky:06}. The measure is based on \emph{information content} of concepts, which can be derived from their probabilities. We will show that this measure has the following special property: concepts can be embedded in a vector lattice in such a way that the distance between concepts in the vector lattice is equal to the Jiang-Conrath distance measure. This is an important result because of the success of this measure in applications: it is arguably experimental evidence in favour of the vector lattice nature of the meaning of words.
+
+We are able to show that the distances are preserved in certain types of taxonomy: the concepts must form a \emph{tree}:
+\begin{defn}[Trees]
+A partially ordered set $S$ is called a \emph{tree} if every element $x$ in $S$ has at most one element $y\in S$ such that $x \prec y$ and there is an element $I$ such that $z \le I$ for all $z \in S$. The unique element preceding $x$ is called the \emph{parent} of $x$, it is denoted $\Par(x)$ if it exists.
+\end{defn}
+Note that in a tree only the topmost element $I$ has no parent.
+
+The Jiang-Conrath measure makes use of a particular property of trees. It is easy to see that a tree forms a \emph{semilattice}: for each pair of elements $x$ and $y$ there is an element $x \lor y$ that is the \emph{least common subsumer} of $x$ and $y$. For example, in figure \ref{plant-taxonomy}, the least common subsumer of \emph{oat} and \emph{barley} is \emph{cereal}; the least common subsumer of \emph{oat} and \emph{beech} is \emph{plant}.
+
+The measure also makes use of the information content of a concept; this is simply the negative logarithm of its probability. In our formulation, the information content $\mathit{IC}(x)$ of a concept $x$ is defined by
+$$\mathit{IC}(x) = -\log \hat{p}(x).$$
+The information content thus decreases as we move up the taxonomy; if there is a most general element $I$, it will have an information content of zero.
+
+The Jiang-Conrath distance measure $d(x,y)$ between two concepts $x$ and $y$ is then defined as
+$$d(x,y) = \mathit{IC}(x) + \mathit{IC}(y) - 2\mathit{IC}(x\lor y).$$
+There is a notable similarity between this expression, and a relation that holds in vector lattices:
+$$|u - v| = u + v - 2(u\land v)$$
+This formula provides the starting point for preserving distances in the vector lattice completion.
+
+In its current form, in building a vector lattice we cannot simply replace the function $\hat{p}$ with the information content, since $\hat{p}$ must increase as we move up the taxonomy; instead we must invert the direction of the lattice. This allows us to embed concepts in the lattice while retaining the information content as the norm, and changes joins into meets, so that distances correspond to the Jiang-Conrath measure.
+\begin{prop}[Distance Preserving Completion]
+Let $S$ be a probabilistic taxonomy which forms a tree with partial ordering $\le$. The function $\mathit{IC}$ defines a positive real-valued function $f_\mathit{IC}$ by
+$$f_\IC(x) = \IC(x) - \IC(\Par(x)).$$
+for $x \in S - \{I\}$, and $f_\IC(I) = 0$. We define a new partial ordering $\le'$ on $S$ by $x \le' y$ iff $y \le x$ (thus $\le'$ is the \emph{dual} of $\le$). Then $f_\IC$ together with the new partial ordering defines a real-valued taxonomy on $S$. Call the function that maps an element of $S$ to its completion in the new taxonomy $\psi$. The vector lattice completion of the new taxonomy satisfies $\|\psi(x)\|_1 = \IC(x)$ and $\|\psi(x) - \psi(y)\|_1 = d(x,y)$. 
+\end{prop}
+
+\begin{proof}
+For the results about vector lattices used here see section \ref{vectorlattice}. By the tree nature of the taxonomy, $f_\IC$ is clearly a positive function satisfying $\|\psi(x)\|_1 = \IC(x)$. To see the second part, we need to know that the vector lattice $\R^S$ with the $L_1$ norm is an \emph{AL-space}; this means that $\|s + t\| = \|s\| + \|t\|$ whenever $s \land t = 0$. We have here
+$$(u - u\land v)\land (v - u\land v)  = u + v - 2(u\land v) - |u - v| = 0,$$
+where we have used the above identity twice. Thus, using the same identity, we have
+\begin{eqnarray*}
+ \|u - v\|_1 = \| |u - v| \|_1&=& \|u + v - 2(u \land v)\|_1\\
+		&=& \|(u - u\land v) + (v - u \land v)\|_1\\
+		&=& \|u - u\land v \|_1 + \|v - u \land v \|_1\\
+		&=& \|u\|_1 + \|v\|_1 -2\|u\land v\|_1
+\end{eqnarray*}
+For the last step, we used the fact that we are dealing with positive elements, with $u - u\land v \ge 0$ and thus, using the additive property of the $L_1$ norm, $\|u\| = \|u - u\land v + u\land v\| = \|u - u\land v\| + \|u\land v\|$.
+
+Finally, note that the lattice completion is built from the dual of a tree, which is a join semilattice. Joins are preserved as meets in the completion since $\down{x} \cap \down{y} = \down{x \land y}$, and thus we have $\psi(x) \land \psi(y) = \psi(x\lor y)$. This completes the proof.
+\end{proof}
+
+Thus we have shown an important link between ontologies and vector lattice representations of meaning: it is possible to simultaneously preserve the partial ordering and distance measure of an ontology within a vector lattice representation. We believe this particular result opens up the potential for a wide range of techniques combining statistical methods of determining meaning with ontological representations. It has been suggested that distributional similarity measures can be used as a predictor of semantic similarity, originating in the distributional hypothesis of \cite{Harris:68}. There has not yet to our knowledge been a thorough analysis of the degree to which distributional similarity can be used to predict semantic distance, however our own preliminary investigations reveal that there is definitely some correlation between the two. If this correlation is strong enough then distributional similarity could in theory be used to place concepts in the vector lattice of meanings based on their similarity with surrounding concepts, opening up the field of determining meaning automatically, and making use of the fine-grained structure allowed by the vector lattice representations.
+
+
+\section{Efficient Completions}
+
+In this section we discuss the question of how many dimensions are necessary to maintain the lattice structure in the vector lattice completion. The representations discussed previously use a very large number of dimensions: one for each node in the ontology. To see that this is far more than is generally needed, consider an ontology whose Hasse diagram is planar: that is it can be rearranged so that no lines cross. If we then position the nodes in the diagram such the lines between nodes are at an angle of less than $45^\circ$ to the vertical (this can always be done by stretching the diagram out vertically), then if we rotate the diagram by $45^\circ$ to the right, and set an origin, the position of each node in the two dimensional diagram can be considered as a representation of the concept in the vector lattice $\R^2$. It is easy to see that the partial ordering is preserved; and we only needed two dimensions.
+
+The problem with this simplistic vector lattice representation is that it is not unique: in general there are many ways we can draw the Hasse diagram, and each will correspond to a different representation. Concepts will necessarily be positioned arbitrarily according to which way the diagram is drawn, leaving us in doubt as to whether the vector aspect of the representation is meaningful. In addition, there is no obvious way for us to interpret the two dimensions of the representation.
+
+Instead, we propose an efficient  representation suitable for any partial ordering in which dimensions correspond to \emph{chains} or emph{totally ordered subsets} of the partial order. This representation is unique up to isomorphism, given a certain requirement on the partial order which we expect to hold for most real world ontologies. This more efficient representation can generally be used in place of the vector ideal completion.
+
+\begin{defn}[Chains]
+Let $S$ be a partially ordered set. A \emph{chain} $C$ of $S$ is a totally ordered subset of $S$, that is a subset of $S$ which is a partially ordered set under the the partial ordering of $S$ such that $x \le y$ or $y \le x$ for all $x,y \in C$.
+
+A collection of chains is called \emph{covering} if $\bigcup \mathcal{C} = S$. Clearly every partially ordered set has at least one covering collection of chains: that collection consisting of all chains containing just one node of $S$.
+\end{defn}
+
+\begin{prop}[Chain completion]
+\newcommand{\Ch}{\mathrm{Ch}_\mathcal{C}}
+Let $S$ be a real valued taxonomy and $\mathcal{C} = \{C_1, C_2, \ldots C_n\}$ be a covering collection of chains for $S$. Let $\Ch(x) = \{i : x \in C_i\}.$ Then define the function $\xi_0$ from $S$ to $\R^n$ by
+$$\xi_0(x) =  \sum_{i \in \Ch(x)} \frac{p(x)}{|\Ch(x)|}e_i,$$
+where $e_i$ are the basis elements of $\R^n$. Then the chain completion $\xi$ is defined by:
+$$\xi(x) = \sum_{y \le x} \xi_0(y).$$
+The function $\xi$ defines a vector lattice completion of $S$ satisfying $\|\xi(x)\|_1 = \hat{p}(x)$.
+\end{prop}
+
+\begin{proof}
+
+\end{proof}
+
+Providing we can find a covering with a low number of chains $n$, the previous proposition gives us an efficient vector lattice representation using $n$ dimensions. The representation as it stands is not unique, since there are in general many ways we can cover a partially ordered set with chains. The task then, is to find an efficient, unique way of determining a covering collection of chains. We achieve this by considering \emph{maximal chains}, chains containing all elements of $S$ that they can whilst remaining a totally ordered set.:
+
+\begin{defn}[Maximal chains]
+A maximal chain $C$ for $S$ is a chain such that for all $x,y \in C$, for all $z \in S$, if $x \le z \le  y$ then $z \in C$. Let $\mathcal{C}$ be the covering collection of chains consisting of all maximal chains of $S$. $S$ is said to be \emph{uniquely minimally covered} by $\mathcal{C}$ if for each $C \in \mathcal{C}$ there is at least one element $x \in C$ such that $x$ is not in any other chain of $\mathcal{C}$.
+\end{defn}
+
+\begin{algorithm}
+\begin{center}
+\begin{algorithmic}
+\vspace{0.1cm}
+\STATE $X_0 \leftarrow \{x \in S : \text{there is no $y$ such that } y \le x\}$
+\end{algorithmic}
+\end{center}
+\caption{Algorithm to generate an efficient chain completion.}
+\end{algorithm}
+
+% \bibliographystyle{plainnat}
+% \bibliography{contexts}
+ 
+% \end{document}

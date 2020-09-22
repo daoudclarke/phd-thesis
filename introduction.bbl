@@ -1,0 +1,49 @@
+\begin{thebibliography}{7}
+\expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
+\expandafter\ifx\csname url\endcsname\relax
+  \def\url#1{{\tt #1}}\fi
+
+\bibitem[Bar-Haim et~al.(2006)Bar-Haim, Dagan, Dolan, Ferro, Giampiccolo,
+  Magnini, and Szpektor]{Bar-Haim:06}
+Roy Bar-Haim, Ido Dagan, Bill Dolan, Lisa Ferro, Danilo Giampiccolo, Bernardo
+  Magnini, and Idan Szpektor.
+\newblock The second pascal recognising textual entailment challenge.
+\newblock In {\em Proceedings of the Second PASCAL Challenges Workshop on
+  Recognising Textual Entailment}, 2006.
+
+\bibitem[Blackburn and Bos(2005)]{Blackburn:05}
+Patrick Blackburn and Johan Bos.
+\newblock {\em Representation and Inference for Natural Language}.
+\newblock CSLI, 2005.
+
+\bibitem[Dagan et~al.(2005)Dagan, Glickman, and Magnini]{Dagan:05}
+Ido Dagan, Oren Glickman, and Bernardo Magnini.
+\newblock The pascal recognising textual entailment challenge.
+\newblock In {\em Proceedings of the Recognising Textual Entailment Challenge},
+  2005.
+
+\bibitem[Firth(1957)]{Firth:57}
+John~R. Firth.
+\newblock A synopsis of linguistic theory 1930--1955.
+\newblock In F.~Palmer, editor, {\em Selected Papers of J. R. Firth}. Longman,
+  London, 1957.
+
+\bibitem[Harris(1968)]{Harris:68}
+Zellig Harris.
+\newblock {\em Mathematical Structures of Language}.
+\newblock Wiley, New York, 1968.
+
+\bibitem[Kamp and Reyle(1993)]{Kamp:93}
+Hans Kamp and Uwe Reyle.
+\newblock {\em From Discourse to Logic: Introduction to Modeltheoretic
+  Semantics of Natural Language, Formal Logic and Discourse Representation
+  Theory}, volume~42 of {\em Studies in linguistics and philosophy}.
+\newblock Kluwer, Dordrecht, 1993.
+
+\bibitem[Wittgenstein(1953)]{Wittgenstein:53}
+Ludwig Wittgenstein.
+\newblock {\em Philosophical Investigations}.
+\newblock Macmillan, New York, 1953.
+\newblock G. Anscombe, translator.
+
+\end{thebibliography}

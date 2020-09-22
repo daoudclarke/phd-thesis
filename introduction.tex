@@ -1,0 +1,178 @@
+%%Bismillahi-r-Rahmani-r-Rahim
+%\documentclass[12pt]{report}
+
+%\include{head}
+%\usepackage{fancyvrb}
+%\usepackage{pstricks}
+
+%\begin{document}
+
+\part{The Context-theoretic Framework}
+\chapter{Introduction}
+
+This thesis deals with the philosophical and theoretical foundations of computational linguistics. We are interested in the nature of meaning in natural language and the ways in which meaning can be represented computationally, in particular the relationship between vector-based representations of meaning and logical representations.
+
+In recent years, the abundance of text corpora and computing power has allowed the development of techniques to analyse statistical properties of words. These techniques have proved useful in many areas of computational linguistics, arguably providing evidence that they capture something about the nature of words that should be included in representations of their meaning. However, it is very difficult to reconcile these techniques with existing theories of meaning in language, which revolve around logical and ontological representations. The new techniques, almost without exception, can be viewed as dealing with vector-based representations of meaning, placing meaning (at least at the word level) within the realm of mathematics and algebra; conversely the older theories of meaning dwell in the realm of logic and ontology. It seems there is no unifying theory of meaning to provide guidance to those making use of the new techniques.
+%There thus appears to be a gulf between theory and practice. Theory says that meaning looks logical, while in practice computational linguists make use of vector-based representations of meaning.
+
+The problem appears to be a fundamental one in computational linguistics since the whole foundation of meaning seems to be in question. The older, logical theories often subscribe to a model-theoretic \index{logical semantics} philosophy of meaning \citep{Kamp:93, Blackburn:05}. According to this approach, sentences should be translated to a logical form that can be interpreted as a description of the state of the world. The new vector-based techniques, on the other hand, are often closer in spirit to the philosophy of ``meaning as context'',\index{meaning!as context} that the meaning of an expression is determined by how it is used. This is an old idea with origins in the philosophy of \cite{Wittgenstein:53},\index{Wittgenstein, Ludwig} who said that ``meaning just \emph{is} use'' \index{meaning!as use} and \cite{Firth:57},\index{Firth, J.~R.} ``You shall know a word by the company it keeps'', and the distributional hypothesis\index{distributional!hypothesis} of \cite{Harris:68}\index{Harris, Zellig}, that words will occur in similar contexts if and only if they have similar meanings. Whilst the two philosophies are not obviously incompatible --- especially since the former applies mainly at the sentence level and the latter mainly at the word level --- it is not clear how they relate to each other.
+
+While the model-theoretic philosophy of meaning provides us with theories which allow a complete description of natural language from the word level to the sentence level and beyond, the same cannot be said for the philosophy of meaning as context. It is this philosophy that has inspired vector based techniques, yet there is currently no theory explaining how these vectors can be used to represent phrases and sentences. This lack of a firm theoretical foundation has far-reaching implications for computational linguists or engineers implementing systems that represent expressions using vectors.
+
+Such a theoretical foundation would be applicable to a wide range of tasks involving natural language. The task of recognising textual entailment was developed as part of a PASCAL Challenge \index{entailment!textual!PASCAL Challenge} \citep{Dagan:05,Bar-Haim:06} in an attempt to identify a generic task that is inherent in a number of areas within natural language processing, including information retrieval, question answering, machine translation and paraphrase acquisition. The task is to determine, given two sentences or natural language expressions (called the \emph{text} and \emph{hypothesis} sentences), whether the first entails or implies the second, for example in the case of the two sentences
+\begin{itemize}
+\item \emph{Text:} Once called the ``Queen of the Danube,'' Budapest has long been the focal point of the nation and a lively cultural centre.
+\item \emph{Hypothesis:} Budapest was once popularly known as the ``Queen of the Danube.''
+\end{itemize}
+the text sentence does entail the hypothesis. Finding a solution to this task necessarily means solving the majority of problems within computational linguistics and natural language processing because the task is so general.
+
+%Many tasks in natural language processing, such as questioning answering, summarisation, and information retrieval would benefit from a system that can accurately determine entailment. The task has recently received a lot of attention thanks to the PASCAL Recognising Textual Entailment Challenges\index{entailment!textual!PASCAL Challenge} \citep{Dagan:05,Bar-Haim:06}, which provided a method of evaluating textual entailment systems using a large number of text-hypothesis pairs.
+The PASCAL Challenge provided a method of evaluating textual entailment systems using a large number of text-hypothesis pairs. A large proportion, 22 of the 41 entered runs, made use of corpus or web-based statistics, yet there is no linguistic theory of meaning that explains how to determine entailment between sentences using such statistics. We might be able to find vector representations for words or multi-word expressions by statistical analysis, but we are left without any guidelines about how sentences should be represented. Entailment systems making use of such statistics thus have to resort to somewhat ad-hoc methods tuned and evaluated empirically by their performance at the task. While this is fine from a practical perspective, it leaves a lot to be desired from a linguistic perspective, since we are left without a deeper understanding of the nature of language.
+
+\index{context-theoretic!framework|(}
+%In this thesis we attempt to solve these problems by identifying a framework to provide guidelines as to how to deal with vector-based representations of meaning in a principled way. We call this the \emph{context-theoretic framework}\index{context-theoretic!framework|(} since it is based on a theoretical model in which meaning is determined by context. We were looking for specific properties from the framework, namely, we wanted the framework to:
+In this thesis we attempt to solve these problems by identifying a framework to provide guidelines as to how to deal with vector-based representations of meaning in a principled way. We were looking for specific properties from the framework, namely, we wanted the framework to:
+\begin{itemize}
+\item provide some guidelines describing in what way the representation of a phrase or sentence should relate to the representations of the individual words as vectors;
+\item require information about the probability of a string of words to be incorporated into the representation;
+\item provide a way to measure the degree of entailment\index{entailment!degree of} between strings based on the particular meaning representation;
+\item be general enough to encompass logical representations of meaning\index{logical semantics};
+\item be able to incorporate the representation of ambiguity and uncertainty,\index{uncertainty, representing} including statistical information such as the probability of a parse or the probability that a word takes a particular sense.
+%\item be grounded in a theory and philosophy of meaning.
+\end{itemize}
+The framework itself does not provide a recipe for how to represent meaning in natural language, instead it provides restrictions on the set of possibilities. The advantage of the framework is in ensuring that techniques are used in a way that is well-founded in a theory of meaning. For example, given vector representations of words, there is not one single way of combining these to give vector representations of phrases and sentences, but in order to fit within the framework there are certain properties of the representation that need to hold. Any method of combining these vectors in which these properties hold can be considered within the framework and is thus justified according to the underlying theory; in addition the framework instructs us as to how to measure the degree of entailment between strings according to that particular method. In the second part of the thesis, we show how the framework can be applied to problems in natural language processing.
+
+Implementations of the framework are called \emph{context theories} since we think of them as theories about the contexts that strings of the language occur in. By analogy with the term ``model-theoretic'' we use the term ``context-theoretic'' for concepts relating to context theories; in particular we will often call our framework ``the context-theoretic framework''.
+
+\begin{figure}
+\begin{center}
+\begin{graph}(8,8)(0,.5)
+\newcommand{\ntext}[4]{\textnode{#1}(#2,#3){#4}[\graphlinecolour{1}]}
+%\newcommand{\btext}[3]{\bow{#1}{#2}{0.5}[\graphlinecolour{0}] \bowtext{#1}{#2}{0.5}{#3}}
+%\ntext{Rel}{0}{8}{Existing Work}
+\ntext{Mean}{2}{6}{Meaning as Context}
+\ntext{Exist}{0}{8}{Vector-based Techniques}
+\ntext{Phil}{4}{8}{Philosophy}
+\ntext{Math}{6}{6.05}{Mathematics}
+\ntext{Cont}{4}{4}{\textbf{Context-theoretic Framework}}
+\ntext{Dev}{4}{1}{Development of Context Theories}
+%\diredge{Rel}{Req}
+\dirbow{Phil}{Mean}{0.1}
+\dirbow{Exist}{Mean}{-0.1}
+\dirbow{Math}{Cont}{0.1}
+\dirbow{Mean}{Cont}{-0.1}
+\dirbow{Cont}{Dev}{0.2}
+\dirbow{Dev}{Cont}{0.2}
+\end{graph}
+\end{center}
+\caption{Method of Approach in developing the Context-theoretic Framework.}
+\label{approach}
+\end{figure}
+
+
+Our approach to identifying the framework can be divided into several components, as depicted in Figure \ref{approach}:
+\begin{itemize}
+\item We examine the philosophy of meaning as context, looking at the ideas of Wittgenstein, Firth and Harris as well as later developments to these ideas --- see Chapter \ref{background}. In this chapter, we also review statistical techniques that analyse occurrences of words in corpora to determine something about their meaning; such techniques can usually be viewed as representing meaning in terms of vectors. Specifically we look at latent semantic analysis and its variations, and measures of distributional similarity.
+\item There are many areas of mathematics that could be of benefit to the problems we are addressing; in the Appendix we summarise those areas that are particularly relevant to our approach.
+%and a large part of our initial work was in becoming familiar with what is available and identifying those areas that are particularly relevant to our approach. These are summarised in the Appendix.
+\item Based on the philosophy of meaning as context, and inspired by the statistical techniques, we develop a mathematical theory of meaning as context by making use of the abstract mathematical idea of a \emph{corpus model}, and we examine the mathematical properties of such models. This theory is vital in formulating the framework; in fact the framework can be viewed as a mathematical abstraction of the properties of the theory (see Section \ref{model-meaning-context}).
+\item In Section \ref{context-theoretic-framework} we abstract the theory of meaning as context to define the context-theoretic framework, based on an analysis of the features that were important to include in the framework and the mathematics presented in the Appendix.
+\item The second half of the thesis is devoted to describing applications of the context-theoretic framework, in order to demonstrate its usefulness in describing natural language (these are summarised in Table \ref{context-theories-table}). The applications were developed simultaneously with the framework itself; this also helped us to identify which features were important to include in the framework. The areas we look at are as follows:
+\begin{itemize}
+\item In Chapter \ref{entailment-chapter} we look at the application of the framework to the task of recognising textual entailment, comparing our framework to the approach of others and showing how several existing approaches can be described in terms of context theories.
+\item In Chapter \ref{model-theoretic-chapter} we show how the framework can be used to extend standard logical semantics for natural language to include statistical information about uncertainty of meaning.
+\item In Chapter \ref{ontologies} we discuss the relationship between ontological representations of meaning and vector-based representations, and show how to construct vector-based representations of meaning from a taxonomy.
+\item in Chapter \ref{syntax-chapter} we show how syntactic structure can be represented within the framework, leading to new representations for syntax, and potentially new techniques for statistical parsing of natural language.
+\end{itemize}
+
+
+\end{itemize}
+
+\begin{table}
+\begin{center}
+\begin{tabular}{|l|p{6cm}|l|}
+\hline
+\textbf{Context Theory} & \textbf{Purpose} & \textbf{Section}\\
+\hline\hline
+%\multicolumn{3}{|c|}{\textsc{Textual Entailment}}\\
+%\hline
+Document projections & Relate \citeauthor{Glickman:05}'s (\citeyear{Glickman:05}) approach to the task of recognising textual  entailment to the context-theoretic framework. &\ref{document-projections}\\
+\hline
+Subsequence matching & Estimate the degree of entailment based on the number of shared subsequences. & \ref{subsequence}\\
+\hline
+Lexical overlap & Relate the degree of lexical overlap, commonly used as a baseline in the task of recognising textual entailment, to the framework. & \ref{subsequence}\\
+\hline
+%\multicolumn{3}{|c|}{\textsc{Uncertainty in Logical Semantics}}\\
+%\hline
+Projections for Logic & Represent logical sentences within the framework, allowing statistical information about ambiguity and uncertainty to be incorporated. & \ref{bayesian-uncertainty-section}\\
+\hline
+Ideal Projection Completion & Represent concepts from an ontology in such a way that words can be represented as weighted sums over the vector representation of its component senses. & \ref{ideal-projection}\\
+\hline
+Lambek Calculus & Represent syntactic categories in terms of the Lambek Calculus. & \ref{categorial-context}\\
+\hline
+Link Grammar & Describe syntax in terms of link grammar as operators on a Hilbert space. & \ref{link-context-1}\\
+\hline
+Semigroups & Construct a context theory from any semigroup. & \ref{semigroup-context}\\
+\hline
+\end{tabular}
+\caption{The context theories described in the thesis, together with a summary of their purpose and the location of their full descriptions.}
+\label{context-theories-table}
+\end{center}
+\end{table}
+
+In summary, the major contributions of the thesis are as follows:
+\begin{itemize}
+\item the development of a mathematical theory of meaning as context that solidifies ideas implicit in existing philosophies and techniques;
+\item the identification of a framework for natural language semantics that abstracts the salient features from the theory of meaning, providing guidelines for implementations that make use of vector-based representations of meaning;\index{context-theoretic!framework|)}
+\item a demonstration of the application of the framework to important problems in natural language processing, most importantly the representation of statistical information about uncertainty and ambiguity in logical semantics.
+\item in the development of applications of the framework some theoretical discoveries were made:
+\begin{itemize}
+\item in Chapter \ref{ontologies} we describe \emph{vector lattice embeddings} of partial orderings --- that is, ways to associate vectors with elements of a partially ordered set such as a taxonomy describing a hierarchy of concepts in such a way that the partial ordering is preserved;
+\item in Chapter \ref{syntax-chapter} we provide new ways of describing link grammar both in terms of operators on a Hilbert space and in terms of inverse semigroups.
+\end{itemize}
+\end{itemize}
+
+
+
+
+%\begin{itemize}
+%\item We develop a set of \emph{requirements} for a theoretical basis for computational linguistics based on an analysis of \emph{existing work} (in Chapter 2); we will call this basis the \emph{general formalism}.
+%\item We introduce the \emph{mathematics} that is of importance in understanding theory to be introduced later, but which we believe is also of general importance for computational linguists. Because we were specifically interested in representing the vector nature of meaning, it was clear that a study of mathematical formalisms was going to be of great importance to the development of the theory. A large amount of work was devoted to searching mathematical literature for areas that seemed relevant to the task at hand; the most important of these are introduced in Chapter~3.
+%\item We look at the \emph{philosophy} of Wittgenstein, Firth and Harris, and from these ideas we develop a mathematical theory of \emph{meaning as context}. According to the theory, meanings of words can be represented as elements of an ``algebra over a field'', that is, a vector space with a compatible form of multiplication. The theory specifies how the notions of entailment and the probability of a sequence should be incorporated into the representation; it is motivated and described in Chapter 4.
+%\item We develop a \emph{general formalism}, abstracting from the theory of meaning as context. We selected those features of the theory that were deemed important to \emph{applications}, and which allowed us to meet the \emph{requirements} developed earlier, but without putting unnecessary restrictions on the nature of the formalism. This has resulted in a very general formalism (described in Chapter 5) which allows the description of a large number of phenomena.
+%\item The second part of the thesis is devoted to applications of the theory, demonstrating its generality and benefits of applying it. Applications were developed in parallel with the theory, and allowed us to determine which features were of importance to be retained in the general formalism. Specifically,
+%\begin{itemize}
+%\item In Chapter 6 we show how the theory applies to language models such as $n$-grams, allowing such simple descriptions of language to be used to describe entailment.
+%\item In Chapter 7 we show that logical representations can be incorporated into implementations of the theory, and that doing so allows for an elegant description of lexical and syntactic ambiguity, incorporating statistical features of ambiguity into the representation.
+%\item In Chapter 8 we examine possible ways of incorporating representations of syntax into the theory, showing how categorial grammar relates to the representation. We also give a description of link grammar in algebraic terms, showing that it fits our formalism naturally. We also show how the use of random matrices has the potential to enable fast statistical parsing of text.
+%\item In Chapter 9 we look at ontological representations of meaning and relate them to vector-based representations. We show that the mathematical concept of \emph{vector lattice} provides a unifying framework for representing meaning.
+%\item In Chapter 10 we look at ways of combining implementations to build complex vector based systems. We predict that when words combine compositionally, their representations can be decomposed into syntactic and semantic parts that combine according to \emph{free probability}, a relatively new mathematical concept that forms part of the framework of non-commutative probability.
+%\end{itemize}
+%\item We conclude in Chapter 11 with a summary of possible directions for future research.
+%\end{itemize}
+%Our main contribution --- that the notion of meaning as context leads to a representation of words as elements of an algebra over a field --- may be summarised as follows:
+%\begin{quote}
+%\emph{If we are to represent meanings of words as vectors which are intended to indicate the contexts the words occur in, then the correct representation for the concatenation of two words is a vector whose components are formed from products of the components of the original words, given some product (an associative binary operation) defined on vector components.}
+%\end{quote}
+%It is this idea that forms the core of the thesis, and our thesis may be roughly described in terms of it as follows: The first part of our thesis is devoted to motivating and explaining this idea, whilst the second part is devoted to applying it.
+
+%\section{Approach}
+
+%Our approach is described schematically in figure \ref{approach}; each node of the graph represents a component of our work:
+%\begin{itemize}
+%\item \emph{Related work.} Our formalism is influenced by a wide variety of work in computational linguistics, most importantly the vector-based techniques summarised in the next chapter.
+%\item \emph{Requirements.} In order to be explicit about what we expected of the formalism under development, we came up with a set of requirements (described in Chapter 4) influenced by the related work and our own intuitions.
+%\item \emph{Mathematics.} Because we were specifically interested in representing the vector nature of meaning, it was clear that a study of mathematical formalisms was going to be of great importance to the development of the theory. A large amount of work was devoted to searching mathematical literature for areas that seemed relevant to the task at hand, the most important of these are introduced in Chapter 3.
+%\item \emph{Philosophy.} The theory we have developed, like the vector-based techniques themselves, has its roots in the philosophy of Wittgenstein, Firth and Harris, described in Chapter 2.
+%\item \emph{Meaning as Context.} Based on the above philosophy, we developed a mathematical theory of meaning as context, based on a statistical description of text corpora. This theory was instrumental in the development of the general formalism, and is described in Chapter 4.
+%\item \emph{General Formalism.} The general formalism abstracts from the theory of meaning as context, as we selected those features of the theory that were deemed important to applications, and which allowed us to meet the requirements, but without putting unnecessary restrictions on the nature of the formalism. This has resulted in a very general formalism (also described in Chapter 4) which allows the description of a large number of phenomena.
+%\item \emph{Development of Applications.} Applications were developed in parallel with the theory, and allowed us to determine which features were of importance to be retained in the general formalism.
+%\end{itemize}
+
+%
+% \bibliographystyle{plainnat}
+% \bibliography{contexts}
+% 
+% 
+% 
+% \end{document}

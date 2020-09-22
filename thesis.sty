@@ -1,0 +1,76 @@
+%Font for drop caps:
+\font\cmbig=cmr7 at 90pt
+
+%Font for chapter headings:
+\font\cmtitle=cmssdc10 at 20pt
+\font\cmchapter=cmssdc10 at 24pt
+\font\cmchapternum=cmssdc10 at 16pt
+\font\cmsection=cmssdc10 at 16pt
+ 
+ %Drop Capitals for beginning of chapters:
+ \newcommand{\dropcap}[1]{
+ \setbox1=\hbox{\cmbig #1}
+\dimen1=\wd1
+\dimen2=\ht1
+\box1\nointerlineskip
+\advance\dimen2 by 1.5pt
+\vskip-\dimen2
+\advance\dimen1 by -2pt
+\hangindent=\dimen1 \hangafter=-4\noindent
+}
+
+%Change fonts for headings:
+%\let\LaTeX@startsection\@startsection 
+%\renewcommand{\@startsection}[6]{\LaTeX@startsection%
+%{#1}{#2}{#3}{#4}{#5}{\itshape}} 
+
+%\let\LaTeXchapter=\chapter
+%\renewcommand{\chapter}[1]{\LaTeXchapter{\cmchapter #1}}
+
+\renewcommand{\@makechapterhead}[1]{%
+  \vspace*{50\p@}%
+  {\parindent \z@ \raggedright \normalfont
+    %\hrule                                        % horizontal line
+    \vspace{5pt}%                                 % add vertical space
+    \ifnum \c@secnumdepth >\m@ne
+        \cmchapternum \@chapapp\space \thechapter % Chapter number
+        \par\nobreak
+        \vskip 20\p@
+    \fi
+    \interlinepenalty\@M
+    \cmchapter #1\par                         % chapter title
+    \vspace{5pt}%                                 % add vertical space
+    %\hrule                                        % horizontal rule
+    \nobreak
+    \vskip 40\p@
+  }}
+
+\renewcommand{\@makeschapterhead}[1]{%
+  \vspace*{50\p@}%
+  {\parindent \z@ \raggedright
+    \normalfont
+    %\hrule                                        % horizontal line
+    \vspace{5pt}%                                 % add vertical space
+    \interlinepenalty\@M
+    \cmchapter #1\par                         % chapter title
+    \vspace{5pt}%                                 % add vertical space
+    %\hrule                                        % horizontal line
+    \nobreak
+    \vskip 40\p@
+  }}
+
+\renewcommand{\section}{\@startsection
+{section}%                   % the name
+{1}%                         % the level
+{0mm}%                       % the indent
+{-\baselineskip}%            % the before skip
+{0.5\baselineskip}%          % the after skip
+{\cmsection}} % the style
+
+\renewcommand{\subsection}{\@startsection
+{subsection}%                   % the name
+{2}%                         % the level
+{0mm}%                       % the indent
+{-\baselineskip}%            % the before skip
+{0.5\baselineskip}%          % the after skip
+{\cmsection}} % the style

@@ -1,0 +1,125 @@
+\begin{thebibliography}{21}
+\expandafter\ifx\csname natexlab\endcsname\relax\def\natexlab#1{#1}\fi
+\expandafter\ifx\csname url\endcsname\relax
+  \def\url#1{{\tt #1}}\fi
+
+\bibitem[Abrusci(1991)]{Abrusci:91}
+V.~M. Abrusci.
+\newblock Phase semantics and sequent calculus for pure noncommutative
+  classical linear propositional logic.
+\newblock {\em The Journal of Symbolic Logic}, 56:\penalty0 1403--1451, 1991.
+
+\bibitem[Bar-Hillel(1950)]{Bar-Hillel:50}
+Yehoshua Bar-Hillel.
+\newblock On syntactical categories.
+\newblock {\em Journal of Symbolic Logic}, 15\penalty0 (1):\penalty0 1--16,
+  1950.
+
+\bibitem[Bar-Hillel()]{Bar-Hillel:64}
+Yehoshua Bar-Hillel.
+\newblock {\em Language and Information: Selected Essays on their Theory and
+  Application}.
+\newblock Addison-Wesley Publishing Co., Reading, MA., 1964.
+
+\bibitem[Birkhoff(1973)]{Birkhoff:48}
+Garrett Birkhoff.
+\newblock {\em Lattice Theory}.
+\newblock Amer. Math. Soc. Colloquium Publications, New York, 1973.
+
+\bibitem[Casadio and Lambek(2002)]{Casadio:02}
+Claudia Casadio and Joachim Lambek.
+\newblock A tale of four grammars.
+\newblock {\em Studia Logica}, 71\penalty0 (3):\penalty0 315--329, 2002.
+
+\bibitem[Girard(1987)]{Girard:87}
+J.~Y. Girard.
+\newblock Linear logic.
+\newblock {\em Theoretical Computer Science}, 50:\penalty0 1--102, 1987.
+
+\bibitem[Howie(1976)]{Howie:76}
+J.~M. Howie.
+\newblock {\em An Introduction to Semigroup Theory}.
+\newblock Academic Press, London, 1976.
+\newblock ISBN 0-12-356950-8.
+
+\bibitem[Kreyszig(1989)]{Kreyszig:89}
+Erwin Kreyszig.
+\newblock {\em Introduction to Functional Analysis with Applications}.
+\newblock Robert E. Krieger Publishing Company, Malabar, Florida, 1989.
+
+\bibitem[Lafferty et~al.(1992)Lafferty, Sleator, and Temperley]{Lafferty:92}
+John Lafferty, Daniel Sleator, and Davy Temperley.
+\newblock Grammatical trigrams: {A} probabilistic model of {LINK} grammar.
+\newblock In {\em Proc.\ of the AAAI Fall Symposium on Probabilistic Approaches
+  to Natural Language. Cambridge, MA, 1992}, pages 89--97, Menlo Park, CA,
+  1992. AAAI Press.
+
+\bibitem[Lambek(1958)]{Lambek:58}
+J.~Lambek.
+\newblock The mathematics of sentence structure.
+\newblock {\em American Mathematical Monthly}, 65:\penalty0 154--169, 1958.
+
+\bibitem[Lambek(1993)]{Lambek:93}
+J.~Lambek.
+\newblock From categorial grammar to bilinear logic.
+\newblock In Kosta Do{\v{s}}en and Peter Schroeder-Heister, editors, {\em
+  Substructural Logics}, pages 207--238. Oxford Univ.\null{} Press, 1993.
+
+\bibitem[Lambek(2001)]{Lambek:01}
+Joachim Lambek.
+\newblock Type grammars as pregroups.
+\newblock {\em Grammars}, 4\penalty0 (1):\penalty0 21--39, 2001.
+
+\bibitem[Manning and Sch{\"u}tze(1999)]{Manning:99}
+Christopher Manning and Hinrich Sch{\"u}tze.
+\newblock {\em Foundations of Statistical Natural Language Processing}.
+\newblock MIT Press, Cambridge, MA, 1999.
+
+\bibitem[Munn(1974)]{Munn:74}
+W.~D. Munn.
+\newblock Free inverse semigroup.
+\newblock {\em Proceedings of the London Mathematical Society}, 29:\penalty0
+  385--404, 1974.
+
+\bibitem[Pentus(1995)]{Pentus:95}
+Mati Pentus.
+\newblock Models for the lambek calculus.
+\newblock {\em Annals of Pure and Applied Logic}, 75:\penalty0 179--213, 1995.
+
+\bibitem[Sahlgren and Karlgren(2002)]{Sahlgren:02}
+Magnus Sahlgren and Jussi Karlgren.
+\newblock Vector-based semantic analysis using random indexing for
+  cross-lingual query expansion.
+\newblock {\em Lecture Notes in Computer Science}, 2406:\penalty0 169--176,
+  2002.
+
+\bibitem[Sleator and Temperley(1991)]{Sleator:91}
+Daniel~D. Sleator and Davy Temperley.
+\newblock Parsing english with a link grammar.
+\newblock Technical Report CMU-CS-91-196, Department of Computer Science,
+  Carnegie Mellon University, 1991.
+
+\bibitem[Sleator and Temperley(1993)]{Sleator:93}
+Daniel~D. Sleator and Davy Temperley.
+\newblock Parsing english with a link grammar.
+\newblock In {\em The Third International Workshop on Parsing Technologies},
+  August 1993.
+
+\bibitem[Voiculescu(1997)]{Voiculescu:97}
+Dan-Virgil Voiculescu.
+\newblock {\em Free Probability Theory}.
+\newblock American Mathematical Society, 1997.
+
+\bibitem[Widdows(2003)]{Widdows:03}
+Dominic Widdows.
+\newblock Orthogonal negation in vector spaces for modelling word-meanings and
+  document retrieval.
+\newblock In {\em Proceedings of the 41st Annual Meeting of the Association of
+  Computational Linguistics, 2003, Sapporo, Japan}, pages 136--143, 2003.
+
+\bibitem[Wood(1993)]{Wood:93}
+Mary~McGee Wood.
+\newblock {\em Categorial Grammars}.
+\newblock Routledge, London, 1993.
+
+\end{thebibliography}
